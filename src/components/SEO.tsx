@@ -9,8 +9,8 @@ interface SEOProps {
 
 // SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
-  title = "Hello World",
-  description = "Welcome to my app",
+  title = "Marijuana Bahamas - Seed to Sale",
+  description = "Complete cannabis tracking solution from cultivation to retail sales",
   image = "/og-image.png",
   url,
 }: SEOProps) {
@@ -40,7 +40,7 @@ export function SEOElements({
 }
 
 // Default SEO component for use in pages/_app.tsx or individual pages (uses next/head)
-export default function SEO(props: SEOProps) {
+export function SEO(props: SEOProps) {
   return (
     <Head>
       <SEOElements {...props} />
