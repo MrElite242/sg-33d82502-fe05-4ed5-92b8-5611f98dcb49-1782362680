@@ -1,0 +1,341 @@
+import { SEO } from "@/components/SEO";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+
+interface DashboardStats {
+  activePlants: number;
+  batchesInProduction: number;
+  pendingTests: number;
+  activeDeliveries: number;
+  dailySales: number;
+  complianceStatus: string;
+}
+
+export default function Dashboard() {
+  const [stats, setStats] = useState<DashboardStats>({
+    activePlants: 0,
+    batchesInProduction: 0,
+    pendingTests: 0,
+    activeDeliveries: 0,
+    dailySales: 0,
+    complianceStatus: "compliant"
+  });
+
+  useEffect(() => {
+    // Load from localStorage
+    const saved = localStorage.getItem("dashboardStats");
+    if (saved) {
+      setStats(JSON.parse(saved));
+    } else {
+      // Demo data
+      const demoStats = {
+        activePlants: 1247,
+        batchesInProduction: 8,
+        pendingTests: 3,
+        activeDeliveries: 12,
+        dailySales: 24500,
+        complianceStatus: "compliant"
+      };
+      setStats(demoStats);
+      localStorage.setItem("dashboardStats", JSON.stringify(demoStats));
+    }
+  }, []);
+
+  const quickStats = [
+    { 
+      label: "Active Plants", 
+      value: stats.activePlants.toLocaleString(), 
+      icon: Sprout, 
+      color: "text-green-600",
+      bgColor: "bg-green-50"
+    },
+    { 
+      label: "Batches in Production", 
+      value: stats.batchesInProduction.toString(), 
+      icon: Factory, 
+      color: "text-purple-600",
+      bgColor: "bg-purple-50"
+    },
+    { 
+      label: "Pending Tests", 
+      value: stats.pendingTests.toString(), 
+      icon: FlaskConical, 
+      color: "text-blue-600",
+      bgColor: "bg-blue-50"
+    },
+    { 
+      label: "Active Deliveries", 
+      value: stats.activeDeliveries.toString(), 
+      icon: Truck, 
+      color: "text-orange-600",
+      bgColor: "bg-orange-50"
+    },
+    { 
+      label: "Daily Sales", 
+      value: `$${stats.dailySales.toLocaleString()}`, 
+      icon: Store, 
+      color: "text-pink-600",
+      bgColor: "bg-pink-50"
+    },
+  ];
+
+  return (
+    <>
+      <SEO title="Dashboard - Marijuana Bahamas" />
+      
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
+        <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <Link href="/">
+              <Button variant="ghost" className="gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Home
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <div className="w-24"></div>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-8">
+          {/* Compliance Status Banner */}
+          <Card className={`mb-8 border-2 ${stats.complianceStatus === "compliant" ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}`}>
+            <CardContent className="flex items-center justify-between py-4">
+              <div className="flex items-center gap-3">
+                {stats.complianceStatus === "compliant" ? (
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                ) : (
+                  <AlertCircle className="w-6 h-6 text-yellow-600" />
+                )}
+                <div>
+                  <h3 className="font-semibold">
+                    {stats.complianceStatus === "compliant" ? "All Systems Compliant" : "Action Required"}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {stats.complianceStatus === "compliant" 
+                      ? "All operations meeting regulatory requirements" 
+                      : "3 items need attention"}
+                  </p>
+                </div>
+              </div>
+              <Link href="/compliance">
+                <Button variant="outline">View Details</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            {quickStats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Card key={stat.label}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
+                        <Icon className={`w-5 h-5 ${stat.color}`} />
+                      </div>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-sm text-gray-600">{stat.label}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Main Dashboard Tabs */}
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid grid-cols-4 lg:grid-cols-7 w-full">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="cultivation">Cultivation</TabsTrigger>
+              <TabsTrigger value="manufacturing">Manufacturing</TabsTrigger>
+              <TabsTrigger value="testing">Testing</TabsTrigger>
+              <TabsTrigger value="transport">Transport</TabsTrigger>
+              <TabsTrigger value="retail">Retail</TabsTrigger>
+              <TabsTrigger value="accounting">Accounting</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="overview" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Activity</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Batch #1247 moved to flowering</p>
+                          <p className="text-xs text-gray-500">2 hours ago</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Lab results received for Batch #1243</p>
+                          <p className="text-xs text-gray-500">4 hours ago</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Delivery #89 completed</p>
+                          <p className="text-xs text-gray-500">6 hours ago</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Upcoming Tasks</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                          <AlertCircle className="w-4 h-4 text-red-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Harvest Batch #1238</p>
+                          <p className="text-xs text-gray-500">Due today</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                          <FlaskConical className="w-4 h-4 text-yellow-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Submit samples for testing</p>
+                          <p className="text-xs text-gray-500">Due tomorrow</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                          <Truck className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Schedule deliveries</p>
+                          <p className="text-xs text-gray-500">Due in 2 days</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="cultivation">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Cultivation Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Manage your cultivation operations from this panel.</p>
+                  <Link href="/cultivation">
+                    <Button className="gap-2">
+                      <Sprout className="w-4 h-4" />
+                      Go to Cultivation Module
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="manufacturing">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Manufacturing Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Track extraction and product manufacturing processes.</p>
+                  <Link href="/manufacturing">
+                    <Button className="gap-2">
+                      <Factory className="w-4 h-4" />
+                      Go to Manufacturing Module
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="testing">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Testing Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">View lab results and compliance testing status.</p>
+                  <Link href="/testing">
+                    <Button className="gap-2">
+                      <FlaskConical className="w-4 h-4" />
+                      Go to Testing Module
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="transport">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Transport Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Manage deliveries and transport manifests.</p>
+                  <Link href="/transport">
+                    <Button className="gap-2">
+                      <Truck className="w-4 h-4" />
+                      Go to Transport Module
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="retail">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Retail Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Access point of sale and retail inventory management.</p>
+                  <Link href="/retail">
+                    <Button className="gap-2">
+                      <Store className="w-4 h-4" />
+                      Go to Retail Module
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="accounting">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Accounting Integration</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Configure QuickBooks and other accounting integrations.</p>
+                  <Link href="/accounting">
+                    <Button className="gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      Go to Accounting Settings
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </>
+  );
+}
