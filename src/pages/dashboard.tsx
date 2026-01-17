@@ -1,10 +1,14 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
-import Link from "next/link";
-import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, ArrowLeft, AlertCircle, CheckCircle, User, LogOut, Leaf } from "lucide-react";
+import { useState } from "react";
 
 interface DashboardStats {
   activePlants: number;
@@ -16,6 +20,8 @@ interface DashboardStats {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
+  const { user, logout, isAuthenticated, loading } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     activePlants: 0,
     batchesInProduction: 0,
@@ -26,12 +32,16 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    // Load from localStorage
+    if (!loading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, loading, router]);
+
+  useEffect(() => {
     const saved = localStorage.getItem("dashboardStats");
     if (saved) {
       setStats(JSON.parse(saved));
     } else {
-      // Demo data
       const demoStats = {
         activePlants: 1247,
         batchesInProduction: 8,
@@ -44,6 +54,19 @@ export default function Dashboard() {
       localStorage.setItem("dashboardStats", JSON.stringify(demoStats));
     }
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+      </div>
+    );
+  }
 
   const quickStats = [
     { 
@@ -85,23 +108,45 @@ export default function Dashboard() {
 
   return (
     <>
-      <SEO title="Dashboard - Marijuana Bahamas" />
+      <SEO title="Dashboard - Cannabis Tracking System" />
       
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
         <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="/">
-              <Button variant="ghost" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Home
-              </Button>
+            <Link href="/" className="flex items-center gap-2">
+              <div className="bg-emerald-600 p-2 rounded-lg">
+                <Leaf className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-xl font-bold">Cannabis Track</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <div className="w-24"></div>
+            
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
+                <span className="font-medium">{user.companyName}</span>
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
+                  {user.status.toUpperCase()}
+                </Badge>
+              </div>
+              <Link href="/account">
+                <Button variant="outline" className="gap-2">
+                  <User className="w-4 h-4" />
+                  Account
+                </Button>
+              </Link>
+              <Button variant="ghost" onClick={handleLogout} className="gap-2">
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </div>
           </div>
         </header>
 
         <div className="container mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user.companyName}</h1>
+            <p className="text-gray-600">Here&apos;s what&apos;s happening with your operations today.</p>
+          </div>
+
           {/* Compliance Status Banner */}
           <Card className={`mb-8 border-2 ${stats.complianceStatus === "compliant" ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}`}>
             <CardContent className="flex items-center justify-between py-4">
@@ -122,9 +167,7 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-              <Link href="/compliance">
-                <Button variant="outline">View Details</Button>
-              </Link>
+              <Button variant="outline">View Details</Button>
             </CardContent>
           </Card>
 
