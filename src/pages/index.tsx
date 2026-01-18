@@ -1,7 +1,8 @@
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings, Leaf } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -53,21 +54,33 @@ export default function Home() {
   return (
     <>
       <SEO 
-        title="Cannabis Tracking System - Seed to Sale Platform"
+        title="Blaze 360 - Cannabis Seed to Sale Platform"
         description="Complete cannabis tracking solution from cultivation to retail sales with compliance and accounting integration"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative overflow-hidden">
+        {/* Background Watermark Leaves */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] dark:opacity-[0.02]">
+          <CannabisLeaf className="absolute top-10 left-10 text-emerald-600 rotate-12" size={200} />
+          <CannabisLeaf className="absolute top-1/4 right-20 text-green-600 -rotate-45" size={300} />
+          <CannabisLeaf className="absolute bottom-20 left-1/4 text-emerald-700 rotate-[30deg]" size={250} />
+          <CannabisLeaf className="absolute top-1/2 left-1/2 text-green-500 -rotate-12" size={400} />
+          <CannabisLeaf className="absolute bottom-1/4 right-1/4 text-emerald-600 rotate-[60deg]" size={180} />
+        </div>
+
         {/* Header */}
         <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-600 p-2 rounded-lg">
-                <Leaf className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-2.5 rounded-xl shadow-lg relative">
+                <CannabisLeaf className="w-7 h-7 text-white" size={28} />
+                <div className="absolute inset-0 bg-white/20 rounded-xl"></div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Cannabis Track</h1>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Seed to Sale Platform</p>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                  Blaze 360
+                </h1>
+                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Seed to Sale Platform</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -78,7 +91,7 @@ export default function Home() {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link href="/signup">
-                <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-md">
                   Start Free Trial
                 </Button>
               </Link>
@@ -87,43 +100,50 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16 lg:py-24 text-center">
+        <section className="container mx-auto px-4 py-16 lg:py-24 text-center relative z-10">
           <div className="max-w-4xl mx-auto">
-            <div className="inline-block mb-4 px-4 py-2 bg-emerald-100 dark:bg-emerald-900 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold">
+            <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-emerald-100 dark:bg-emerald-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold border border-emerald-200 dark:border-emerald-800">
+              <CannabisLeaf size={16} className="text-emerald-600 dark:text-emerald-400" />
               Trusted by 500+ Cannabis Businesses
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
               Complete Seed-to-Sale
-              <span className="block text-emerald-600 mt-2">Cannabis Tracking</span>
+              <span className="block bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent mt-2">
+                Cannabis Tracking
+              </span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
               Track every stage of your cannabis operation with full regulatory compliance, 
               real-time analytics, and seamless accounting integration
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">
-                <Button size="lg" className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-lg px-8 py-6">
+                <Button size="lg" className="gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all">
+                  <CannabisLeaf size={20} />
                   Start Free Trial
                   <TrendingUp className="w-5 h-5" />
                 </Button>
               </Link>
               <Link href="/plans">
-                <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6">
+                <Button size="lg" variant="outline" className="gap-2 text-lg px-10 py-7 border-2 hover:bg-emerald-50 dark:hover:bg-emerald-950">
                   View Pricing
                   <BarChart3 className="w-5 h-5" />
                 </Button>
               </Link>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mt-4">
+            <p className="text-sm text-gray-500 dark:text-gray-500 mt-6">
               No credit card required • 14-day free trial • Cancel anytime
             </p>
           </div>
         </section>
 
         {/* Modules Grid */}
-        <section className="container mx-auto px-4 py-16">
+        <section className="container mx-auto px-4 py-16 relative z-10">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <CannabisLeaf size={32} className="text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Complete Operation Management
             </h3>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -134,11 +154,14 @@ export default function Home() {
             {modules.map((module) => {
               const Icon = module.icon;
               return (
-                <Card key={module.href} className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer border-2 hover:border-emerald-200 dark:hover:border-emerald-800">
+                <Card key={module.href} className="h-full hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border-2 hover:border-emerald-300 dark:hover:border-emerald-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <CannabisLeaf size={120} className="text-emerald-600 rotate-12" />
+                  </div>
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center ${module.color}`}>
-                        <Icon className="w-6 h-6" />
+                      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-md ${module.color}`}>
+                        <Icon className="w-7 h-7" />
                       </div>
                       <CardTitle className="text-xl">{module.title}</CardTitle>
                     </div>
@@ -155,11 +178,15 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-white dark:bg-gray-900 py-16 lg:py-24">
-          <div className="container mx-auto px-4">
+        <section className="bg-white/90 dark:bg-gray-900/90 py-16 lg:py-24 relative backdrop-blur-sm">
+          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.02]">
+            <CannabisLeaf className="absolute top-20 right-10 text-emerald-600 rotate-45" size={250} />
+            <CannabisLeaf className="absolute bottom-20 left-10 text-green-600 -rotate-12" size={280} />
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                   Enterprise-Grade Features
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -167,39 +194,39 @@ export default function Home() {
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center flex-shrink-0">
-                    <BarChart3 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="flex gap-4 bg-emerald-50/50 dark:bg-emerald-950/30 p-6 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <BarChart3 className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2 dark:text-white">Real-Time Analytics</h4>
+                    <h4 className="font-bold text-lg mb-2 dark:text-white">Real-Time Analytics</h4>
                     <p className="text-gray-600 dark:text-gray-400">Track KPIs, inventory levels, and compliance metrics in real-time with customizable dashboards</p>
                   </div>
                 </div>
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-                    <Settings className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="flex gap-4 bg-blue-50/50 dark:bg-blue-950/30 p-6 rounded-xl border border-blue-100 dark:border-blue-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Settings className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2 dark:text-white">QuickBooks Integration</h4>
+                    <h4 className="font-bold text-lg mb-2 dark:text-white">QuickBooks Integration</h4>
                     <p className="text-gray-600 dark:text-gray-400">Seamless two-way sync with QuickBooks and other accounting platforms</p>
                   </div>
                 </div>
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
-                    <FlaskConical className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="flex gap-4 bg-purple-50/50 dark:bg-purple-950/30 p-6 rounded-xl border border-purple-100 dark:border-purple-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <FlaskConical className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2 dark:text-white">Compliance Ready</h4>
+                    <h4 className="font-bold text-lg mb-2 dark:text-white">Compliance Ready</h4>
                     <p className="text-gray-600 dark:text-gray-400">Built-in compliance checks, automated reporting, and audit trail for all transactions</p>
                   </div>
                 </div>
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
-                    <Truck className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                <div className="flex gap-4 bg-orange-50/50 dark:bg-orange-950/30 p-6 rounded-xl border border-orange-100 dark:border-orange-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Truck className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2 dark:text-white">Full Traceability</h4>
+                    <h4 className="font-bold text-lg mb-2 dark:text-white">Full Traceability</h4>
                     <p className="text-gray-600 dark:text-gray-400">Track every product from seed to final sale with complete chain of custody</p>
                   </div>
                 </div>
@@ -209,22 +236,29 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="container mx-auto px-4 py-16">
+        <section className="container mx-auto px-4 py-16 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Card className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-0 shadow-2xl">
-              <CardContent className="py-12 px-8 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
+            <Card className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white border-0 shadow-2xl relative overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
+                <CannabisLeaf className="absolute -top-10 -right-10 text-white rotate-12" size={200} />
+                <CannabisLeaf className="absolute -bottom-10 -left-10 text-white -rotate-45" size={220} />
+              </div>
+              <CardContent className="py-12 px-8 text-center relative z-10">
+                <div className="flex justify-center mb-6">
+                  <CannabisLeaf size={64} className="text-white drop-shadow-lg" />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
                 <p className="text-xl mb-8 text-emerald-50">
                   Join hundreds of cannabis businesses streamlining their operations
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/signup">
-                    <Button size="lg" className="bg-white text-emerald-600 hover:bg-gray-100 text-lg px-8 py-6">
+                    <Button size="lg" className="bg-white text-emerald-600 hover:bg-gray-100 text-lg px-10 py-6 shadow-xl">
                       Start Free Trial
                     </Button>
                   </Link>
                   <Link href="/plans">
-                    <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-emerald-700 text-lg px-8 py-6">
+                    <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-emerald-700 text-lg px-10 py-6">
                       View Pricing Plans
                     </Button>
                   </Link>
@@ -235,14 +269,20 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm mt-16">
-          <div className="container mx-auto px-4 py-8">
+        <footer className="border-t bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm mt-16 relative">
+          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.02]">
+            <CannabisLeaf className="absolute bottom-0 left-1/2 -translate-x-1/2 text-emerald-600" size={150} />
+          </div>
+          <div className="container mx-auto px-4 py-8 relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-600 dark:text-gray-400">© 2026 Cannabis Track. All rights reserved.</p>
+              <div className="flex items-center gap-2">
+                <CannabisLeaf size={20} className="text-emerald-600 dark:text-emerald-400" />
+                <p className="text-gray-600 dark:text-gray-400">© 2026 Blaze 360. All rights reserved.</p>
+              </div>
               <div className="flex gap-6">
-                <Link href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600">Privacy</Link>
-                <Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600">Terms</Link>
-                <Link href="/support" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600">Support</Link>
+                <Link href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Privacy</Link>
+                <Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Terms</Link>
+                <Link href="/support" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Support</Link>
               </div>
             </div>
           </div>
