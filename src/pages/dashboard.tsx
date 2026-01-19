@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, ArrowLeft, AlertCircle, CheckCircle, User, LogOut, Leaf } from "lucide-react";
 import { useState } from "react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 interface DashboardStats {
   activePlants: number;
@@ -110,12 +111,20 @@ export default function Dashboard() {
     <>
       <SEO title="Dashboard - Cannabis Tracking System" />
       
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 relative overflow-hidden">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-20 left-10 text-emerald-600/5 rotate-12" size={300} />
+          <CannabisLeaf className="absolute top-1/3 right-20 text-green-600/3 -rotate-45" size={400} />
+          <CannabisLeaf className="absolute bottom-40 left-1/4 text-emerald-700/4 rotate-90" size={250} />
+          <CannabisLeaf className="absolute bottom-20 right-10 text-green-500/5 -rotate-12" size={350} />
+        </div>
+
         <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="bg-emerald-600 p-2 rounded-lg">
-                <Leaf className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-2 rounded-lg shadow-lg">
+                <CannabisLeaf className="text-white" size={24} />
               </div>
               <span className="text-xl font-bold">Cannabis Track</span>
             </Link>
@@ -141,7 +150,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user.companyName}</h1>
             <p className="text-gray-600">Here&apos;s what&apos;s happening with your operations today.</p>
@@ -176,7 +185,10 @@ export default function Dashboard() {
             {quickStats.map((stat) => {
               const Icon = stat.icon;
               return (
-                <Card key={stat.label}>
+                <Card key={stat.label} className="relative overflow-hidden group">
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                    <CannabisLeaf className="text-emerald-600" size={60} />
+                  </div>
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between mb-2">
                       <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>

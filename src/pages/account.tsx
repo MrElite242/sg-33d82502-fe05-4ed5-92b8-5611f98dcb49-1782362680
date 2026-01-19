@@ -107,20 +107,20 @@ export default function AccountPage() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">Role</label>
-                    <p className="text-lg">
+                    <div className="text-lg">
                       <Badge variant="secondary">{user.role}</Badge>
-                    </p>
+                    </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">Account Status</label>
-                    <p className="text-lg">
+                    <div className="text-lg">
                       <Badge 
                         variant={user.status === "active" ? "default" : "destructive"}
                         className={user.status === "active" ? "bg-emerald-600" : ""}
                       >
                         {user.status.toUpperCase()}
                       </Badge>
-                    </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
