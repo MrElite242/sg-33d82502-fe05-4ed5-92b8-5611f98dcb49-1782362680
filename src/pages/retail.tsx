@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, ShoppingCart, CreditCard, User, Plus, Search } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -75,7 +76,15 @@ export default function Retail() {
     <>
       <SEO title="Retail POS - Marijuana Bahamas" />
       
-      <div className="min-h-screen bg-gray-100 flex flex-col">
+      <div className="min-h-screen bg-gray-100 flex flex-col relative">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-20 left-10 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-15deg)" }} />
+          <CannabisLeaf className="absolute top-40 right-20 text-emerald-500/5 dark:text-emerald-400/3" size={250} style={{ transform: "rotate(25deg)" }} />
+          <CannabisLeaf className="absolute bottom-40 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={200} style={{ transform: "rotate(45deg)" }} />
+          <CannabisLeaf className="absolute bottom-20 right-1/3 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(-30deg)" }} />
+        </div>
+
         <header className="bg-white border-b sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -85,7 +94,9 @@ export default function Retail() {
                 </Button>
               </Link>
               <h1 className="text-xl font-bold flex items-center gap-2">
-                <ShoppingCart className="w-6 h-6 text-pink-600" />
+                <div className="bg-gradient-to-br from-pink-600 to-pink-700 p-2 rounded-lg">
+                  <CannabisLeaf className="text-white" size={20} />
+                </div>
                 Point of Sale
               </h1>
             </div>
@@ -99,7 +110,7 @@ export default function Retail() {
           </div>
         </header>
 
-        <div className="flex-1 container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden h-[calc(100vh-64px)]">
+        <div className="flex-1 container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden h-[calc(100vh-64px)] relative z-10">
           {/* Product Catalog */}
           <div className="lg:col-span-2 flex flex-col gap-4 overflow-hidden h-full">
             <Card className="flex-shrink-0">
@@ -118,7 +129,8 @@ export default function Retail() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto pb-20">
               {filteredProducts.map((product) => (
-                <Card key={product.id} className="cursor-pointer hover:border-pink-300 transition-colors" onClick={() => addToCart(product)}>
+                <Card key={product.id} className="cursor-pointer hover:border-pink-300 transition-colors group relative overflow-hidden" onClick={() => addToCart(product)}>
+                  <CannabisLeaf className="absolute top-2 right-2 text-emerald-500/0 group-hover:text-emerald-500/10 transition-all duration-300" size={40} />
                   <CardContent className="p-4">
                     <div className="h-32 bg-gray-100 rounded-md mb-3 flex items-center justify-center">
                       <ShoppingCart className="w-8 h-8 text-gray-300" />

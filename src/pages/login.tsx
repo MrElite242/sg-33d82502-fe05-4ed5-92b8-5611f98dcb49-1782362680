@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, AlertCircle } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,12 +44,20 @@ export default function LoginPage() {
         title="Login - Cannabis Tracking System"
         description="Login to your cannabis seed-to-sale tracking account"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center p-4 relative">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-20 left-12 text-emerald-500/5 dark:text-emerald-400/3" size={320} style={{ transform: "rotate(-20deg)" }} />
+          <CannabisLeaf className="absolute top-40 right-16 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(30deg)" }} />
+          <CannabisLeaf className="absolute bottom-24 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={240} style={{ transform: "rotate(50deg)" }} />
+          <CannabisLeaf className="absolute bottom-32 right-1/3 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-25deg)" }} />
+        </div>
+
+        <Card className="w-full max-w-md relative z-10">
           <CardHeader className="space-y-1 text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-emerald-600 p-3 rounded-full">
-                <Leaf className="w-8 h-8 text-white" />
+                <CannabisLeaf className="text-white" size={32} />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>

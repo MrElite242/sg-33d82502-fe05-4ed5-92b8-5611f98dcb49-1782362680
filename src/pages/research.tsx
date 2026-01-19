@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ArrowLeft, TrendingUp, BarChart2, LineChart, PieChart, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 interface StrainPerformance {
   strain: string;
@@ -20,7 +21,6 @@ export default function Research() {
   const [data, setData] = useState<StrainPerformance[]>([]);
 
   useEffect(() => {
-    // Simulated research data
     const researchData: StrainPerformance[] = [
       { strain: "Blue Dream", avgYield: "450g/m²", avgThc: "18-24%", growthCycle: 65, resistance: "High", popularity: "Very High" },
       { strain: "OG Kush", avgYield: "400g/m²", avgThc: "20-26%", growthCycle: 55, resistance: "Medium", popularity: "High" },
@@ -32,9 +32,16 @@ export default function Research() {
 
   return (
     <>
-      <SEO title="Research & Analytics - Marijuana Bahamas" />
+      <SEO title="Research & Analytics - Cannabis Tracking" />
       
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 relative overflow-hidden">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-40 left-10 text-purple-600/4 rotate-12" size={340} />
+          <CannabisLeaf className="absolute bottom-32 right-20 text-emerald-600/5 -rotate-45" size={360} />
+          <CannabisLeaf className="absolute top-1/4 right-1/3 text-green-500/3 rotate-90" size={300} />
+        </div>
+
         <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <Link href="/dashboard">
@@ -51,10 +58,13 @@ export default function Research() {
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Analytics Overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-blue-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -67,7 +77,10 @@ export default function Research() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-green-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -80,7 +93,10 @@ export default function Research() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-purple-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -136,7 +152,10 @@ export default function Research() {
 
           {/* Charts Section Placeholder */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+            <Card className="relative overflow-hidden">
+              <div className="absolute top-4 right-4 opacity-5 pointer-events-none">
+                <CannabisLeaf className="text-emerald-600" size={100} />
+              </div>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <PieChart className="w-5 h-5" />
@@ -147,7 +166,10 @@ export default function Research() {
                 <p className="text-gray-400">Production distribution chart visualization</p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden">
+              <div className="absolute top-4 right-4 opacity-5 pointer-events-none">
+                <CannabisLeaf className="text-emerald-600" size={100} />
+              </div>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <LineChart className="w-5 h-5" />

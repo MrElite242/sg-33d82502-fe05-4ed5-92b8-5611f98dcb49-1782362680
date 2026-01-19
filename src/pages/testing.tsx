@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ArrowLeft, Plus, FlaskConical, CheckCircle, AlertTriangle, FileText } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 interface LabTest {
   id: string;
@@ -71,9 +72,16 @@ export default function Testing() {
 
   return (
     <>
-      <SEO title="Testing & QA - Marijuana Bahamas" />
+      <SEO title="Testing & QA - Cannabis Tracking" />
       
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 relative overflow-hidden">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-32 right-10 text-blue-600/4 rotate-12" size={340} />
+          <CannabisLeaf className="absolute bottom-20 left-20 text-emerald-600/5 -rotate-45" size={300} />
+          <CannabisLeaf className="absolute top-1/2 left-1/4 text-green-500/3 rotate-90" size={380} />
+        </div>
+
         <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <Link href="/dashboard">
@@ -90,10 +98,13 @@ export default function Testing() {
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-blue-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -106,7 +117,10 @@ export default function Testing() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-green-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -119,7 +133,10 @@ export default function Testing() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-red-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
@@ -132,7 +149,10 @@ export default function Testing() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <CannabisLeaf className="text-gray-600" size={70} />
+              </div>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">

@@ -9,7 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, AlertCircle, Check } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 const plans = [
   {
@@ -96,12 +97,20 @@ export default function SignupPage() {
         title="Sign Up - Cannabis Tracking System"
         description="Create your cannabis seed-to-sale tracking account"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 py-12 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 py-12 px-4 relative">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-20 left-10 text-emerald-500/5 dark:text-emerald-400/3" size={350} style={{ transform: "rotate(-15deg)" }} />
+          <CannabisLeaf className="absolute top-1/4 right-20 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(25deg)" }} />
+          <CannabisLeaf className="absolute bottom-40 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(45deg)" }} />
+          <CannabisLeaf className="absolute bottom-10 right-10 text-emerald-500/5 dark:text-emerald-400/3" size={250} style={{ transform: "rotate(-30deg)" }} />
+        </div>
+
+        <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-emerald-600 p-3 rounded-full">
-                <Leaf className="w-8 h-8 text-white" />
+                <CannabisLeaf className="text-white" size={32} />
               </div>
             </div>
             <h1 className="text-3xl font-bold mb-2">Create Your Account</h1>

@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, RefreshCw, CheckCircle, AlertCircle, TrendingUp, DollarSign } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -23,7 +24,14 @@ export default function Accounting() {
     <>
       <SEO title="Accounting Integration - Marijuana Bahamas" />
       
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 relative">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-32 left-16 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(20deg)" }} />
+          <CannabisLeaf className="absolute top-1/3 right-12 text-emerald-500/5 dark:text-emerald-400/3" size={220} style={{ transform: "rotate(-40deg)" }} />
+          <CannabisLeaf className="absolute bottom-32 left-1/3 text-emerald-500/5 dark:text-emerald-400/3" size={260} style={{ transform: "rotate(15deg)" }} />
+        </div>
+
         <header className="bg-white border-b sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <Link href="/dashboard">
@@ -33,16 +41,19 @@ export default function Accounting() {
               </Button>
             </Link>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <DollarSign className="w-6 h-6 text-green-700" />
+              <div className="bg-gradient-to-br from-green-700 to-emerald-700 p-2 rounded-lg">
+                <CannabisLeaf className="text-white" size={24} />
+              </div>
               Accounting Integration
             </h1>
             <div className="w-32"></div>
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="container mx-auto px-4 py-8 max-w-5xl relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="col-span-1 md:col-span-2">
+            <Card className="col-span-1 md:col-span-2 group relative overflow-hidden">
+              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={60} />
               <CardHeader>
                 <CardTitle>QuickBooks Online Integration</CardTitle>
                 <CardDescription>
@@ -88,7 +99,8 @@ export default function Accounting() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="group relative overflow-hidden">
+              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={50} />
               <CardHeader>
                 <CardTitle>Configuration</CardTitle>
               </CardHeader>
@@ -118,7 +130,8 @@ export default function Accounting() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="group relative overflow-hidden">
+            <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={60} />
             <CardHeader>
               <CardTitle>Sync History</CardTitle>
             </CardHeader>

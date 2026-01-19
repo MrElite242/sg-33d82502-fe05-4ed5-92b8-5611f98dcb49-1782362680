@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, User, Building2, Calendar, CreditCard, LogOut, ArrowLeft } from "lucide-react";
+import { User, Building2, Calendar, CreditCard, LogOut, ArrowLeft } from "lucide-react";
+import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -60,9 +61,17 @@ export default function AccountPage() {
         title="Account Settings - Cannabis Tracking System"
         description="Manage your account and subscription"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative">
+        {/* Background Watermarks */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <CannabisLeaf className="absolute top-24 left-16 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-20deg)" }} />
+          <CannabisLeaf className="absolute top-1/3 right-20 text-emerald-500/5 dark:text-emerald-400/3" size={260} style={{ transform: "rotate(35deg)" }} />
+          <CannabisLeaf className="absolute bottom-32 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={220} style={{ transform: "rotate(50deg)" }} />
+          <CannabisLeaf className="absolute bottom-20 right-12 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(-15deg)" }} />
+        </div>
+
         {/* Header */}
-        <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <Link href="/dashboard" className="flex items-center gap-2">
@@ -71,7 +80,7 @@ export default function AccountPage() {
               </Link>
               <div className="flex items-center gap-2">
                 <div className="bg-emerald-600 p-2 rounded-lg">
-                  <Leaf className="w-6 h-6 text-white" />
+                  <CannabisLeaf className="text-white" size={24} />
                 </div>
                 <span className="text-xl font-bold">Cannabis Track</span>
               </div>
@@ -79,12 +88,13 @@ export default function AccountPage() {
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto px-4 py-12 relative z-10">
           <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
 
           <div className="space-y-6">
             {/* Account Information */}
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={80} style={{ transform: "rotate(15deg)" }} />
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
@@ -127,7 +137,8 @@ export default function AccountPage() {
             </Card>
 
             {/* Subscription Details */}
-            <Card>
+            <Card className="relative overflow-hidden group">
+              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={80} style={{ transform: "rotate(-10deg)" }} />
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CreditCard className="w-5 h-5" />
@@ -188,7 +199,7 @@ export default function AccountPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex items-center justify-between p-3 border rounded-lg bg-white/50">
                     <div>
                       <p className="font-medium">{getLicenseTypeDisplay(user.licenseType)} License</p>
                       <p className="text-sm text-gray-600">{formatDate(user.licenseStartDate)}</p>
@@ -210,7 +221,7 @@ export default function AccountPage() {
               <CardContent className="space-y-3">
                 <Button 
                   variant="outline" 
-                  className="w-full justify-start"
+                  className="w-full justify-start hover:bg-red-50 hover:text-red-600 hover:border-red-200"
                   onClick={handleLogout}
                 >
                   <LogOut className="w-4 h-4 mr-2" />
