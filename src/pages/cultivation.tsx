@@ -9,12 +9,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Plus, Sprout, Calendar, Droplets, ThermometerSun, Eye, Printer, Edit, ArrowRight } from "lucide-react";
+import { ArrowLeft, Plus, Sprout, Calendar, Droplets, ThermometerSun, Eye, Printer, Edit, ArrowRight, Download, Search, Filter, X, BarChart3 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 import { PlantLabel } from "@/components/PlantLabel";
 import { PlantTimeline } from "@/components/PlantTimeline";
+import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface Plant {
   id: string;
@@ -39,6 +40,14 @@ interface Plant {
   };
 }
 
+interface Filters {
+  stage: string;
+  strain: string;
+  health: string;
+  location: string;
+  search: string;
+}
+
 export default function Cultivation() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -46,6 +55,14 @@ export default function Cultivation() {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isLabelDialogOpen, setIsLabelDialogOpen] = useState(false);
   const [isStageUpdateOpen, setIsStageUpdateOpen] = useState(false);
+  const [isChartsDialogOpen, setIsChartsDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<Filters>({
+    stage: "all",
+    strain: "all",
+    health: "all",
+    location: "all",
+    search: ""
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("cultivationPlants");
@@ -126,12 +143,103 @@ export default function Cultivation() {
             lightCycle: "18/6",
             phLevel: "6.1"
           }
+        },
+        {
+          id: "P1004",
+          strain: "Blue Dream",
+          stage: "Flowering",
+          plantedDate: "2025-12-05",
+          batchNumber: "B1247",
+          location: "Room A1",
+          health: "Good",
+          notes: "Growing well",
+          timeline: [
+            { stage: "Seedling", date: "2025-12-05", completed: true, notes: "Started strong" },
+            { stage: "Vegetative", date: "2025-12-20", completed: true, notes: "Healthy growth" },
+            { stage: "Flowering", date: "2026-01-10", completed: true, notes: "Flowering stage" },
+            { stage: "Harvesting", date: "TBD", completed: false },
+            { stage: "Cured", date: "TBD", completed: false }
+          ],
+          environmental: {
+            temperature: "73°F",
+            humidity: "64%",
+            lightCycle: "12/12",
+            phLevel: "6.3"
+          }
+        },
+        {
+          id: "P1005",
+          strain: "Purple Haze",
+          stage: "Vegetative",
+          plantedDate: "2025-12-20",
+          batchNumber: "B1250",
+          location: "Room B2",
+          health: "Excellent",
+          notes: "Vigorous growth",
+          timeline: [
+            { stage: "Seedling", date: "2025-12-20", completed: true, notes: "Quick germination" },
+            { stage: "Vegetative", date: "2026-01-03", completed: true, notes: "Strong vegetative phase" },
+            { stage: "Flowering", date: "TBD", completed: false },
+            { stage: "Harvesting", date: "TBD", completed: false },
+            { stage: "Cured", date: "TBD", completed: false }
+          ],
+          environmental: {
+            temperature: "71°F",
+            humidity: "67%",
+            lightCycle: "18/6",
+            phLevel: "6.1"
+          }
         }
       ];
       setPlants(demoPlants);
       localStorage.setItem("cultivationPlants", JSON.stringify(demoPlants));
     }
   }, []);
+
+  // Filtered plants based on active filters
+  const filteredPlants = useMemo(() => {
+    return plants.filter(plant => {
+      const matchesStage = filters.stage === "all" || plant.stage === filters.stage;
+      const matchesStrain = filters.strain === "all" || plant.strain === filters.strain;
+      const matchesHealth = filters.health === "all" || plant.health === filters.health;
+      const matchesLocation = filters.location === "all" || plant.location === filters.location;
+      const matchesSearch = filters.search === "" || 
+        plant.id.toLowerCase().includes(filters.search.toLowerCase()) ||
+        plant.strain.toLowerCase().includes(filters.search.toLowerCase());
+      
+      return matchesStage && matchesStrain && matchesHealth && matchesLocation && matchesSearch;
+    });
+  }, [plants, filters]);
+
+  // Get unique values for filter dropdowns
+  const uniqueStrains = useMemo(() => [...new Set(plants.map(p => p.strain))], [plants]);
+  const uniqueLocations = useMemo(() => [...new Set(plants.map(p => p.location))], [plants]);
+
+  // Chart data
+  const stageDistribution = useMemo(() => {
+    const stages = ["Seedling", "Vegetative", "Flowering", "Harvesting", "Cured"];
+    return stages.map(stage => ({
+      name: stage,
+      value: plants.filter(p => p.stage === stage).length
+    })).filter(item => item.value > 0);
+  }, [plants]);
+
+  const healthDistribution = useMemo(() => {
+    const healthLevels = ["Excellent", "Good", "Fair", "Poor"];
+    return healthLevels.map(health => ({
+      name: health,
+      value: plants.filter(p => p.health === health).length
+    })).filter(item => item.value > 0);
+  }, [plants]);
+
+  const strainDistribution = useMemo(() => {
+    return uniqueStrains.map(strain => ({
+      name: strain,
+      count: plants.filter(p => p.strain === strain).length
+    }));
+  }, [plants, uniqueStrains]);
+
+  const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'];
 
   const handleAddPlant = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -216,6 +324,65 @@ export default function Cultivation() {
 
   const handlePrintLabel = () => {
     if (!selectedPlant) return;
+    window.print();
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      stage: "all",
+      strain: "all",
+      health: "all",
+      location: "all",
+      search: ""
+    });
+  };
+
+  const hasActiveFilters = filters.stage !== "all" || filters.strain !== "all" || 
+    filters.health !== "all" || filters.location !== "all" || filters.search !== "";
+
+  // Export to CSV
+  const exportToCSV = () => {
+    const headers = ["Plant ID", "Strain", "Stage", "Batch", "Location", "Planted Date", "Health", "Days in Growth", "Notes"];
+    const rows = filteredPlants.map(plant => [
+      plant.id,
+      plant.strain,
+      plant.stage,
+      plant.batchNumber,
+      plant.location,
+      plant.plantedDate,
+      plant.health,
+      Math.floor((new Date().getTime() - new Date(plant.plantedDate).getTime()) / (1000 * 60 * 60 * 24)),
+      plant.notes.replace(/,/g, ";") // Replace commas in notes
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `plant-inventory-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Export to JSON
+  const exportToJSON = () => {
+    const dataStr = JSON.stringify(filteredPlants, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `plant-inventory-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Print Report
+  const printReport = () => {
     window.print();
   };
 
@@ -319,119 +486,321 @@ export default function Cultivation() {
             </Card>
           </div>
 
+          {/* Filters and Search */}
+          <Card className="mb-6">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Filter className="w-5 h-5 text-gray-600" />
+                  <CardTitle className="text-lg">Filters</CardTitle>
+                  {hasActiveFilters && (
+                    <Badge variant="secondary">{filteredPlants.length} results</Badge>
+                  )}
+                </div>
+                {hasActiveFilters && (
+                  <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
+                    <X className="w-4 h-4" />
+                    Clear All
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {/* Search */}
+                <div className="md:col-span-2">
+                  <Label htmlFor="search">Search</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input
+                      id="search"
+                      placeholder="Search by ID or strain..."
+                      value={filters.search}
+                      onChange={(e) => setFilters({...filters, search: e.target.value})}
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
+
+                {/* Stage Filter */}
+                <div>
+                  <Label htmlFor="stageFilter">Growth Stage</Label>
+                  <Select value={filters.stage} onValueChange={(value) => setFilters({...filters, stage: value})}>
+                    <SelectTrigger id="stageFilter">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Stages</SelectItem>
+                      <SelectItem value="Seedling">Seedling</SelectItem>
+                      <SelectItem value="Vegetative">Vegetative</SelectItem>
+                      <SelectItem value="Flowering">Flowering</SelectItem>
+                      <SelectItem value="Harvesting">Harvesting</SelectItem>
+                      <SelectItem value="Cured">Cured</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Strain Filter */}
+                <div>
+                  <Label htmlFor="strainFilter">Strain</Label>
+                  <Select value={filters.strain} onValueChange={(value) => setFilters({...filters, strain: value})}>
+                    <SelectTrigger id="strainFilter">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Strains</SelectItem>
+                      {uniqueStrains.map(strain => (
+                        <SelectItem key={strain} value={strain}>{strain}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Location Filter */}
+                <div>
+                  <Label htmlFor="locationFilter">Location</Label>
+                  <Select value={filters.location} onValueChange={(value) => setFilters({...filters, location: value})}>
+                    <SelectTrigger id="locationFilter">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Locations</SelectItem>
+                      {uniqueLocations.map(location => (
+                        <SelectItem key={location} value={location}>{location}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Plant Management */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Plant Inventory</CardTitle>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2">
-                    <Plus className="w-4 h-4" />
-                    Add Plant
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add New Plant</DialogTitle>
-                    <DialogDescription>Enter the details for the new plant</DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleAddPlant} className="space-y-4">
-                    <div>
-                      <Label htmlFor="strain">Strain</Label>
-                      <Input id="strain" name="strain" placeholder="e.g., Blue Dream" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="stage">Initial Growth Stage</Label>
-                      <Select name="stage" required>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select stage" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Seedling">Seedling</SelectItem>
-                          <SelectItem value="Vegetative">Vegetative</SelectItem>
-                          <SelectItem value="Flowering">Flowering</SelectItem>
-                          <SelectItem value="Harvesting">Harvesting</SelectItem>
-                          <SelectItem value="Cured">Cured</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="plantedDate">Planted Date</Label>
-                      <Input id="plantedDate" name="plantedDate" type="date" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="batchNumber">Batch Number</Label>
-                      <Input id="batchNumber" name="batchNumber" placeholder="e.g., B1250" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="location">Location</Label>
-                      <Input id="location" name="location" placeholder="e.g., Room A1" required />
-                    </div>
-                    <Button type="submit" className="w-full">Add Plant</Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
+              <CardTitle>Plant Inventory ({filteredPlants.length})</CardTitle>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setIsChartsDialogOpen(true)} className="gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  Statistics
+                </Button>
+                <Button variant="outline" onClick={exportToCSV} className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export CSV
+                </Button>
+                <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="gap-2">
+                      <Plus className="w-4 h-4" />
+                      Add Plant
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add New Plant</DialogTitle>
+                      <DialogDescription>Enter the details for the new plant</DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleAddPlant} className="space-y-4">
+                      <div>
+                        <Label htmlFor="strain">Strain</Label>
+                        <Input id="strain" name="strain" placeholder="e.g., Blue Dream" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="stage">Initial Growth Stage</Label>
+                        <Select name="stage" required>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select stage" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Seedling">Seedling</SelectItem>
+                            <SelectItem value="Vegetative">Vegetative</SelectItem>
+                            <SelectItem value="Flowering">Flowering</SelectItem>
+                            <SelectItem value="Harvesting">Harvesting</SelectItem>
+                            <SelectItem value="Cured">Cured</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor="plantedDate">Planted Date</Label>
+                        <Input id="plantedDate" name="plantedDate" type="date" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="batchNumber">Batch Number</Label>
+                        <Input id="batchNumber" name="batchNumber" placeholder="e.g., B1250" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="location">Location</Label>
+                        <Input id="location" name="location" placeholder="e.g., Room A1" required />
+                      </div>
+                      <Button type="submit" className="w-full">Add Plant</Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Plant ID</TableHead>
-                    <TableHead>Strain</TableHead>
-                    <TableHead>Stage</TableHead>
-                    <TableHead>Batch</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Planted Date</TableHead>
-                    <TableHead>Health</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {plants.map((plant) => (
-                    <TableRow key={plant.id}>
-                      <TableCell className="font-medium">{plant.id}</TableCell>
-                      <TableCell>{plant.strain}</TableCell>
-                      <TableCell>
-                        <Badge className={getStageColor(plant.stage)}>{plant.stage}</Badge>
-                      </TableCell>
-                      <TableCell>{plant.batchNumber}</TableCell>
-                      <TableCell>{plant.location}</TableCell>
-                      <TableCell>{plant.plantedDate}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-green-600">{plant.health}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedPlant(plant);
-                              setIsDetailDialogOpen(true);
-                            }}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedPlant(plant);
-                              setIsLabelDialogOpen(true);
-                            }}
-                          >
-                            <Printer className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+              {filteredPlants.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <Sprout className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No plants match your filters</p>
+                  <Button variant="link" onClick={clearFilters} className="mt-2">
+                    Clear filters
+                  </Button>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Plant ID</TableHead>
+                      <TableHead>Strain</TableHead>
+                      <TableHead>Stage</TableHead>
+                      <TableHead>Batch</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Planted Date</TableHead>
+                      <TableHead>Health</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredPlants.map((plant) => (
+                      <TableRow key={plant.id}>
+                        <TableCell className="font-medium">{plant.id}</TableCell>
+                        <TableCell>{plant.strain}</TableCell>
+                        <TableCell>
+                          <Badge className={getStageColor(plant.stage)}>{plant.stage}</Badge>
+                        </TableCell>
+                        <TableCell>{plant.batchNumber}</TableCell>
+                        <TableCell>{plant.location}</TableCell>
+                        <TableCell>{plant.plantedDate}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-green-600">{plant.health}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedPlant(plant);
+                                setIsDetailDialogOpen(true);
+                              }}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedPlant(plant);
+                                setIsLabelDialogOpen(true);
+                              }}
+                            >
+                              <Printer className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </div>
       </div>
+
+      {/* Statistics Charts Dialog */}
+      <Dialog open={isChartsDialogOpen} onOpenChange={setIsChartsDialogOpen}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-green-600" />
+              Plant Growth Statistics
+            </DialogTitle>
+            <DialogDescription>
+              Visual analytics and insights for your plant inventory
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Stage Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Plants by Growth Stage</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={stageDistribution}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {stageDistribution.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Strain Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Plants by Strain</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={strainDistribution}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#10b981" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Health Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Health Status Distribution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={healthDistribution} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#3b82f6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Export Options */}
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={exportToJSON} className="gap-2">
+                <Download className="w-4 h-4" />
+                Export JSON
+              </Button>
+              <Button variant="outline" onClick={printReport} className="gap-2">
+                <Printer className="w-4 h-4" />
+                Print Report
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Plant Detail Dialog */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
