@@ -352,7 +352,7 @@ export default function Cultivation() {
       plant.plantedDate,
       plant.health,
       Math.floor((new Date().getTime() - new Date(plant.plantedDate).getTime()) / (1000 * 60 * 60 * 24)),
-      plant.notes.replace(/,/g, ";") // Replace commas in notes
+      (plant.notes || "").replace(/,/g, ";") // Fix: handle undefined/null notes
     ]);
 
     const csvContent = [
