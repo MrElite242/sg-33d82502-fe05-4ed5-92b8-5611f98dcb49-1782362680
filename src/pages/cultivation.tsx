@@ -50,7 +50,12 @@ export default function Cultivation() {
   useEffect(() => {
     const saved = localStorage.getItem("cultivationPlants");
     if (saved) {
-      setPlants(JSON.parse(saved));
+      try {
+        setPlants(JSON.parse(saved));
+      } catch (error) {
+        console.error("Error parsing cultivation data:", error);
+        setPlants([]);
+      }
     } else {
       const demoPlants: Plant[] = [
         {
@@ -214,6 +219,9 @@ export default function Cultivation() {
     window.print();
   };
 
+  // Safe calculation with proper array check
+  const floweringCount = plants?.filter(p => p?.stage === "Flowering")?.length || 0;
+
   return (
     <>
       <SEO title="Cultivation - Plant Tracking & Labeling" />
@@ -271,9 +279,7 @@ export default function Cultivation() {
                     <Calendar className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold">
-                      {plants.filter(p => p.stage === "Flowering").length}
-                    </p>
+                    <p className="text-2xl font-bold">{floweringCount}</p>
                     <p className="text-sm text-gray-600">Flowering</p>
                   </div>
                 </div>
