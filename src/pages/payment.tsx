@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CreditCard, Wallet, Building2, Bitcoin, Apple, CheckCircle2, Lock, ArrowLeft, ShieldCheck } from "lucide-react";
+import { CreditCard, Wallet, Building2, Bitcoin, Smartphone, CheckCircle2, Lock, ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -314,7 +314,7 @@ export default function Payment() {
                             onClick={handlePayment}
                           >
                             <div className="flex items-center gap-3">
-                              <Apple className="w-8 h-8" />
+                              <Smartphone className="w-8 h-8" />
                               <div className="text-left">
                                 <div className="font-semibold">Apple Pay</div>
                                 <div className="text-xs text-gray-300">Pay with Apple Wallet</div>

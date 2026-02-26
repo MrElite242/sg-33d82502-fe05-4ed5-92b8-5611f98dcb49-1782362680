@@ -2,7 +2,7 @@ import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Sparkles, TrendingUp, Building2, CannabisLeaf } from "lucide-react";
+import { Check, X, Sparkles, TrendingUp, Building2 } from "lucide-react";
 import Link from "next/link";
 
 export default function Plans() {
