@@ -1,260 +1,234 @@
-import Link from "next/link";
 import { SEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, ArrowRight } from "lucide-react";
-import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Check, X, Sparkles, TrendingUp, Building2, CannabisLeaf } from "lucide-react";
+import Link from "next/link";
 
-const plans = [
-  {
-    id: "quarterly",
-    name: "Quarterly Plan",
-    price: "$499",
-    period: "per 3 months",
-    description: "Perfect for small operations testing the waters",
-    features: [
-      "Full seed-to-sale tracking",
-      "Cultivation management",
-      "Manufacturing & testing modules",
-      "Transport & logistics",
-      "Retail POS system",
-      "Email support",
-      "Basic analytics & reporting",
-      "Up to 5 users",
-    ],
-    cta: "Start Quarterly",
-    popular: false,
-  },
-  {
-    id: "semi-annually",
-    name: "Semi-Annual Plan",
-    price: "$899",
-    period: "per 6 months",
-    savings: "Save 10%",
-    description: "Best value for growing businesses",
-    features: [
-      "Everything in Quarterly",
-      "Priority email support",
-      "Advanced analytics dashboard",
-      "Custom reporting",
-      "QuickBooks integration",
-      "Up to 15 users",
-      "API access",
-      "Dedicated account manager",
-    ],
-    cta: "Start Semi-Annual",
-    popular: true,
-  },
-  {
-    id: "annually",
-    name: "Annual Plan",
-    price: "$1,599",
-    period: "per year",
-    savings: "Save 20%",
-    description: "Maximum savings for established operations",
-    features: [
-      "Everything in Semi-Annual",
-      "24/7 priority support",
-      "Advanced compliance tools",
-      "Multi-location support",
-      "Custom integrations",
-      "Unlimited users",
-      "White-label options",
-      "Quarterly business reviews",
-      "Training & onboarding",
-    ],
-    cta: "Start Annual",
-    popular: false,
-  },
-];
+export default function Plans() {
+  const plans = [
+    {
+      name: "Starter",
+      price: 49,
+      interval: "month",
+      description: "Perfect for small operations just getting started",
+      popular: false,
+      features: [
+        { name: "Up to 50 plants", included: true },
+        { name: "Basic cultivation tracking", included: true },
+        { name: "Simple batch management", included: true },
+        { name: "Retail POS", included: true },
+        { name: "Email support", included: true },
+        { name: "QuickBooks integration", included: false },
+        { name: "Advanced analytics", included: false },
+        { name: "Multi-location support", included: false },
+        { name: "Priority support", included: false },
+      ]
+    },
+    {
+      name: "Professional",
+      price: 199,
+      interval: "month",
+      description: "Full-featured platform for growing businesses",
+      popular: true,
+      features: [
+        { name: "Unlimited plants", included: true },
+        { name: "Complete tracking modules", included: true },
+        { name: "Advanced batch management", included: true },
+        { name: "Full retail & manufacturing", included: true },
+        { name: "QuickBooks integration", included: true },
+        { name: "Advanced analytics & reports", included: true },
+        { name: "Up to 3 locations", included: true },
+        { name: "Priority email & chat support", included: true },
+        { name: "Custom workflows", included: false },
+      ]
+    },
+    {
+      name: "Enterprise",
+      price: 499,
+      interval: "month",
+      description: "Complete solution for large-scale operations",
+      popular: false,
+      features: [
+        { name: "Unlimited everything", included: true },
+        { name: "All modules + custom features", included: true },
+        { name: "Multi-state compliance", included: true },
+        { name: "Unlimited locations", included: true },
+        { name: "All integrations included", included: true },
+        { name: "Custom reporting & analytics", included: true },
+        { name: "Dedicated account manager", included: true },
+        { name: "24/7 phone support", included: true },
+        { name: "Custom development", included: true },
+      ]
+    }
+  ];
 
-const features = [
-  {
-    title: "Seed-to-Sale Tracking",
-    description: "Complete traceability from cultivation to retail sale",
-  },
-  {
-    title: "Compliance Ready",
-    description: "Built-in compliance tools for regulatory reporting",
-  },
-  {
-    title: "Multi-Module System",
-    description: "Cultivation, manufacturing, testing, transport, and retail in one platform",
-  },
-  {
-    title: "Accounting Integration",
-    description: "Seamless QuickBooks and accounting software integration",
-  },
-  {
-    title: "Real-Time Analytics",
-    description: "Track performance metrics and make data-driven decisions",
-  },
-  {
-    title: "Secure & Reliable",
-    description: "Bank-level security with 99.9% uptime guarantee",
-  },
-];
-
-export default function PlansPage() {
   return (
     <>
       <SEO 
-        title="Pricing Plans - Cannabis Tracking System"
-        description="Choose the perfect plan for your cannabis business"
+        title="Pricing Plans - Blaze 360"
+        description="Choose the perfect plan for your cannabis operation. From starter to enterprise solutions."
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative">
-        {/* Background Watermarks */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <CannabisLeaf className="absolute top-24 left-16 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-20deg)" }} />
-          <CannabisLeaf className="absolute top-48 right-12 text-emerald-500/5 dark:text-emerald-400/3" size={260} style={{ transform: "rotate(25deg)" }} />
-          <CannabisLeaf className="absolute bottom-32 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={240} style={{ transform: "rotate(40deg)" }} />
-          <CannabisLeaf className="absolute bottom-20 right-1/3 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(-30deg)" }} />
-        </div>
-
+      
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900">
         {/* Header */}
         <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="bg-emerald-600 p-2 rounded-lg">
-                  <CannabisLeaf className="text-white" size={24} />
-                </div>
-                <span className="text-xl font-bold">Cannabis Track</span>
-              </Link>
-              <div className="flex items-center gap-4">
-                <Link href="/login">
-                  <Button variant="ghost">Login</Button>
-                </Link>
-                <Link href="/signup">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700">
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
-            </div>
+          <div className="container mx-auto px-4 py-4">
+            <Link href="/">
+              <Button variant="ghost">← Back to Home</Button>
+            </Link>
           </div>
         </header>
 
         {/* Hero Section */}
-        <div className="py-16 px-4 relative z-10">
-          <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Simple, Transparent Pricing
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Choose the plan that fits your business. All plans include our complete seed-to-sale platform.
-            </p>
+        <section className="container mx-auto px-4 py-16 text-center">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold">
+            <Sparkles className="w-4 h-4" />
+            14-Day Free Trial • No Credit Card Required
           </div>
-        </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+            Choose Your Plan
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Scale your cannabis operation with flexible pricing that grows with your business
+          </p>
+        </section>
 
         {/* Pricing Cards */}
-        <div className="max-w-7xl mx-auto px-4 pb-16 relative z-10">
-          <div className="grid md:grid-cols-3 gap-8">
+        <section className="container mx-auto px-4 pb-16">
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {plans.map((plan) => (
               <Card 
-                key={plan.id}
-                className={`relative group overflow-hidden ${
+                key={plan.name}
+                className={`relative ${
                   plan.popular 
-                    ? "border-emerald-600 border-2 shadow-xl scale-105" 
-                    : ""
+                    ? "border-emerald-500 dark:border-emerald-400 shadow-2xl scale-105" 
+                    : "border-gray-200 dark:border-gray-800"
                 }`}
               >
-                <CannabisLeaf className="absolute -top-4 -right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-500" size={150} style={{ transform: "rotate(15deg)" }} />
-                
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                    <span className="bg-emerald-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-1">
                       Most Popular
-                    </span>
+                    </Badge>
                   </div>
                 )}
-                <CardHeader className="text-center pb-8">
+                <CardHeader className="text-center pb-8 pt-8">
                   <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                  <CardDescription className="mb-4">{plan.description}</CardDescription>
-                  <div className="space-y-1">
-                    <div className="text-4xl font-bold text-emerald-600">{plan.price}</div>
-                    <div className="text-sm text-gray-600">{plan.period}</div>
-                    {plan.savings && (
-                      <div className="text-sm font-semibold text-emerald-600">{plan.savings}</div>
-                    )}
+                  <CardDescription className="text-base">{plan.description}</CardDescription>
+                  <div className="mt-4">
+                    <span className="text-5xl font-bold">${plan.price}</span>
+                    <span className="text-gray-600 dark:text-gray-400">/{plan.interval}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 mb-6 relative z-10">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
+                  <Link href="/payment">
+                    <Button 
+                      className={`w-full mb-6 ${
+                        plan.popular 
+                          ? "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700" 
+                          : ""
+                      }`}
+                      variant={plan.popular ? "default" : "outline"}
+                    >
+                      Start Free Trial
+                    </Button>
+                  </Link>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        {feature.included ? (
+                          <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <X className="w-5 h-5 text-gray-400 dark:text-gray-600 flex-shrink-0 mt-0.5" />
+                        )}
+                        <span className={feature.included ? "" : "text-gray-400 dark:text-gray-600"}>
+                          {feature.name}
+                        </span>
                       </li>
                     ))}
                   </ul>
-                  <Link href="/signup" className="block relative z-10">
-                    <Button 
-                      className={`w-full ${
-                        plan.popular
-                          ? "bg-emerald-600 hover:bg-emerald-700"
-                          : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
-                      }`}
-                    >
-                      {plan.cta}
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </Link>
                 </CardContent>
               </Card>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Features Section */}
-        <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm py-16 px-4 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Everything You Need to Manage Your Cannabis Business
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              {features.map((feature) => (
-                <div key={feature.title} className="text-center group p-4 rounded-xl hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 transition-colors">
-                  <div className="bg-emerald-100 dark:bg-emerald-900 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Check className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{feature.description}</p>
-                </div>
-              ))}
+        {/* FAQ Section */}
+        <section className="bg-white/90 dark:bg-gray-900/90 py-16">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Can I switch plans later?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">What payment methods do you accept?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    We accept all major credit cards, ACH bank transfers, cryptocurrency (Bitcoin, Ethereum, USDC), and digital wallets (Apple Pay, Google Pay, PayPal).
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Is there a long-term commitment?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    No contracts required. All plans are month-to-month and you can cancel anytime. We also offer annual plans with 20% discount.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Do you offer discounts for annual billing?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Yes! Save 20% when you choose annual billing. Contact sales for custom enterprise pricing.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* CTA Section */}
-        <div className="py-16 px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <Card className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-0 relative overflow-hidden">
-              <CannabisLeaf className="absolute -left-10 -bottom-10 text-white/10" size={200} style={{ transform: "rotate(30deg)" }} />
-              <CannabisLeaf className="absolute -right-10 -top-10 text-white/10" size={200} style={{ transform: "rotate(-30deg)" }} />
-              
-              <CardContent className="py-12 relative z-10">
-                <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-                <p className="text-xl mb-8 text-emerald-50">
-                  Join hundreds of cannabis businesses using our platform
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/signup">
-                    <Button size="lg" className="bg-white text-emerald-600 hover:bg-gray-100">
-                      Start Free Trial
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                  <Link href="/login">
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-emerald-700">
-                      Login to Account
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* CTA */}
+        <section className="container mx-auto px-4 py-16 text-center">
+          <Card className="max-w-2xl mx-auto bg-gradient-to-r from-emerald-600 to-green-600 text-white border-0">
+            <CardContent className="py-12">
+              <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+              <p className="text-lg mb-6 text-emerald-50">
+                Start your 14-day free trial today. No credit card required.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/signup">
+                  <Button size="lg" className="bg-white text-emerald-600 hover:bg-gray-100">
+                    Start Free Trial
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-emerald-700">
+                    Schedule a Demo
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       </div>
     </>
   );
