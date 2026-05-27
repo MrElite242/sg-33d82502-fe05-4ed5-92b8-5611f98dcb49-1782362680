@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Stethoscope, Building2, User, Loader2, AlertCircle } from "lucide-react";
+import { Stethoscope, Building2, User, Loader2, AlertCircle, Store } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ export default function Login() {
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient">("doctor");
+  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business">("business");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -45,6 +45,8 @@ export default function Login() {
         router.push("/pharmacy-dashboard");
       } else if (user?.user_role === "patient") {
         router.push("/patient-dashboard");
+      } else if (user?.user_role === "business") {
+        router.push("/dashboard");
       } else {
         router.push("/dashboard");
       }
@@ -84,7 +86,17 @@ export default function Login() {
 
           <CardContent>
             <Tabs value={selectedRole} onValueChange={(v) => setSelectedRole(v as any)} className="mb-6">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2 mb-2">
+                <TabsTrigger value="business" className="gap-1.5">
+                  <Store className="w-4 h-4" />
+                  Cannabis Business
+                </TabsTrigger>
+                <TabsTrigger value="patient" className="gap-1.5">
+                  <User className="w-4 h-4" />
+                  Patient
+                </TabsTrigger>
+              </TabsList>
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="doctor" className="gap-1.5">
                   <Stethoscope className="w-4 h-4" />
                   Doctor
@@ -92,10 +104,6 @@ export default function Login() {
                 <TabsTrigger value="pharmacy" className="gap-1.5">
                   <Building2 className="w-4 h-4" />
                   Pharmacy
-                </TabsTrigger>
-                <TabsTrigger value="patient" className="gap-1.5">
-                  <User className="w-4 h-4" />
-                  Patient
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -157,6 +165,11 @@ export default function Login() {
 
             <div className="mt-6 text-center text-sm">
               <span className="text-gray-600 dark:text-gray-400">Don't have an account? </span>
+              {selectedRole === "business" && (
+                <Link href="/signup?role=business" className="text-emerald-600 hover:underline font-semibold">
+                  Register Your Business
+                </Link>
+              )}
               {selectedRole === "doctor" && (
                 <Link href="/doctor-signup" className="text-emerald-600 hover:underline font-semibold">
                   Register as Doctor

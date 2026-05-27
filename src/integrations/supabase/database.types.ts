@@ -19,6 +19,11 @@ export type Database = {
         Row: {
           address: string | null
           avatar_url: string | null
+          company_address: string | null
+          company_license: string | null
+          company_name: string | null
+          company_phone: string | null
+          company_type: string | null
           created_at: string | null
           date_of_birth: string | null
           dea_number: string | null
@@ -45,6 +50,11 @@ export type Database = {
         Insert: {
           address?: string | null
           avatar_url?: string | null
+          company_address?: string | null
+          company_license?: string | null
+          company_name?: string | null
+          company_phone?: string | null
+          company_type?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           dea_number?: string | null
@@ -71,6 +81,11 @@ export type Database = {
         Update: {
           address?: string | null
           avatar_url?: string | null
+          company_address?: string | null
+          company_license?: string | null
+          company_name?: string | null
+          company_phone?: string | null
+          company_type?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           dea_number?: string | null
