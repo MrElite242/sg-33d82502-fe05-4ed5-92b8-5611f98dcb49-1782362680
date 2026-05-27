@@ -9,7 +9,7 @@ export default function Plans() {
   const plans = [
     {
       name: "Starter",
-      price: 49,
+      price: 99,
       interval: "month",
       description: "Perfect for small operations just getting started",
       popular: false,
@@ -27,7 +27,7 @@ export default function Plans() {
     },
     {
       name: "Professional",
-      price: 199,
+      price: 249,
       interval: "month",
       description: "Full-featured platform for growing businesses",
       popular: true,
@@ -45,7 +45,7 @@ export default function Plans() {
     },
     {
       name: "Enterprise",
-      price: 499,
+      price: 549,
       interval: "month",
       description: "Complete solution for large-scale operations",
       popular: false,

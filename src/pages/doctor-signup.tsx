@@ -53,7 +53,7 @@ export default function DoctorSignup() {
     {
       id: "starter",
       name: "Starter",
-      price: 99,
+      price: 149,
       interval: "month",
       features: [
         "Up to 50 prescriptions/month",
@@ -66,7 +66,7 @@ export default function DoctorSignup() {
     {
       id: "professional",
       name: "Professional",
-      price: 249,
+      price: 299,
       interval: "month",
       popular: true,
       features: [
@@ -82,7 +82,7 @@ export default function DoctorSignup() {
     {
       id: "enterprise",
       name: "Enterprise",
-      price: 599,
+      price: 649,
       interval: "month",
       features: [
         "Everything in Professional",

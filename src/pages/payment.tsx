@@ -18,7 +18,7 @@ export default function Payment() {
   // Get selected plan from URL params or localStorage
   const [selectedPlan] = useState({
     name: "Professional",
-    price: 199,
+    price: 249,
     interval: "month"
   });
 
