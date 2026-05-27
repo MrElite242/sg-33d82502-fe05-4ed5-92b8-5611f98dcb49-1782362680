@@ -122,6 +122,22 @@ export default function Login() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {selectedRole === "admin" && (
+                <Alert className="bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800">
+                  <Shield className="h-4 w-4 text-red-600" />
+                  <AlertDescription className="text-sm">
+                    <div className="font-semibold text-red-700 dark:text-red-400 mb-2">Demo Admin Credentials:</div>
+                    <div className="space-y-1 text-red-600 dark:text-red-400">
+                      <div><strong>Email:</strong> admin@blazed360.com</div>
+                      <div><strong>Password:</strong> admin123</div>
+                    </div>
+                    <div className="text-xs text-red-500 dark:text-red-500 mt-2">
+                      For production, change these credentials immediately.
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
