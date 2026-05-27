@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield } from "lucide-react";
+import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield, LogOut, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
