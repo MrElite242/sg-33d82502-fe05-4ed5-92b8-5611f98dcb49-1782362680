@@ -67,7 +67,18 @@ export default function AdminPortal() {
     pendingAlerts: 3
   });
 
+  // Check for demo admin user
+  const [isDemoAdmin, setIsDemoAdmin] = useState(false);
+
   useEffect(() => {
+    // Check for demo admin in localStorage
+    const demoAdmin = localStorage.getItem("demo_admin_user");
+    if (demoAdmin) {
+      setIsDemoAdmin(true);
+      loadSystemData();
+      return;
+    }
+
     // Only admin users can access this page
     if (!loading && (!user || user.user_role !== "admin")) {
       toast({
@@ -273,14 +284,19 @@ export default function AdminPortal() {
   });
 
   if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-      </div>
-    );
+    // Allow demo admin to bypass
+    if (localStorage.getItem("demo_admin_user")) {
+      // Continue rendering
+    } else {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+        </div>
+      );
+    }
   }
 
-  if (user.user_role !== "admin") {
+  if (!isDemoAdmin && user?.user_role !== "admin") {
     return null;
   }
 
