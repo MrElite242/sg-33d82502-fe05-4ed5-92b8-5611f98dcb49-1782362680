@@ -6,7 +6,7 @@ interface UserProfile {
   id: string;
   email: string;
   full_name: string | null;
-  user_role: "doctor" | "pharmacy" | "patient" | "admin" | null;
+  user_role: "doctor" | "pharmacy" | "patient" | "business" | "admin" | null;
   avatar_url: string | null;
   // Doctor fields
   medical_license?: string | null;
@@ -28,6 +28,12 @@ interface UserProfile {
   phone?: string | null;
   address?: string | null;
   medical_conditions?: string[] | null;
+  // Business fields
+  company_name?: string | null;
+  company_license?: string | null;
+  company_type?: string | null;
+  company_address?: string | null;
+  company_phone?: string | null;
 }
 
 interface AuthContextType {
