@@ -7,63 +7,63 @@ import Link from "next/link";
 
 export default function Home() {
   const modules = [
-    {
-      icon: Sprout,
-      title: "Cultivation",
-      description: "Track plants from seed to harvest with batch management and growth monitoring",
-      href: "/cultivation",
-      color: "text-green-600"
-    },
-    {
-      icon: FileText,
-      title: "E-Prescriptions",
-      description: "Secure medical cannabis prescriptions, doctor verification, and pharmacy routing",
-      href: "/doctor-signup",
-      color: "text-indigo-600"
-    },
-    {
-      icon: Factory,
-      title: "Manufacturing",
-      description: "Manage extraction, processing, and product creation with full traceability",
-      href: "/manufacturing",
-      color: "text-purple-600"
-    },
-    {
-      icon: FlaskConical,
-      title: "Testing",
-      description: "Lab results, compliance testing, and quality assurance documentation",
-      href: "/testing",
-      color: "text-blue-600"
-    },
-    {
-      icon: TrendingUp,
-      title: "Research",
-      description: "Data analytics, strain performance, and cultivation insights",
-      href: "/research",
-      color: "text-orange-600"
-    },
-    {
-      icon: Truck,
-      title: "Transport",
-      description: "Manage manifests, delivery routes, and compliance documentation",
-      href: "/transport",
-      color: "text-yellow-600"
-    },
-    {
-      icon: Store,
-      title: "Retail",
-      description: "Point of sale, inventory management, and customer tracking",
-      href: "/retail",
-      color: "text-pink-600"
-    }
-  ];
+  {
+    icon: Sprout,
+    title: "Cultivation",
+    description: "Track plants from seed to harvest with batch management and growth monitoring",
+    href: "/cultivation",
+    color: "text-green-600"
+  },
+  {
+    icon: FileText,
+    title: "E-Prescriptions",
+    description: "Secure medical cannabis prescriptions, doctor verification, and pharmacy routing",
+    href: "/doctor-signup",
+    color: "text-indigo-600"
+  },
+  {
+    icon: Factory,
+    title: "Manufacturing",
+    description: "Manage extraction, processing, and product creation with full traceability",
+    href: "/manufacturing",
+    color: "text-purple-600"
+  },
+  {
+    icon: FlaskConical,
+    title: "Testing",
+    description: "Lab results, compliance testing, and quality assurance documentation",
+    href: "/testing",
+    color: "text-blue-600"
+  },
+  {
+    icon: TrendingUp,
+    title: "Research",
+    description: "Data analytics, strain performance, and cultivation insights",
+    href: "/research",
+    color: "text-orange-600"
+  },
+  {
+    icon: Truck,
+    title: "Transport",
+    description: "Manage manifests, delivery routes, and compliance documentation",
+    href: "/transport",
+    color: "text-yellow-600"
+  },
+  {
+    icon: Store,
+    title: "Retail",
+    description: "Point of sale, inventory management, and customer tracking",
+    href: "/retail",
+    color: "text-pink-600"
+  }];
+
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Blaze 360 - Cannabis Seed to Sale Platform"
-        description="Complete cannabis tracking solution from cultivation to retail sales with compliance and accounting integration"
-      />
+        description="Complete cannabis tracking solution from cultivation to retail sales with compliance and accounting integration" />
+      
       
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative overflow-hidden">
         {/* Background Watermark Leaves */}
@@ -84,8 +84,8 @@ export default function Home() {
                 <div className="absolute inset-0 bg-white/20 rounded-xl"></div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                  Blaze 360
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Canna Blaze 360
+
                 </h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Seed to Sale Platform</p>
               </div>
@@ -275,8 +275,8 @@ export default function Home() {
                       {module.description}
                     </CardDescription>
                   </CardContent>
-                </Card>
-              );
+                </Card>);
+
             })}
           </div>
         </section>
@@ -392,6 +392,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </>
-  );
+    </>);
+
 }
