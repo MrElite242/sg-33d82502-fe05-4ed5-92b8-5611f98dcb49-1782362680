@@ -245,9 +245,9 @@ export default function Retail() {
       setProcessing(false);
 
       // Reload products to reflect new stock levels
-      const savedInventory = localStorage.getItem("inventoryItems");
-      if (savedInventory) {
-        const inventory: InventoryItem[] = JSON.parse(savedInventory);
+      const reloadedInventory = localStorage.getItem("inventoryItems");
+      if (reloadedInventory) {
+        const inventory: InventoryItem[] = JSON.parse(reloadedInventory);
         const availableProducts = inventory.filter(item => 
           item.status === "in-stock" || item.status === "low-stock"
         );
