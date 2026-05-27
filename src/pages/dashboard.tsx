@@ -65,47 +65,47 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
-      </div>
-    );
+      </div>);
+
   }
 
   const quickStats = [
-    { 
-      label: "Active Plants", 
-      value: stats.activePlants.toLocaleString(), 
-      icon: Sprout, 
-      color: "text-green-600",
-      bgColor: "bg-green-50"
-    },
-    { 
-      label: "Batches in Production", 
-      value: stats.batchesInProduction.toString(), 
-      icon: Factory, 
-      color: "text-purple-600",
-      bgColor: "bg-purple-50"
-    },
-    { 
-      label: "Pending Tests", 
-      value: stats.pendingTests.toString(), 
-      icon: FlaskConical, 
-      color: "text-blue-600",
-      bgColor: "bg-blue-50"
-    },
-    { 
-      label: "Active Deliveries", 
-      value: stats.activeDeliveries.toString(), 
-      icon: Truck, 
-      color: "text-orange-600",
-      bgColor: "bg-orange-50"
-    },
-    { 
-      label: "Daily Sales", 
-      value: `$${stats.dailySales.toLocaleString()}`, 
-      icon: Store, 
-      color: "text-pink-600",
-      bgColor: "bg-pink-50"
-    },
-  ];
+  {
+    label: "Active Plants",
+    value: stats.activePlants.toLocaleString(),
+    icon: Sprout,
+    color: "text-green-600",
+    bgColor: "bg-green-50"
+  },
+  {
+    label: "Batches in Production",
+    value: stats.batchesInProduction.toString(),
+    icon: Factory,
+    color: "text-purple-600",
+    bgColor: "bg-purple-50"
+  },
+  {
+    label: "Pending Tests",
+    value: stats.pendingTests.toString(),
+    icon: FlaskConical,
+    color: "text-blue-600",
+    bgColor: "bg-blue-50"
+  },
+  {
+    label: "Active Deliveries",
+    value: stats.activeDeliveries.toString(),
+    icon: Truck,
+    color: "text-orange-600",
+    bgColor: "bg-orange-50"
+  },
+  {
+    label: "Daily Sales",
+    value: `$${stats.dailySales.toLocaleString()}`,
+    icon: Store,
+    color: "text-pink-600",
+    bgColor: "bg-pink-50"
+  }];
+
 
   return (
     <>
@@ -126,7 +126,7 @@ export default function Dashboard() {
               <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-2 rounded-lg shadow-lg">
                 <CannabisLeaf className="text-white" size={24} />
               </div>
-              <span className="text-xl font-bold">Cannabis Track</span>
+              <span className="text-xl font-bold">Canna 360 Track</span>
             </Link>
             
             <div className="flex items-center gap-4">
@@ -160,19 +160,19 @@ export default function Dashboard() {
           <Card className={`mb-8 border-2 ${stats.complianceStatus === "compliant" ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}`}>
             <CardContent className="flex items-center justify-between py-4">
               <div className="flex items-center gap-3">
-                {stats.complianceStatus === "compliant" ? (
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-6 h-6 text-yellow-600" />
-                )}
+                {stats.complianceStatus === "compliant" ?
+                <CheckCircle className="w-6 h-6 text-green-600" /> :
+
+                <AlertCircle className="w-6 h-6 text-yellow-600" />
+                }
                 <div>
                   <h3 className="font-semibold">
                     {stats.complianceStatus === "compliant" ? "All Systems Compliant" : "Action Required"}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {stats.complianceStatus === "compliant" 
-                      ? "All operations meeting regulatory requirements" 
-                      : "3 items need attention"}
+                    {stats.complianceStatus === "compliant" ?
+                    "All operations meeting regulatory requirements" :
+                    "3 items need attention"}
                   </p>
                 </div>
               </div>
@@ -198,8 +198,8 @@ export default function Dashboard() {
                     <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                     <p className="text-sm text-gray-600">{stat.label}</p>
                   </CardContent>
-                </Card>
-              );
+                </Card>);
+
             })}
           </div>
 
@@ -391,6 +391,6 @@ export default function Dashboard() {
           </Tabs>
         </div>
       </div>
-    </>
-  );
+    </>);
+
 }
