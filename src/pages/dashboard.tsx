@@ -260,6 +260,24 @@ export default function Dashboard() {
                           </div>
                         </Button>
                       </Link>
+                      <Link href="/analytics">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <TrendingUp className="w-4 h-4 text-blue-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Analytics</div>
+                            <div className="text-xs text-gray-500">Insights & Reports</div>
+                          </div>
+                        </Button>
+                      </Link>
+                      <Link href="/staff">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <User className="w-4 h-4 text-indigo-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Staff</div>
+                            <div className="text-xs text-gray-500">Team Management</div>
+                          </div>
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
