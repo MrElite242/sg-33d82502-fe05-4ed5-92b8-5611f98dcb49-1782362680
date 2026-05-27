@@ -22,7 +22,8 @@ interface DashboardStats {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user, logout, isAuthenticated, loading } = useAuth();
+  const { user, signOut, loading } = useAuth();
+  const isAuthenticated = !!user;
   const [stats, setStats] = useState<DashboardStats>({
     activePlants: 0,
     batchesInProduction: 0,
@@ -56,8 +57,8 @@ export default function Dashboard() {
     }
   }, []);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut();
     router.push("/");
   };
 
@@ -131,9 +132,9 @@ export default function Dashboard() {
             
             <div className="flex items-center gap-4">
               <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
-                <span className="font-medium">{user.companyName}</span>
-                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-                  {user.status.toUpperCase()}
+                <span className="font-medium">{user.full_name || user.email}</span>
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 capitalize">
+                  {user.user_role || "User"}
                 </Badge>
               </div>
               <Link href="/account">
@@ -152,7 +153,7 @@ export default function Dashboard() {
 
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user.companyName}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user.full_name || user.email}</h1>
             <p className="text-gray-600">Here&apos;s what&apos;s happening with your operations today.</p>
           </div>
 
