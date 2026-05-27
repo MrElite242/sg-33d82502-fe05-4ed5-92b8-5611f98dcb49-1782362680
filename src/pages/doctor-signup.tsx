@@ -101,7 +101,7 @@ export default function DoctorSignup() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const rect = canvas.getClientRect();
+    const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     

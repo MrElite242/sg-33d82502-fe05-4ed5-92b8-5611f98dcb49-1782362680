@@ -2,7 +2,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings } from "lucide-react";
+import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings, FileText } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -13,6 +13,13 @@ export default function Home() {
       description: "Track plants from seed to harvest with batch management and growth monitoring",
       href: "/cultivation",
       color: "text-green-600"
+    },
+    {
+      icon: FileText,
+      title: "E-Prescriptions",
+      description: "Secure medical cannabis prescriptions, doctor verification, and pharmacy routing",
+      href: "/doctor-signup",
+      color: "text-indigo-600"
     },
     {
       icon: Factory,
