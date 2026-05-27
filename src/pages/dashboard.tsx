@@ -220,6 +220,52 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
+                    <CardTitle>Quick Access Modules</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Link href="/inventory">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <Leaf className="w-4 h-4 text-emerald-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Inventory</div>
+                            <div className="text-xs text-gray-500">Stock & Batches</div>
+                          </div>
+                        </Button>
+                      </Link>
+                      <Link href="/cultivation">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <Sprout className="w-4 h-4 text-green-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Cultivation</div>
+                            <div className="text-xs text-gray-500">Plant Tracking</div>
+                          </div>
+                        </Button>
+                      </Link>
+                      <Link href="/manufacturing">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <Factory className="w-4 h-4 text-purple-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Manufacturing</div>
+                            <div className="text-xs text-gray-500">Production</div>
+                          </div>
+                        </Button>
+                      </Link>
+                      <Link href="/retail">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <Store className="w-4 h-4 text-pink-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Retail POS</div>
+                            <div className="text-xs text-gray-500">Point of Sale</div>
+                          </div>
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
                     <CardTitle>Recent Activity</CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -248,7 +294,9 @@ export default function Dashboard() {
                     </div>
                   </CardContent>
                 </Card>
+              </div>
 
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
                     <CardTitle>Upcoming Tasks</CardTitle>
@@ -283,6 +331,39 @@ export default function Dashboard() {
                         </div>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Inventory Alerts</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 pb-3 border-b">
+                        <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                          <AlertCircle className="w-4 h-4 text-amber-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">3 items running low on stock</p>
+                          <p className="text-xs text-gray-500">Consider reordering</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 pb-3">
+                        <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                          <Leaf className="w-4 h-4 text-emerald-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Total inventory value: $147,250</p>
+                          <p className="text-xs text-gray-500">Across 6 SKUs</p>
+                        </div>
+                      </div>
+                    </div>
+                    <Link href="/inventory">
+                      <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700">
+                        View Full Inventory
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </div>
