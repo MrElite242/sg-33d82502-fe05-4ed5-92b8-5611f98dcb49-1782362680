@@ -80,12 +80,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .from("profiles")
         .select("*")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      setUser(data as UserProfile);
+
+      if (data) {
+        setUser(data as UserProfile);
+      } else {
+        // Profile doesn't exist yet - create it
+        const { data: authUser } = await supabase.auth.getUser();
+        if (authUser.user) {
+          const newProfile = {
+            id: authUser.user.id,
+            email: authUser.user.email || "",
+            full_name: authUser.user.user_metadata?.full_name || null,
+            user_role: authUser.user.user_metadata?.user_role || "business",
+            avatar_url: null
+          };
+
+          const { data: createdProfile, error: createError } = await supabase
+            .from("profiles")
+            .insert([newProfile])
+            .select()
+            .single();
+
+          if (createError) throw createError;
+          setUser(createdProfile as UserProfile);
+        }
+      }
     } catch (error) {
       console.error("Error fetching user profile:", error);
+      setUser(null);
     } finally {
       setLoading(false);
     }
