@@ -156,7 +156,34 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Cannabis Business Portal - FEATURED FIRST */}
+              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-emerald-500 dark:hover:border-emerald-500 bg-gradient-to-br from-emerald-100/80 to-green-100/80 dark:from-emerald-900/50 dark:to-green-900/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Store className="text-emerald-600 w-32 h-32 rotate-12" />
+                </div>
+                <CardHeader>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 to-green-700 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <Store className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl">Cannabis Business</CardTitle>
+                  <CardDescription className="text-base">
+                    Seed-to-sale tracking platform for cultivation, manufacturing, and retail
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/dashboard">
+                    <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white group-hover:shadow-lg transition-shadow">
+                      Sign In to Platform
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                    New? <Link href="/signup?role=business" className="text-emerald-600 hover:underline font-semibold">Register Business</Link>
+                  </p>
+                </CardContent>
+              </Card>
+
               {/* Doctor Portal */}
               <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-emerald-400 dark:hover:border-emerald-600 bg-gradient-to-br from-emerald-50/80 to-green-50/80 dark:from-emerald-950/50 dark:to-green-950/50 relative overflow-hidden">
                 <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
