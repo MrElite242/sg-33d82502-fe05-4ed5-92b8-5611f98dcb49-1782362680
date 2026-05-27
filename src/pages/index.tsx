@@ -2,7 +2,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings, FileText } from "lucide-react";
+import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, BarChart3, Settings, FileText, Stethoscope, Building2, User, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -141,6 +141,103 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-500 mt-6">
               No credit card required • 14-day free trial • Cancel anytime
             </p>
+          </div>
+        </section>
+
+        {/* Portal Access Section - NEW */}
+        <section className="container mx-auto px-4 py-8 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-10">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+                Access Your Portal
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Sign in to your account based on your role
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Doctor Portal */}
+              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-emerald-400 dark:hover:border-emerald-600 bg-gradient-to-br from-emerald-50/80 to-green-50/80 dark:from-emerald-950/50 dark:to-green-950/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Stethoscope className="text-emerald-600 w-32 h-32 rotate-12" />
+                </div>
+                <CardHeader>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <Stethoscope className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl">Doctor Portal</CardTitle>
+                  <CardDescription className="text-base">
+                    Create and manage medical cannabis prescriptions for your patients
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/prescriptions">
+                    <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white group-hover:shadow-lg transition-shadow">
+                      Sign In as Doctor
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                    New? <Link href="/doctor-signup" className="text-emerald-600 hover:underline font-semibold">Register here</Link>
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Pharmacy Portal */}
+              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-blue-400 dark:hover:border-blue-600 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Building2 className="text-blue-600 w-32 h-32 rotate-12" />
+                </div>
+                <CardHeader>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <Building2 className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl">Pharmacy Portal</CardTitle>
+                  <CardDescription className="text-base">
+                    View incoming prescriptions and update fulfillment status
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/pharmacy-dashboard">
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white group-hover:shadow-lg transition-shadow">
+                      Sign In as Pharmacy
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                    Pharmacy staff login only
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Patient Portal */}
+              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-purple-400 dark:hover:border-purple-600 bg-gradient-to-br from-purple-50/80 to-pink-50/80 dark:from-purple-950/50 dark:to-pink-950/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <User className="text-purple-600 w-32 h-32 rotate-12" />
+                </div>
+                <CardHeader>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <User className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl">Patient Portal</CardTitle>
+                  <CardDescription className="text-base">
+                    View your prescriptions and track pharmacy fulfillment status
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/patient-dashboard">
+                    <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white group-hover:shadow-lg transition-shadow">
+                      Sign In as Patient
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                    Secure access to your prescriptions
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </section>
 
