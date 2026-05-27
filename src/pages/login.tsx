@@ -30,6 +30,26 @@ export default function Login() {
     setLoading(true);
 
     try {
+      // Demo mode for admin - bypass Supabase authentication
+      if (selectedRole === "admin" && formData.email === "admin@blazed360.com" && formData.password === "admin123") {
+        // Set demo admin user directly in localStorage for testing
+        const demoAdmin = {
+          id: "demo-admin-id",
+          email: "admin@blazed360.com",
+          full_name: "System Administrator",
+          user_role: "admin",
+          avatar_url: null
+        };
+        
+        localStorage.setItem("demo_admin_user", JSON.stringify(demoAdmin));
+        
+        // Redirect to admin portal
+        setTimeout(() => {
+          router.push("/admin-portal");
+        }, 500);
+        return;
+      }
+
       const { error: signInError, user } = await signIn(formData.email, formData.password);
       
       if (signInError) {
