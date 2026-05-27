@@ -1,131 +1,174 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
-interface User {
+interface UserProfile {
   id: string;
   email: string;
-  companyName: string;
-  role: string;
-  licenseType: "quarterly" | "semi-annually" | "annually" | null;
-  licenseStartDate: string | null;
-  licenseEndDate: string | null;
-  status: "active" | "expired" | "trial";
+  full_name: string | null;
+  user_role: "doctor" | "pharmacy" | "patient" | "admin" | null;
+  avatar_url: string | null;
+  // Doctor fields
+  medical_license?: string | null;
+  npi_number?: string | null;
+  dea_number?: string | null;
+  specialty?: string | null;
+  signature_data?: string | null;
+  practice_name?: string | null;
+  practice_address?: string | null;
+  practice_phone?: string | null;
+  // Pharmacy fields
+  pharmacy_name?: string | null;
+  pharmacy_license?: string | null;
+  pharmacy_address?: string | null;
+  pharmacy_phone?: string | null;
+  pharmacy_hours?: string | null;
+  // Patient fields
+  date_of_birth?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  medical_conditions?: string[] | null;
 }
 
 interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  signup: (data: SignupData) => Promise<boolean>;
-  logout: () => void;
-  isAuthenticated: boolean;
+  user: UserProfile | null;
   loading: boolean;
-}
-
-interface SignupData {
-  email: string;
-  password: string;
-  companyName: string;
-  licenseType: "quarterly" | "semi-annually" | "annually";
+  signUp: (email: string, password: string, metadata: any) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any; user: UserProfile | null }>;
+  signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session on mount
-    const storedUser = localStorage.getItem("cannabis_track_user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      // Check if license is expired
-      if (parsedUser.licenseEndDate) {
-        const endDate = new Date(parsedUser.licenseEndDate);
-        const today = new Date();
-        if (today > endDate) {
-          parsedUser.status = "expired";
-        }
+    // Check active sessions and sets the user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setLoading(false);
       }
-      setUser(parsedUser);
-    }
-    setLoading(false);
+    });
+
+    // Listen for changes on auth state (logged in, signed out, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Simulate API call
-    const users = JSON.parse(localStorage.getItem("cannabis_track_users") || "[]");
-    const foundUser = users.find((u: any) => u.email === email && u.password === password);
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
 
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem("cannabis_track_user", JSON.stringify(userWithoutPassword));
-      return true;
+      if (error) throw error;
+      setUser(data as UserProfile);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    } finally {
+      setLoading(false);
     }
-    return false;
   };
 
-  const signup = async (data: SignupData): Promise<boolean> => {
-    // Calculate license end date
-    const startDate = new Date();
-    const endDate = new Date(startDate);
-    
-    switch (data.licenseType) {
-      case "quarterly":
-        endDate.setMonth(endDate.getMonth() + 3);
-        break;
-      case "semi-annually":
-        endDate.setMonth(endDate.getMonth() + 6);
-        break;
-      case "annually":
-        endDate.setFullYear(endDate.getFullYear() + 1);
-        break;
+  const signUp = async (email: string, password: string, metadata: any) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: metadata
+        }
+      });
+
+      if (error) return { error };
+
+      // Create profile
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert([{
+            id: data.user.id,
+            email: data.user.email,
+            ...metadata
+          }]);
+
+        if (profileError) return { error: profileError };
+      }
+
+      return { error: null };
+    } catch (error: any) {
+      return { error };
     }
-
-    const newUser = {
-      id: `user_${Date.now()}`,
-      email: data.email,
-      password: data.password,
-      companyName: data.companyName,
-      role: "vendor",
-      licenseType: data.licenseType,
-      licenseStartDate: startDate.toISOString(),
-      licenseEndDate: endDate.toISOString(),
-      status: "active" as const,
-    };
-
-    // Store in localStorage (simulating database)
-    const users = JSON.parse(localStorage.getItem("cannabis_track_users") || "[]");
-    users.push(newUser);
-    localStorage.setItem("cannabis_track_users", JSON.stringify(users));
-
-    // Set current user
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem("cannabis_track_user", JSON.stringify(userWithoutPassword));
-    
-    return true;
   };
 
-  const logout = () => {
+  const signIn = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) return { error, user: null };
+
+      if (data.user) {
+        await fetchUserProfile(data.user.id);
+        return { error: null, user };
+      }
+
+      return { error: null, user: null };
+    } catch (error: any) {
+      return { error, user: null };
+    }
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem("cannabis_track_user");
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        signup,
-        logout,
-        isAuthenticated: !!user,
-        loading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    try {
+      if (!user) return { error: new Error("No user logged in") };
+
+      const { error } = await supabase
+        .from("profiles")
+        .update(updates)
+        .eq("id", user.id);
+
+      if (error) return { error };
+
+      setUser({ ...user, ...updates });
+      return { error: null };
+    } catch (error: any) {
+      return { error };
+    }
+  };
+
+  const value = {
+    user,
+    loading,
+    signUp,
+    signIn,
+    signOut,
+    updateProfile
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

@@ -1,237 +1,341 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
 import { SEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { User, Mail, Phone, MapPin, Building2, FileText, Loader2, CheckCircle2, LogOut, Stethoscope } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
-import { User, Building2, Calendar, CreditCard, LogOut, ArrowLeft } from "lucide-react";
-import { CannabisLeaf } from "@/components/CannabisLeaf";
 
-export default function AccountPage() {
+export default function Account() {
   const router = useRouter();
-  const { user, logout, isAuthenticated, loading } = useAuth();
-  const [daysRemaining, setDaysRemaining] = useState<number>(0);
+  const { user, loading: authLoading, signOut, updateProfile } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    phone: "",
+    address: "",
+    practice_name: "",
+    practice_address: "",
+    practice_phone: "",
+    pharmacy_name: "",
+    pharmacy_address: "",
+    pharmacy_phone: ""
+  });
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!authLoading && !user) {
       router.push("/login");
+    } else if (user) {
+      setFormData({
+        full_name: user.full_name || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        practice_name: user.practice_name || "",
+        practice_address: user.practice_address || "",
+        practice_phone: user.practice_phone || "",
+        pharmacy_name: user.pharmacy_name || "",
+        pharmacy_address: user.pharmacy_address || "",
+        pharmacy_phone: user.pharmacy_phone || ""
+      });
+    }
+  }, [user, authLoading, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+
+    const { error } = await updateProfile(formData);
+
+    if (!error) {
+      setSuccess(true);
     }
 
-    if (user?.licenseEndDate) {
-      const endDate = new Date(user.licenseEndDate);
-      const today = new Date();
-      const diff = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-      setDaysRemaining(diff);
-    }
-  }, [user, isAuthenticated, loading, router]);
-
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
+    setLoading(false);
   };
 
-  if (loading || !user) {
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  if (authLoading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
       </div>
     );
   }
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const getLicenseTypeDisplay = (type: string | null) => {
-    if (!type) return "N/A";
-    return type.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-  };
-
   return (
     <>
       <SEO 
-        title="Account Settings - Cannabis Tracking System"
-        description="Manage your account and subscription"
+        title="Account Settings - Blaze 360"
+        description="Manage your account settings"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative">
-        {/* Background Watermarks */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <CannabisLeaf className="absolute top-24 left-16 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-20deg)" }} />
-          <CannabisLeaf className="absolute top-1/3 right-20 text-emerald-500/5 dark:text-emerald-400/3" size={260} style={{ transform: "rotate(35deg)" }} />
-          <CannabisLeaf className="absolute bottom-32 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={220} style={{ transform: "rotate(50deg)" }} />
-          <CannabisLeaf className="absolute bottom-20 right-12 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(-15deg)" }} />
-        </div>
-
+      
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900">
         {/* Header */}
         <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/dashboard" className="flex items-center gap-2">
-                <ArrowLeft className="w-5 h-5" />
-                <span className="font-semibold">Back to Dashboard</span>
-              </Link>
-              <div className="flex items-center gap-2">
-                <div className="bg-emerald-600 p-2 rounded-lg">
-                  <CannabisLeaf className="text-white" size={24} />
-                </div>
-                <span className="text-xl font-bold">Cannabis Track</span>
-              </div>
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <Link href="/">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                Blaze 360
+              </h1>
+            </Link>
+            <div className="flex items-center gap-3">
+              <Badge variant="outline" className="capitalize">
+                {user.user_role === "doctor" && <Stethoscope className="w-3 h-3 mr-1" />}
+                {user.user_role === "pharmacy" && <Building2 className="w-3 h-3 mr-1" />}
+                {user.user_role === "patient" && <User className="w-3 h-3 mr-1" />}
+                {user.user_role}
+              </Badge>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
             </div>
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto px-4 py-12 relative z-10">
-          <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Account Settings</h2>
+            <p className="text-gray-600 dark:text-gray-400">Manage your profile information</p>
+          </div>
 
-          <div className="space-y-6">
-            {/* Account Information */}
-            <Card className="relative overflow-hidden group">
-              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={80} style={{ transform: "rotate(15deg)" }} />
+          {success && (
+            <Alert className="mb-6 bg-green-50 text-green-900 border-green-200">
+              <CheckCircle2 className="h-4 w-4" />
+              <AlertDescription>Profile updated successfully!</AlertDescription>
+            </Alert>
+          )}
+
+          <div className="grid gap-6">
+            {/* Profile Information */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Account Information
+                  Profile Information
                 </CardTitle>
-                <CardDescription>Your profile and company details</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Email</label>
-                    <p className="text-lg">{user.email}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Company Name</label>
-                    <p className="text-lg flex items-center gap-2">
-                      <Building2 className="w-4 h-4" />
-                      {user.companyName}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Role</label>
-                    <div className="text-lg">
-                      <Badge variant="secondary">{user.role}</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Account Status</label>
-                    <div className="text-lg">
-                      <Badge 
-                        variant={user.status === "active" ? "default" : "destructive"}
-                        className={user.status === "active" ? "bg-emerald-600" : ""}
-                      >
-                        {user.status.toUpperCase()}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Subscription Details */}
-            <Card className="relative overflow-hidden group">
-              <CannabisLeaf className="absolute top-4 right-4 text-emerald-500/0 group-hover:text-emerald-500/5 transition-all duration-300" size={80} style={{ transform: "rotate(-10deg)" }} />
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5" />
-                  Subscription Details
-                </CardTitle>
-                <CardDescription>Your current license and billing information</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">License Type</label>
-                    <p className="text-lg font-semibold text-emerald-600">
-                      {getLicenseTypeDisplay(user.licenseType)}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Days Remaining</label>
-                    <p className="text-lg font-semibold">
-                      {daysRemaining > 0 ? `${daysRemaining} days` : "Expired"}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      License Start Date
-                    </label>
-                    <p className="text-lg">{formatDate(user.licenseStartDate)}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      License End Date
-                    </label>
-                    <p className="text-lg">{formatDate(user.licenseEndDate)}</p>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/plans" className="flex-1">
-                    <Button variant="outline" className="w-full">
-                      View All Plans
-                    </Button>
-                  </Link>
-                  <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700">
-                    Upgrade Plan
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Billing History */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Billing History</CardTitle>
-                <CardDescription>View your payment history and invoices</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 border rounded-lg bg-white/50">
-                    <div>
-                      <p className="font-medium">{getLicenseTypeDisplay(user.licenseType)} License</p>
-                      <p className="text-sm text-gray-600">{formatDate(user.licenseStartDate)}</p>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Input
+                          id="email"
+                          value={user.email}
+                          disabled
+                          className="pl-10"
+                        />
+                      </div>
                     </div>
-                    <Badge className="bg-emerald-600">Paid</Badge>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="full_name">Full Name</Label>
+                      <Input
+                        id="full_name"
+                        value={formData.full_name}
+                        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                        disabled={loading}
+                      />
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 text-center py-4">
-                    More invoices will appear here as you continue your subscription
-                  </p>
-                </div>
+
+                  {/* Patient Fields */}
+                  {user.user_role === "patient" && (
+                    <>
+                      <Separator />
+                      <h3 className="text-lg font-semibold">Contact Information</h3>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Phone Number</Label>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <Input
+                              id="phone"
+                              value={formData.phone}
+                              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                              disabled={loading}
+                              className="pl-10"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Date of Birth</Label>
+                          <Input value={user.date_of_birth || "Not set"} disabled />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address">Address</Label>
+                        <div className="relative">
+                          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <Input
+                            id="address"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            disabled={loading}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Doctor Fields */}
+                  {user.user_role === "doctor" && (
+                    <>
+                      <Separator />
+                      <h3 className="text-lg font-semibold">Practice Information</h3>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="practice_name">Practice Name</Label>
+                          <Input
+                            id="practice_name"
+                            value={formData.practice_name}
+                            onChange={(e) => setFormData({ ...formData, practice_name: e.target.value })}
+                            disabled={loading}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="practice_phone">Practice Phone</Label>
+                          <Input
+                            id="practice_phone"
+                            value={formData.practice_phone}
+                            onChange={(e) => setFormData({ ...formData, practice_phone: e.target.value })}
+                            disabled={loading}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="practice_address">Practice Address</Label>
+                        <Input
+                          id="practice_address"
+                          value={formData.practice_address}
+                          onChange={(e) => setFormData({ ...formData, practice_address: e.target.value })}
+                          disabled={loading}
+                        />
+                      </div>
+
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label>Medical License</Label>
+                          <Input value={user.medical_license || "Not set"} disabled />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>NPI Number</Label>
+                          <Input value={user.npi_number || "Not set"} disabled />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>DEA Number</Label>
+                          <Input value={user.dea_number || "Not set"} disabled />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Pharmacy Fields */}
+                  {user.user_role === "pharmacy" && (
+                    <>
+                      <Separator />
+                      <h3 className="text-lg font-semibold">Pharmacy Information</h3>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="pharmacy_name">Pharmacy Name</Label>
+                          <Input
+                            id="pharmacy_name"
+                            value={formData.pharmacy_name}
+                            onChange={(e) => setFormData({ ...formData, pharmacy_name: e.target.value })}
+                            disabled={loading}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>License Number</Label>
+                          <Input value={user.pharmacy_license || "Not set"} disabled />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="pharmacy_address">Pharmacy Address</Label>
+                        <Input
+                          id="pharmacy_address"
+                          value={formData.pharmacy_address}
+                          onChange={(e) => setFormData({ ...formData, pharmacy_address: e.target.value })}
+                          disabled={loading}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="pharmacy_phone">Pharmacy Phone</Label>
+                        <Input
+                          id="pharmacy_phone"
+                          value={formData.pharmacy_phone}
+                          onChange={(e) => setFormData({ ...formData, pharmacy_phone: e.target.value })}
+                          disabled={loading}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      type="submit"
+                      className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        "Save Changes"
+                      )}
+                    </Button>
+                    <Link href={
+                      user.user_role === "doctor" ? "/prescriptions" :
+                      user.user_role === "pharmacy" ? "/pharmacy-dashboard" :
+                      "/patient-dashboard"
+                    }>
+                      <Button variant="outline">
+                        Back to Dashboard
+                      </Button>
+                    </Link>
+                  </div>
+                </form>
               </CardContent>
             </Card>
 
-            {/* Actions */}
-            <Card>
+            {/* Danger Zone */}
+            <Card className="border-red-200 dark:border-red-900">
               <CardHeader>
-                <CardTitle>Account Actions</CardTitle>
+                <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
+                <CardDescription>Irreversible account actions</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start hover:bg-red-50 hover:text-red-600 hover:border-red-200"
-                  onClick={handleLogout}
-                >
+              <CardContent>
+                <Button variant="destructive" onClick={handleSignOut}>
                   <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  className="w-full justify-start"
-                >
-                  Cancel Subscription
+                  Sign Out
                 </Button>
               </CardContent>
             </Card>

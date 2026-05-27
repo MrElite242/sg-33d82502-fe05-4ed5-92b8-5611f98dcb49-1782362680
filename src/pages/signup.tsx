@@ -1,92 +1,98 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
 import { SEO } from "@/components/SEO";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useAuth } from "@/contexts/AuthContext";
-import { AlertCircle, Check } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { Loader2, AlertCircle, CheckCircle2, User, Building2 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
 
-const plans = [
-  {
-    id: "quarterly",
-    name: "Quarterly",
-    price: "$499",
-    period: "/3 months",
-    description: "Perfect for small operations",
-    features: ["All core features", "Email support", "Basic analytics"],
-  },
-  {
-    id: "semi-annually",
-    name: "Semi-Annual",
-    price: "$899",
-    period: "/6 months",
-    description: "Best value for growing businesses",
-    badge: "Popular",
-    features: ["All core features", "Priority support", "Advanced analytics", "10% savings"],
-  },
-  {
-    id: "annually",
-    name: "Annual",
-    price: "$1,599",
-    period: "/year",
-    description: "Maximum savings for established operations",
-    badge: "Best Value",
-    features: ["All core features", "24/7 priority support", "Advanced analytics", "Custom integrations", "20% savings"],
-  },
-];
-
-export default function SignupPage() {
+export default function Signup() {
   const router = useRouter();
-  const { signup } = useAuth();
+  const { signUp } = useAuth();
+  const roleParam = router.query.role as string;
+  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
-    companyName: "",
-    licenseType: "semi-annually" as "quarterly" | "semi-annually" | "annually",
+    full_name: "",
+    role: roleParam || "patient",
+    // Patient fields
+    phone: "",
+    address: "",
+    date_of_birth: "",
+    // Pharmacy fields
+    pharmacy_name: "",
+    pharmacy_license: "",
+    pharmacy_address: "",
+    pharmacy_phone: ""
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess(false);
+    setLoading(true);
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
+      setLoading(false);
       return;
     }
 
-    if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters long");
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      setLoading(false);
       return;
     }
-
-    setLoading(true);
 
     try {
-      const success = await signup({
+      const profileData: any = {
+        full_name: formData.full_name,
         email: formData.email,
-        password: formData.password,
-        companyName: formData.companyName,
-        licenseType: formData.licenseType,
-      });
+        user_role: formData.role
+      };
 
-      if (success) {
-        router.push("/dashboard");
-      } else {
-        setError("Failed to create account. Please try again.");
+      // Add role-specific fields
+      if (formData.role === "patient") {
+        profileData.phone = formData.phone;
+        profileData.address = formData.address;
+        profileData.date_of_birth = formData.date_of_birth;
+      } else if (formData.role === "pharmacy") {
+        profileData.pharmacy_name = formData.pharmacy_name;
+        profileData.pharmacy_license = formData.pharmacy_license;
+        profileData.pharmacy_address = formData.pharmacy_address;
+        profileData.pharmacy_phone = formData.pharmacy_phone;
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-    } finally {
+
+      const { error: signUpError } = await signUp(formData.email, formData.password, profileData);
+      
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      setSuccess(true);
+      setLoading(false);
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || "An error occurred during registration");
       setLoading(false);
     }
   };
@@ -94,160 +100,271 @@ export default function SignupPage() {
   return (
     <>
       <SEO 
-        title="Sign Up - Cannabis Tracking System"
-        description="Create your cannabis seed-to-sale tracking account"
+        title="Sign Up - Blaze 360"
+        description="Create your Blaze 360 account"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 py-12 px-4 relative">
-        {/* Background Watermarks */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <CannabisLeaf className="absolute top-20 left-10 text-emerald-500/5 dark:text-emerald-400/3" size={350} style={{ transform: "rotate(-15deg)" }} />
-          <CannabisLeaf className="absolute top-1/4 right-20 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(25deg)" }} />
-          <CannabisLeaf className="absolute bottom-40 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(45deg)" }} />
-          <CannabisLeaf className="absolute bottom-10 right-10 text-emerald-500/5 dark:text-emerald-400/3" size={250} style={{ transform: "rotate(-30deg)" }} />
+      
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center p-4">
+        {/* Background Watermark */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] dark:opacity-[0.02]">
+          <CannabisLeaf className="absolute top-10 right-10 text-emerald-600 -rotate-12" size={200} />
+          <CannabisLeaf className="absolute bottom-20 left-20 text-green-600 rotate-45" size={250} />
         </div>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <div className="bg-emerald-600 p-3 rounded-full">
-                <CannabisLeaf className="text-white" size={32} />
+        <Card className="w-full max-w-2xl relative z-10">
+          <CardHeader className="text-center pb-4">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-3 rounded-xl shadow-lg">
+                <CannabisLeaf className="w-8 h-8 text-white" size={32} />
               </div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                Blaze 360
+              </h1>
             </div>
-            <h1 className="text-3xl font-bold mb-2">Create Your Account</h1>
-            <p className="text-gray-600">Choose a plan and get started today</p>
-          </div>
+            <CardTitle className="text-2xl">Create Your Account</CardTitle>
+            <CardDescription>
+              {formData.role === "patient" && "Sign up as a patient to track your prescriptions"}
+              {formData.role === "pharmacy" && "Register your pharmacy to manage prescriptions"}
+              {formData.role === "doctor" && "Doctors should use the professional registration"}
+            </CardDescription>
+          </CardHeader>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign Up</CardTitle>
-              <CardDescription>
-                Fill in your details and select a license plan
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
+          <CardContent>
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {success && (
+              <Alert className="mb-4 bg-green-50 text-green-900 border-green-200">
+                <CheckCircle2 className="h-4 w-4" />
+                <AlertDescription>
+                  Account created successfully! Please check your email to verify your account. Redirecting to login...
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="role">Account Type</Label>
+                <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="patient">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        Patient
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="pharmacy">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4" />
+                        Pharmacy
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                {formData.role === "doctor" && (
+                  <p className="text-sm text-amber-600">
+                    Doctors should use the <Link href="/doctor-signup" className="underline font-semibold">professional registration</Link>
+                  </p>
                 )}
+              </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="companyName">Company Name</Label>
-                    <Input
-                      id="companyName"
-                      placeholder="Your Company LLC"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="vendor@company.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      placeholder="••••••••"
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                      required
-                    />
-                  </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="full_name">
+                    {formData.role === "pharmacy" ? "Contact Name" : "Full Name"}
+                  </Label>
+                  <Input
+                    id="full_name"
+                    placeholder={formData.role === "pharmacy" ? "Primary contact" : "John Doe"}
+                    value={formData.full_name}
+                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
-                <div className="space-y-4">
-                  <Label className="text-base">Select License Plan</Label>
-                  <RadioGroup
-                    value={formData.licenseType}
-                    onValueChange={(value) => setFormData({ ...formData, licenseType: value as any })}
-                  >
-                    <div className="grid gap-4">
-                      {plans.map((plan) => (
-                        <div key={plan.id} className="relative">
-                          <RadioGroupItem
-                            value={plan.id}
-                            id={plan.id}
-                            className="peer sr-only"
-                          />
-                          <Label
-                            htmlFor={plan.id}
-                            className="flex flex-col md:flex-row md:items-center justify-between p-4 border-2 rounded-lg cursor-pointer peer-data-[state=checked]:border-emerald-600 peer-data-[state=checked]:bg-emerald-50 dark:peer-data-[state=checked]:bg-emerald-950 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                          >
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-semibold text-lg">{plan.name}</span>
-                                {plan.badge && (
-                                  <span className="bg-emerald-600 text-white text-xs px-2 py-1 rounded-full">
-                                    {plan.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-600 mb-2">{plan.description}</p>
-                              <div className="flex flex-wrap gap-2">
-                                {plan.features.map((feature) => (
-                                  <span key={feature} className="flex items-center gap-1 text-xs text-gray-600">
-                                    <Check className="w-3 h-3 text-emerald-600" />
-                                    {feature}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="mt-3 md:mt-0 md:ml-4 text-right">
-                              <div className="text-2xl font-bold text-emerald-600">{plan.price}</div>
-                              <div className="text-sm text-gray-600">{plan.period}</div>
-                            </div>
-                          </Label>
-                        </div>
-                      ))}
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              {/* Patient Fields */}
+              {formData.role === "patient" && (
+                <>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="(555) 123-4567"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        required
+                        disabled={loading}
+                      />
                     </div>
-                  </RadioGroup>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="date_of_birth">Date of Birth</Label>
+                      <Input
+                        id="date_of_birth"
+                        type="date"
+                        value={formData.date_of_birth}
+                        onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Address</Label>
+                    <Input
+                      id="address"
+                      placeholder="123 Main St, City, State ZIP"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Pharmacy Fields */}
+              {formData.role === "pharmacy" && (
+                <>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="pharmacy_name">Pharmacy Name</Label>
+                      <Input
+                        id="pharmacy_name"
+                        placeholder="Green Valley Pharmacy"
+                        value={formData.pharmacy_name}
+                        onChange={(e) => setFormData({ ...formData, pharmacy_name: e.target.value })}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="pharmacy_license">License Number</Label>
+                      <Input
+                        id="pharmacy_license"
+                        placeholder="CO-PH-12345"
+                        value={formData.pharmacy_license}
+                        onChange={(e) => setFormData({ ...formData, pharmacy_license: e.target.value })}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="pharmacy_address">Pharmacy Address</Label>
+                    <Input
+                      id="pharmacy_address"
+                      placeholder="456 Dispensary Ave, Denver, CO 80202"
+                      value={formData.pharmacy_address}
+                      onChange={(e) => setFormData({ ...formData, pharmacy_address: e.target.value })}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="pharmacy_phone">Pharmacy Phone</Label>
+                    <Input
+                      id="pharmacy_phone"
+                      type="tel"
+                      placeholder="(303) 555-0100"
+                      value={formData.pharmacy_phone}
+                      onChange={(e) => setFormData({ ...formData, pharmacy_phone: e.target.value })}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    disabled={loading}
+                  />
+                  <p className="text-xs text-gray-600">Minimum 6 characters</p>
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-emerald-600 hover:bg-emerald-700"
-                  disabled={loading}
-                >
-                  {loading ? "Creating Account..." : "Create Account & Start Trial"}
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    required
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+                disabled={loading || success}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Creating Account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
+              <Link href="/login" className="text-emerald-600 hover:underline font-semibold">
+                Sign In
+              </Link>
+            </div>
+
+            <div className="mt-4 text-center">
+              <Link href="/">
+                <Button variant="ghost" size="sm">
+                  ← Back to Home
                 </Button>
-
-                <div className="text-center text-sm text-gray-600">
-                  Already have an account?{" "}
-                  <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-semibold hover:underline">
-                    Login
-                  </Link>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </>
   );

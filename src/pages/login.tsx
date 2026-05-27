@@ -1,23 +1,28 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
 import { SEO } from "@/components/SEO";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/contexts/AuthContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { AlertCircle } from "lucide-react";
+import { Stethoscope, Building2, User, Loader2, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
 
-export default function LoginPage() {
+export default function Login() {
   const router = useRouter();
-  const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient">("doctor");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,15 +30,26 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
-        router.push("/dashboard");
-      } else {
-        setError("Invalid email or password. Please try again.");
+      const { error: signInError, user } = await signIn(formData.email, formData.password);
+      
+      if (signInError) {
+        setError(signInError.message);
+        setLoading(false);
+        return;
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-    } finally {
+
+      // Redirect based on user role
+      if (user?.user_role === "doctor") {
+        router.push("/prescriptions");
+      } else if (user?.user_role === "pharmacy") {
+        router.push("/pharmacy-dashboard");
+      } else if (user?.user_role === "patient") {
+        router.push("/patient-dashboard");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred during login");
       setLoading(false);
     }
   };
@@ -41,90 +57,130 @@ export default function LoginPage() {
   return (
     <>
       <SEO 
-        title="Login - Cannabis Tracking System"
-        description="Login to your cannabis seed-to-sale tracking account"
+        title="Login - Blaze 360"
+        description="Sign in to your Blaze 360 account"
       />
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center p-4 relative">
-        {/* Background Watermarks */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <CannabisLeaf className="absolute top-20 left-12 text-emerald-500/5 dark:text-emerald-400/3" size={320} style={{ transform: "rotate(-20deg)" }} />
-          <CannabisLeaf className="absolute top-40 right-16 text-emerald-500/5 dark:text-emerald-400/3" size={280} style={{ transform: "rotate(30deg)" }} />
-          <CannabisLeaf className="absolute bottom-24 left-1/4 text-emerald-500/5 dark:text-emerald-400/3" size={240} style={{ transform: "rotate(50deg)" }} />
-          <CannabisLeaf className="absolute bottom-32 right-1/3 text-emerald-500/5 dark:text-emerald-400/3" size={300} style={{ transform: "rotate(-25deg)" }} />
+      
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex items-center justify-center p-4">
+        {/* Background Watermark */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] dark:opacity-[0.02]">
+          <CannabisLeaf className="absolute top-10 left-10 text-emerald-600 rotate-12" size={200} />
+          <CannabisLeaf className="absolute bottom-20 right-20 text-green-600 -rotate-45" size={250} />
         </div>
 
         <Card className="w-full max-w-md relative z-10">
-          <CardHeader className="space-y-1 text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-emerald-600 p-3 rounded-full">
-                <CannabisLeaf className="text-white" size={32} />
+          <CardHeader className="text-center pb-4">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-3 rounded-xl shadow-lg">
+                <CannabisLeaf className="w-8 h-8 text-white" size={32} />
               </div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                Blaze 360
+              </h1>
             </div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription>
-              Login to your Cannabis Tracking account
-            </CardDescription>
+            <CardTitle className="text-2xl">Welcome Back</CardTitle>
+            <CardDescription>Sign in to your account to continue</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
 
+          <CardContent>
+            <Tabs value={selectedRole} onValueChange={(v) => setSelectedRole(v as any)} className="mb-6">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="doctor" className="gap-1.5">
+                  <Stethoscope className="w-4 h-4" />
+                  Doctor
+                </TabsTrigger>
+                <TabsTrigger value="pharmacy" className="gap-1.5">
+                  <Building2 className="w-4 h-4" />
+                  Pharmacy
+                </TabsTrigger>
+                <TabsTrigger value="patient" className="gap-1.5">
+                  <User className="w-4 h-4" />
+                  Patient
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="vendor@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <Link href="/forgot-password" className="text-sm text-emerald-600 hover:underline">
+                    Forgot password?
+                  </Link>
+                </div>
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
+                  disabled={loading}
                 />
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <Link href="/forgot-password" className="text-emerald-600 hover:text-emerald-700 hover:underline">
-                  Forgot password?
-                </Link>
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full bg-emerald-600 hover:bg-emerald-700"
+                className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
                 disabled={loading}
               >
-                {loading ? "Logging in..." : "Login"}
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
-
-              <div className="text-center text-sm text-gray-600">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="text-emerald-600 hover:text-emerald-700 font-semibold hover:underline">
-                  Sign up
-                </Link>
-              </div>
-
-              <div className="text-center text-sm text-gray-600">
-                <Link href="/plans" className="text-emerald-600 hover:text-emerald-700 hover:underline">
-                  View pricing plans
-                </Link>
-              </div>
             </form>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-gray-600 dark:text-gray-400">Don't have an account? </span>
+              {selectedRole === "doctor" && (
+                <Link href="/doctor-signup" className="text-emerald-600 hover:underline font-semibold">
+                  Register as Doctor
+                </Link>
+              )}
+              {selectedRole === "pharmacy" && (
+                <Link href="/signup?role=pharmacy" className="text-blue-600 hover:underline font-semibold">
+                  Register as Pharmacy
+                </Link>
+              )}
+              {selectedRole === "patient" && (
+                <Link href="/signup?role=patient" className="text-purple-600 hover:underline font-semibold">
+                  Register as Patient
+                </Link>
+              )}
+            </div>
+
+            <div className="mt-4 text-center">
+              <Link href="/">
+                <Button variant="ghost" size="sm">
+                  ← Back to Home
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
