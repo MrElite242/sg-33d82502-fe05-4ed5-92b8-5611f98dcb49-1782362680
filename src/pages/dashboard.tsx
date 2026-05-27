@@ -278,6 +278,15 @@ export default function Dashboard() {
                           </div>
                         </Button>
                       </Link>
+                      <Link href="/activity-log">
+                        <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3">
+                          <AlertCircle className="w-4 h-4 text-slate-600" />
+                          <div className="text-left">
+                            <div className="font-semibold text-sm">Activity Log</div>
+                            <div className="text-xs text-gray-500">Audit Trail</div>
+                          </div>
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
