@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Stethoscope, Building2, User, Loader2, AlertCircle, Store } from "lucide-react";
+import { Stethoscope, Building2, User, Loader2, AlertCircle, Store, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ export default function Login() {
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business">("business");
+  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business" | "admin">("business");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -47,6 +47,8 @@ export default function Login() {
         router.push("/patient-dashboard");
       } else if (user?.user_role === "business") {
         router.push("/dashboard");
+      } else if (user?.user_role === "admin") {
+        router.push("/admin-portal");
       } else {
         router.push("/dashboard");
       }
@@ -86,14 +88,18 @@ export default function Login() {
 
           <CardContent>
             <Tabs value={selectedRole} onValueChange={(v) => setSelectedRole(v as any)} className="mb-6">
-              <TabsList className="grid w-full grid-cols-2 mb-2">
+              <TabsList className="grid w-full grid-cols-3 mb-2">
                 <TabsTrigger value="business" className="gap-1.5">
                   <Store className="w-4 h-4" />
-                  Cannabis Business
+                  Business
                 </TabsTrigger>
                 <TabsTrigger value="patient" className="gap-1.5">
                   <User className="w-4 h-4" />
                   Patient
+                </TabsTrigger>
+                <TabsTrigger value="admin" className="gap-1.5 bg-red-50 border-red-200 data-[state=active]:bg-red-100">
+                  <Shield className="w-4 h-4" />
+                  Admin
                 </TabsTrigger>
               </TabsList>
               <TabsList className="grid w-full grid-cols-2">
@@ -184,6 +190,11 @@ export default function Login() {
                 <Link href="/signup?role=patient" className="text-purple-600 hover:underline font-semibold">
                   Register as Patient
                 </Link>
+              )}
+              {selectedRole === "admin" && (
+                <span className="text-red-600 font-semibold">
+                  Admin accounts are restricted. Contact support.
+                </span>
               )}
             </div>
 

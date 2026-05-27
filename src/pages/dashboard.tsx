@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Sprout, Factory, FlaskConical, TrendingUp, Truck, Store, ArrowLeft, AlertCircle, CheckCircle, User, LogOut, Leaf } from "lucide-react";
+import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield } from "lucide-react";
 import { useState } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
@@ -288,6 +288,20 @@ export default function Dashboard() {
                         </Button>
                       </Link>
                     </div>
+
+                    {user?.user_role === "admin" && (
+                      <div className="mt-4 pt-4 border-t">
+                        <Link href="/admin-portal">
+                          <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3 border-red-200 bg-red-50 hover:bg-red-100">
+                            <Shield className="w-4 h-4 text-red-600" />
+                            <div className="text-left">
+                              <div className="font-semibold text-sm text-red-700">Admin Portal</div>
+                              <div className="text-xs text-red-600">Emergency Access</div>
+                            </div>
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
