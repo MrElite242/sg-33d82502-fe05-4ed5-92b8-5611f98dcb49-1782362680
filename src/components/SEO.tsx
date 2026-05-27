@@ -9,9 +9,9 @@ interface SEOProps {
 
 // SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
-  title = "Marijuana Bahamas - Seed to Sale",
-  description = "Complete cannabis tracking solution from cultivation to retail sales",
-  image = "/og-image.png",
+  title = "Canna Blaze 360",
+  description = "A cannabis seed to sale platform and e prescription software application.",
+  image,
   url,
 }: SEOProps) {
   return (
