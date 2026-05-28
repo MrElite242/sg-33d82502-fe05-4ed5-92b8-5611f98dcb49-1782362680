@@ -285,7 +285,7 @@ export default function AdminPortal() {
 
   if (loading || !user) {
     // Allow demo admin to bypass
-    if (localStorage.getItem("demo_admin_user")) {
+    if (typeof window !== "undefined" && localStorage.getItem("demo_admin_user")) {
       // Continue rendering
     } else {
       return (
