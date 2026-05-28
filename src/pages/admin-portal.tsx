@@ -71,12 +71,14 @@ export default function AdminPortal() {
   const [isDemoAdmin, setIsDemoAdmin] = useState(false);
 
   useEffect(() => {
-    // Check for demo admin in localStorage
-    const demoAdmin = localStorage.getItem("demo_admin_user");
-    if (demoAdmin) {
-      setIsDemoAdmin(true);
-      loadSystemData();
-      return;
+    // Check for demo admin in localStorage (only in browser)
+    if (typeof window !== "undefined") {
+      const demoAdmin = localStorage.getItem("demo_admin_user");
+      if (demoAdmin) {
+        setIsDemoAdmin(true);
+        loadSystemData();
+        return;
+      }
     }
 
     // Only admin users can access this page
