@@ -7,8 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, ShoppingCart, CreditCard, User, Search, X, CheckCircle2, AlertCircle, Printer, Package, TrendingUp } from "lucide-react";
+import { ArrowLeft, ShoppingCart, CreditCard, User, Search, X, CheckCircle2, AlertCircle, Printer, Package, TrendingUp, ScanLine } from "lucide-react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { BarcodeScanner } from "@/components/BarcodeScanner";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -80,6 +81,7 @@ export default function Retail() {
   const [processing, setProcessing] = useState(false);
   const [currentSale, setCurrentSale] = useState<Sale | null>(null);
   const [salesHistory, setSalesHistory] = useState<Sale[]>([]);
+  const [showScanner, setShowScanner] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -126,6 +128,31 @@ export default function Retail() {
       ));
     } else {
       setCart([...cart, { ...product, cartQuantity: 1 }]);
+    }
+    
+    toast({
+      title: "Added to Cart",
+      description: product.productName,
+    });
+  };
+
+  const handleBarcodeScan = (barcode: string) => {
+    const found = products.find(item => 
+      item.sku === barcode || 
+      item.batchNumber === barcode ||
+      item.sku.toLowerCase().includes(barcode.toLowerCase()) ||
+      item.productName.toLowerCase().includes(barcode.toLowerCase())
+    );
+    
+    if (found) {
+      addToCart(found);
+      setShowScanner(false);
+    } else {
+      toast({
+        title: "Product Not Found",
+        description: `No product found with barcode: ${barcode}`,
+        variant: "destructive"
+      });
     }
   };
 
@@ -345,17 +372,40 @@ export default function Retail() {
               <div className="lg:col-span-2 flex flex-col gap-4 overflow-hidden h-full">
                 <Card className="flex-shrink-0">
                   <CardContent className="p-4">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                      <Input 
-                        placeholder="Search products by name, SKU, or category..." 
-                        className="pl-9"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                      />
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Input 
+                          placeholder="Search products by name, SKU, or category..." 
+                          className="pl-9"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowScanner(!showScanner)}
+                        className="border-pink-600 text-pink-600 hover:bg-pink-50"
+                      >
+                        <ScanLine className="w-4 h-4 mr-2" />
+                        Scan
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
+
+                {showScanner && (
+                  <Card className="flex-shrink-0">
+                    <CardContent className="p-4">
+                      <BarcodeScanner
+                        onScan={handleBarcodeScan}
+                        onClose={() => setShowScanner(false)}
+                        title="Scan Product Barcode"
+                        placeholder="Scan or enter SKU/Batch Number..."
+                      />
+                    </CardContent>
+                  </Card>
+                )}
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto pb-20">
                   {filteredProducts.map((product) => (
