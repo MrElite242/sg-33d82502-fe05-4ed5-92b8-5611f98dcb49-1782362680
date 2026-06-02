@@ -9,12 +9,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Plus, Sprout, Calendar, Droplets, ThermometerSun, Eye, Printer, Edit, ArrowRight, Download, Search, Filter, X, BarChart3 } from "lucide-react";
+import { ArrowLeft, Plus, Sprout, Calendar, Droplets, ThermometerSun, Eye, Printer, Edit, ArrowRight, Download, Search, Filter, X, BarChart3, ScanLine, Barcode } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 import { PlantLabel } from "@/components/PlantLabel";
 import { PlantTimeline } from "@/components/PlantTimeline";
+import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { BarcodeDisplay } from "@/components/BarcodeDisplay";
 import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface Plant {
@@ -56,6 +58,9 @@ export default function Cultivation() {
   const [isLabelDialogOpen, setIsLabelDialogOpen] = useState(false);
   const [isStageUpdateOpen, setIsStageUpdateOpen] = useState(false);
   const [isChartsDialogOpen, setIsChartsDialogOpen] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
+  const [showBarcodeDialog, setShowBarcodeDialog] = useState(false);
+  const [selectedBarcodePlant, setSelectedBarcodePlant] = useState<Plant | null>(null);
   const [filters, setFilters] = useState<Filters>({
     stage: "all",
     strain: "all",
@@ -311,6 +316,22 @@ export default function Cultivation() {
     setSelectedPlant(updatedPlant);
   };
 
+  const handleBarcodeScan = (barcode: string) => {
+    const found = plants.find(plant => 
+      plant.id === barcode || 
+      plant.batchNumber === barcode ||
+      plant.id.toLowerCase().includes(barcode.toLowerCase()) ||
+      plant.strain.toLowerCase().includes(barcode.toLowerCase())
+    );
+    
+    if (found) {
+      setFilters({...filters, search: found.id});
+      setShowScanner(false);
+    } else {
+      alert(`No plant found with barcode: ${barcode}`);
+    }
+  };
+
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
       "Seedling": "bg-yellow-100 text-yellow-800",
@@ -510,15 +531,24 @@ export default function Cultivation() {
                 {/* Search */}
                 <div className="md:col-span-2">
                   <Label htmlFor="search">Search</Label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <Input
-                      id="search"
-                      placeholder="Search by ID or strain..."
-                      value={filters.search}
-                      onChange={(e) => setFilters({...filters, search: e.target.value})}
-                      className="pl-9"
-                    />
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="search"
+                        placeholder="Search by ID or strain..."
+                        value={filters.search}
+                        onChange={(e) => setFilters({...filters, search: e.target.value})}
+                        className="pl-9"
+                      />
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowScanner(!showScanner)}
+                      className="border-green-600 text-green-600 hover:bg-green-50 shrink-0"
+                    >
+                      <ScanLine className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
 
@@ -574,6 +604,20 @@ export default function Cultivation() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Barcode Scanner */}
+          {showScanner && (
+            <Card className="mb-6">
+              <CardContent className="pt-6">
+                <BarcodeScanner
+                  onScan={handleBarcodeScan}
+                  onClose={() => setShowScanner(false)}
+                  title="Scan Plant Label"
+                  placeholder="Scan or enter Plant ID/Batch Number..."
+                />
+              </CardContent>
+            </Card>
+          )}
 
           {/* Plant Management */}
           <Card>
@@ -677,6 +721,16 @@ export default function Cultivation() {
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedBarcodePlant(plant);
+                                setShowBarcodeDialog(true);
+                              }}
+                            >
+                              <Barcode className="w-4 h-4" />
+                            </Button>
                             <Button
                               size="sm"
                               variant="outline"
@@ -1047,6 +1101,36 @@ export default function Cultivation() {
                 </p>
               </div>
             </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Barcode Display Dialog */}
+      <Dialog open={showBarcodeDialog} onOpenChange={setShowBarcodeDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Plant Barcode</DialogTitle>
+            <DialogDescription>
+              {selectedBarcodePlant && `${selectedBarcodePlant.strain} - ${selectedBarcodePlant.id}`}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedBarcodePlant && (
+            <div className="py-4">
+              <BarcodeDisplay
+                value={selectedBarcodePlant.id}
+                format="barcode"
+                label={`${selectedBarcodePlant.strain} - Batch ${selectedBarcodePlant.batchNumber}`}
+                size="lg"
+              />
+              <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm space-y-1">
+                <div><strong>Plant ID:</strong> {selectedBarcodePlant.id}</div>
+                <div><strong>Strain:</strong> {selectedBarcodePlant.strain}</div>
+                <div><strong>Batch:</strong> {selectedBarcodePlant.batchNumber}</div>
+                <div><strong>Stage:</strong> {selectedBarcodePlant.stage}</div>
+                <div><strong>Location:</strong> {selectedBarcodePlant.location}</div>
+                <div><strong>Health:</strong> {selectedBarcodePlant.health}</div>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>
