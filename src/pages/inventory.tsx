@@ -10,7 +10,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Package, AlertTriangle, TrendingDown, Search, Plus, ArrowLeft, Download, Filter, Leaf, FlaskConical, Cookie, Cigarette, Droplet, CheckCircle2, XCircle, Clock, ArrowUpRight, ArrowDownRight, RefreshCw, User } from "lucide-react";
+import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { BarcodeDisplay } from "@/components/BarcodeDisplay";
+import { Package, AlertTriangle, TrendingDown, Search, Plus, ArrowLeft, Download, Filter, Leaf, FlaskConical, Cookie, Cigarette, Droplet, CheckCircle2, XCircle, Clock, ArrowUpRight, ArrowDownRight, RefreshCw, User, ScanLine, Barcode } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -61,6 +63,9 @@ export default function Inventory() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showMovementDialog, setShowMovementDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [showScanner, setShowScanner] = useState(false);
+  const [showBarcodeDialog, setShowBarcodeDialog] = useState(false);
+  const [selectedBarcode, setSelectedBarcode] = useState<InventoryItem | null>(null);
 
   // New item form
   const [newItem, setNewItem] = useState<Partial<InventoryItem>>({
@@ -341,6 +346,21 @@ export default function Inventory() {
     setNewMovement({ type: "in", quantity: 0, reason: "", from: "", to: "" });
   };
 
+  const handleBarcodeScan = (barcode: string) => {
+    const found = inventory.find(item => 
+      item.sku === barcode || 
+      item.batchNumber === barcode ||
+      item.sku.toLowerCase().includes(barcode.toLowerCase())
+    );
+    
+    if (found) {
+      setSearchTerm(found.sku);
+      setShowScanner(false);
+    } else {
+      alert(`No item found with barcode: ${barcode}`);
+    }
+  };
+
   const filteredInventory = inventory.filter(item => {
     const matchesSearch = item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -517,6 +537,15 @@ export default function Inventory() {
                       <CardDescription>Track all products with batch numbers and stock levels</CardDescription>
                     </div>
                     <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowScanner(!showScanner)}
+                        className="border-emerald-600 text-emerald-600 hover:bg-emerald-50"
+                      >
+                        <ScanLine className="w-4 h-4 mr-2" />
+                        Scan Barcode
+                      </Button>
+
                       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
                         <DialogTrigger asChild>
                           <Button className="bg-emerald-600 hover:bg-emerald-700">
@@ -718,6 +747,18 @@ export default function Inventory() {
                 </CardHeader>
 
                 <CardContent>
+                  {/* Barcode Scanner */}
+                  {showScanner && (
+                    <div className="mb-6">
+                      <BarcodeScanner
+                        onScan={handleBarcodeScan}
+                        onClose={() => setShowScanner(false)}
+                        title="Scan Inventory Item"
+                        placeholder="Enter SKU or Batch Number..."
+                      />
+                    </div>
+                  )}
+
                   {/* Search and Filters */}
                   <div className="flex flex-col md:flex-row gap-4 mb-6">
                     <div className="flex-1 relative">
@@ -817,16 +858,28 @@ export default function Inventory() {
                               </div>
                             </TableCell>
                             <TableCell>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedItem(item);
-                                  setShowMovementDialog(true);
-                                }}
-                              >
-                                Record Movement
-                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setSelectedBarcode(item);
+                                    setShowBarcodeDialog(true);
+                                  }}
+                                >
+                                  <Barcode className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setSelectedItem(item);
+                                    setShowMovementDialog(true);
+                                  }}
+                                >
+                                  Record Movement
+                                </Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -991,6 +1044,34 @@ export default function Inventory() {
                   Record Movement
                 </Button>
               </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Barcode Display Dialog */}
+          <Dialog open={showBarcodeDialog} onOpenChange={setShowBarcodeDialog}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Product Barcode</DialogTitle>
+                <DialogDescription>
+                  {selectedBarcode && `${selectedBarcode.productName}`}
+                </DialogDescription>
+              </DialogHeader>
+              {selectedBarcode && (
+                <div className="py-4">
+                  <BarcodeDisplay
+                    value={selectedBarcode.sku}
+                    format="barcode"
+                    label={`${selectedBarcode.productName} - ${selectedBarcode.batchNumber}`}
+                    size="lg"
+                  />
+                  <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm space-y-1">
+                    <div><strong>SKU:</strong> {selectedBarcode.sku}</div>
+                    <div><strong>Batch:</strong> {selectedBarcode.batchNumber}</div>
+                    <div><strong>Location:</strong> {selectedBarcode.location}</div>
+                    <div><strong>Stock:</strong> {selectedBarcode.quantity} {selectedBarcode.unit}</div>
+                  </div>
+                </div>
+              )}
             </DialogContent>
           </Dialog>
         </div>
