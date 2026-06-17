@@ -65,27 +65,30 @@ export default function Home() {
         description="Complete cannabis tracking solution from cultivation to retail sales with compliance and accounting integration" />
       
       
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-orange-50 to-green-50 dark:from-gray-900 dark:via-orange-950/30 dark:to-gray-900 relative overflow-hidden">
         {/* Background Watermark Leaves */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] dark:opacity-[0.02]">
           <CannabisLeaf className="absolute top-10 left-10 text-emerald-600 rotate-12" size={200} />
-          <CannabisLeaf className="absolute top-1/4 right-20 text-green-600 -rotate-45" size={300} />
+          <CannabisLeaf className="absolute top-1/4 right-20 text-orange-500 -rotate-45" size={300} />
           <CannabisLeaf className="absolute bottom-20 left-1/4 text-emerald-700 rotate-[30deg]" size={250} />
           <CannabisLeaf className="absolute top-1/2 left-1/2 text-green-500 -rotate-12" size={400} />
-          <CannabisLeaf className="absolute bottom-1/4 right-1/4 text-emerald-600 rotate-[60deg]" size={180} />
+          <CannabisLeaf className="absolute bottom-1/4 right-1/4 text-orange-600 rotate-[60deg]" size={180} />
         </div>
 
         {/* Header */}
         <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-emerald-600 to-green-600 p-2.5 rounded-xl shadow-lg relative">
-                <CannabisLeaf className="w-7 h-7 text-white" size={28} />
-                <div className="absolute inset-0 bg-white/20 rounded-xl"></div>
+              <div className="relative">
+                <img 
+                  src="/canna-blaze-360-logo.png" 
+                  alt="Canna Blaze 360 Logo" 
+                  className="h-12 w-auto"
+                />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Canna Blaze 360
-
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 bg-clip-text text-transparent">
+                  Canna Blaze 360
                 </h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Seed to Sale Platform</p>
               </div>
@@ -98,7 +101,7 @@ export default function Home() {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link href="/signup">
-                <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-md">
+                <Button className="bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 hover:from-emerald-700 hover:via-orange-600 hover:to-green-700 shadow-md">
                   Start Free Trial
                 </Button>
               </Link>
@@ -109,13 +112,20 @@ export default function Home() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-16 lg:py-24 text-center relative z-10">
           <div className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-emerald-100 dark:bg-emerald-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold border border-emerald-200 dark:border-emerald-800">
-              <CannabisLeaf size={16} className="text-emerald-600 dark:text-emerald-400" />
+            <div className="flex justify-center mb-8">
+              <img 
+                src="/canna-blaze-360-logo.png" 
+                alt="Canna Blaze 360" 
+                className="h-32 w-auto drop-shadow-2xl"
+              />
+            </div>
+            <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-emerald-100 via-orange-100 to-green-100 dark:from-emerald-900/50 dark:via-orange-900/50 dark:to-green-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold border border-emerald-200 dark:border-emerald-800">
+              <CannabisLeaf size={16} className="text-orange-500 dark:text-orange-400" />
               Trusted by 500+ Cannabis Businesses
             </div>
             <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
               Complete Seed-to-Sale
-              <span className="block bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent mt-2">
+              <span className="block bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 bg-clip-text text-transparent mt-2">
                 Cannabis Tracking
               </span>
             </h2>
@@ -125,7 +135,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all">
+                <Button size="lg" className="gap-2 bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 hover:from-emerald-700 hover:via-orange-600 hover:to-green-700 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all">
                   <CannabisLeaf size={20} />
                   Start Free Trial
                   <TrendingUp className="w-5 h-5" />
@@ -325,8 +335,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="flex gap-4 bg-emerald-50/50 dark:bg-emerald-950/30 p-6 rounded-xl border border-emerald-100 dark:border-emerald-900">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="flex gap-4 bg-gradient-to-br from-emerald-50/50 via-orange-50/30 to-green-50/50 dark:from-emerald-950/30 dark:via-orange-950/20 dark:to-green-950/30 p-6 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 via-orange-500 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <BarChart3 className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -334,8 +344,8 @@ export default function Home() {
                     <p className="text-gray-600 dark:text-gray-400">Track KPIs, inventory levels, and compliance metrics in real-time with customizable dashboards</p>
                   </div>
                 </div>
-                <div className="flex gap-4 bg-blue-50/50 dark:bg-blue-950/30 p-6 rounded-xl border border-blue-100 dark:border-blue-900">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="flex gap-4 bg-gradient-to-br from-blue-50/50 via-orange-50/30 to-indigo-50/50 dark:from-blue-950/30 dark:via-orange-950/20 dark:to-indigo-950/30 p-6 rounded-xl border border-blue-100 dark:border-blue-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 via-orange-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <Settings className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -343,8 +353,8 @@ export default function Home() {
                     <p className="text-gray-600 dark:text-gray-400">Seamless two-way sync with QuickBooks and other accounting platforms</p>
                   </div>
                 </div>
-                <div className="flex gap-4 bg-purple-50/50 dark:bg-purple-950/30 p-6 rounded-xl border border-purple-100 dark:border-purple-900">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="flex gap-4 bg-gradient-to-br from-purple-50/50 via-orange-50/30 to-pink-50/50 dark:from-purple-950/30 dark:via-orange-950/20 dark:to-pink-950/30 p-6 rounded-xl border border-purple-100 dark:border-purple-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 via-orange-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <FlaskConical className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -352,8 +362,8 @@ export default function Home() {
                     <p className="text-gray-600 dark:text-gray-400">Built-in compliance checks, automated reporting, and audit trail for all transactions</p>
                   </div>
                 </div>
-                <div className="flex gap-4 bg-orange-50/50 dark:bg-orange-950/30 p-6 rounded-xl border border-orange-100 dark:border-orange-900">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="flex gap-4 bg-gradient-to-br from-orange-50/50 via-yellow-50/30 to-amber-50/50 dark:from-orange-950/30 dark:via-yellow-950/20 dark:to-amber-950/30 p-6 rounded-xl border border-orange-100 dark:border-orange-900">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <Truck className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -369,17 +379,21 @@ export default function Home() {
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-16 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Card className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white border-0 shadow-2xl relative overflow-hidden">
+            <Card className="bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 text-white border-0 shadow-2xl relative overflow-hidden">
               <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
                 <CannabisLeaf className="absolute -top-10 -right-10 text-white rotate-12" size={200} />
                 <CannabisLeaf className="absolute -bottom-10 -left-10 text-white -rotate-45" size={220} />
               </div>
               <CardContent className="py-12 px-8 text-center relative z-10">
                 <div className="flex justify-center mb-6">
-                  <CannabisLeaf size={64} className="text-white drop-shadow-lg" />
+                  <img 
+                    src="/canna-blaze-360-logo.png" 
+                    alt="Canna Blaze 360" 
+                    className="h-20 w-auto drop-shadow-2xl brightness-0 invert"
+                  />
                 </div>
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
-                <p className="text-xl mb-8 text-emerald-50">
+                <p className="text-xl mb-8 text-white/90">
                   Join hundreds of cannabis businesses streamlining their operations
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -389,7 +403,7 @@ export default function Home() {
                     </Button>
                   </Link>
                   <Link href="/plans">
-                    <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-emerald-700 text-lg px-10 py-6">
+                    <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-10 py-6">
                       View Pricing Plans
                     </Button>
                   </Link>
@@ -402,18 +416,22 @@ export default function Home() {
         {/* Footer */}
         <footer className="border-t bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm mt-16 relative">
           <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.02]">
-            <CannabisLeaf className="absolute bottom-0 left-1/2 -translate-x-1/2 text-emerald-600" size={150} />
+            <CannabisLeaf className="absolute bottom-0 left-1/2 -translate-x-1/2 text-orange-500" size={150} />
           </div>
           <div className="container mx-auto px-4 py-8 relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2">
-                <CannabisLeaf size={20} className="text-emerald-600 dark:text-emerald-400" />
-                <p className="text-gray-600 dark:text-gray-400">© 2026 Blaze 360. All rights reserved.</p>
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/canna-blaze-360-logo.png" 
+                  alt="Canna Blaze 360" 
+                  className="h-8 w-auto"
+                />
+                <p className="text-gray-600 dark:text-gray-400">© 2026 Canna Blaze 360. All rights reserved.</p>
               </div>
               <div className="flex gap-6">
-                <Link href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Privacy</Link>
-                <Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Terms</Link>
-                <Link href="/support" className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">Support</Link>
+                <Link href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition-colors">Privacy</Link>
+                <Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition-colors">Terms</Link>
+                <Link href="/support" className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition-colors">Support</Link>
               </div>
             </div>
           </div>
