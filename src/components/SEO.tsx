@@ -10,7 +10,7 @@ interface SEOProps {
 // SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
   title = "Canna Blaze 360",
-  description = "A cannabis seed to sale platform and e prescription software application.",
+  description = "Canna Blaze 360™ is the all-in-one cannabis management ecosystem powering the future of legal cannabis. From cultivation, manufacturing, testing, transportation, and retail sales to medical prescriptions, pharmacy fulfillment, patient management, compliance, licensing, and government oversight, Canna Blaze 360 delivers complete seed-to-sale visibility. Built for operators, healthcare providers, researchers, and regulators, it transforms complexity into control, compliance, and growth.",
   image,
   url,
 }: SEOProps) {
