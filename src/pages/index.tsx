@@ -116,7 +116,7 @@ export default function Home() {
               <img 
                 src="/canna-blaze-360-logo.png" 
                 alt="Canna Blaze 360" 
-                className="h-32 w-auto drop-shadow-2xl"
+                className="h-40 w-auto drop-shadow-2xl"
               />
             </div>
             <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-emerald-100 via-orange-100 to-green-100 dark:from-emerald-900/50 dark:via-orange-900/50 dark:to-green-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold border border-emerald-200 dark:border-emerald-800">
