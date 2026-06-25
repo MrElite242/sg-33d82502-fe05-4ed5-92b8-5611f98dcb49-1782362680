@@ -1,6 +1,6 @@
 ---
 title: Task
-status: in_progress
+status: done
 priority: high
 created_by: human
 created_at: '2026-06-17T08:30:31.029441'
