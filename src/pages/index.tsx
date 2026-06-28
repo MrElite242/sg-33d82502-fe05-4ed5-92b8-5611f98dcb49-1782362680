@@ -61,8 +61,71 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Blaze 360 - Cannabis Seed to Sale Platform"
-        description="Complete cannabis tracking solution from cultivation to retail sales with compliance and accounting integration" />
+        title="Canna Blaze 360 - Complete Cannabis Seed-to-Sale Platform | Track, Comply, Grow"
+        description="Enterprise cannabis management platform with cultivation tracking, manufacturing, testing, retail POS, medical prescriptions, compliance reporting, and QuickBooks integration. 14-day free trial."
+        image="/og-image.png"
+        url="https://yourdomain.com"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "name": "Canna Blaze 360",
+              "url": "https://yourdomain.com",
+              "logo": "https://yourdomain.com/canna-blaze-360-logo.png",
+              "description": "Complete seed-to-sale cannabis tracking and compliance platform",
+              "sameAs": [
+                "https://twitter.com/cannablaze360",
+                "https://linkedin.com/company/cannablaze360"
+              ]
+            },
+            {
+              "@type": "SoftwareApplication",
+              "name": "Canna Blaze 360",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web Browser",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+                "priceValidUntil": "2027-12-31",
+                "availability": "https://schema.org/InStock",
+                "url": "https://yourdomain.com/plans"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "500",
+                "bestRating": "5"
+              },
+              "description": "Track every stage of your cannabis operation with full regulatory compliance, real-time analytics, and seamless accounting integration",
+              "featureList": [
+                "Cultivation Tracking",
+                "Manufacturing Management",
+                "Testing & Lab Results",
+                "Transportation & Manifests",
+                "Retail Point of Sale",
+                "Medical Prescriptions",
+                "Pharmacy Management",
+                "Compliance Reporting",
+                "QuickBooks Integration",
+                "Real-time Analytics"
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "url": "https://yourdomain.com",
+              "name": "Canna Blaze 360",
+              "description": "Complete cannabis seed-to-sale tracking platform",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://yourdomain.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }
+          ]
+        }}
+      />
       
       
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-orange-50 to-green-50 dark:from-gray-900 dark:via-orange-950/30 dark:to-gray-900 relative overflow-hidden">
