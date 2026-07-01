@@ -182,10 +182,6 @@ export default function Home() {
                 className="h-40 w-auto drop-shadow-2xl"
               />
             </div>
-            <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-emerald-100 via-orange-100 to-green-100 dark:from-emerald-900/50 dark:via-orange-900/50 dark:to-green-900/50 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold border border-emerald-200 dark:border-emerald-800">
-              <CannabisLeaf size={16} className="text-orange-500 dark:text-orange-400" />
-              Trusted by 500+ Cannabis Businesses
-            </div>
             <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
               Complete Seed-to-Sale
               <span className="block bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 bg-clip-text text-transparent mt-2">
