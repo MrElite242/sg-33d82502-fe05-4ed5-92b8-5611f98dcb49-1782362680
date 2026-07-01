@@ -2,38 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>https://yourdomain.com/</loc>
-    <lastmod>2026-06-28</lastmod>
+    <loc>https://cannablaze360.com/</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- Pricing Plans -->
   <url>
-    <loc>https://yourdomain.com/plans</loc>
-    <lastmod>2026-06-28</lastmod>
+    <loc>https://cannablaze360.com/plans</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Authentication Pages -->
   <url>
-    <loc>https://yourdomain.com/login</loc>
-    <lastmod>2026-06-28</lastmod>
+    <loc>https://cannablaze360.com/login</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://yourdomain.com/signup</loc>
-    <lastmod>2026-06-28</lastmod>
+    <loc>https://cannablaze360.com/signup</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://yourdomain.com/doctor-signup</loc>
-    <lastmod>2026-06-28</lastmod>
+    <loc>https://cannablaze360.com/doctor-signup</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

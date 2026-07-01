@@ -14,7 +14,7 @@ export function SEOElements({
   title = "Canna Blaze 360",
   description = "Canna Blaze 360™ is the all-in-one cannabis management ecosystem powering the future of legal cannabis. From cultivation, manufacturing, testing, transportation, and retail sales to medical prescriptions, pharmacy fulfillment, patient management, compliance, licensing, and government oversight, Canna Blaze 360 delivers complete seed-to-sale visibility. Built for operators, healthcare providers, researchers, and regulators, it transforms complexity into control, compliance, and growth.",
   image = "/og-image.png",
-  url = "https://yourdomain.com",
+  url = "https://cannablaze360.com",
   type = "website",
   jsonLd,
 }: SEOProps) {
