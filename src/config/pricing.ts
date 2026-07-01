@@ -76,6 +76,7 @@ export interface DoctorPricingTier {
   name: string;
   price: number;
   interval: "month" | "year";
+  description: string;
   popular?: boolean;
   features: string[];
 }
@@ -86,6 +87,7 @@ export const DOCTOR_PLANS: DoctorPricingTier[] = [
     name: "Starter",
     price: 149,
     interval: "month",
+    description: "Essential tools for individual practitioners",
     features: [
       "Up to 50 prescriptions/month",
       "Basic e-prescription system",
@@ -99,6 +101,7 @@ export const DOCTOR_PLANS: DoctorPricingTier[] = [
     name: "Professional",
     price: 299,
     interval: "month",
+    description: "Advanced features for growing practices",
     popular: true,
     features: [
       "Unlimited prescriptions",
@@ -115,6 +118,7 @@ export const DOCTOR_PLANS: DoctorPricingTier[] = [
     name: "Enterprise",
     price: 649,
     interval: "month",
+    description: "Complete solution for large practices",
     features: [
       "Everything in Professional",
       "Multi-provider support",
