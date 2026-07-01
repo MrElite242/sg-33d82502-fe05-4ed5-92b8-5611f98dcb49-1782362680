@@ -30,7 +30,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 
 # Owner Backdoor Credentials (optional - defaults exist)
 NEXT_PUBLIC_OWNER_EMAIL=owner@cannablaze360.com
-NEXT_PUBLIC_OWNER_PASSWORD=CannaBlazeOwner2026!
+NEXT_PUBLIC_OWNER_PASSWORD=CannaBlazeOwner4425!
 ```
 
 **Without Supabase configured, ALL login attempts will fail with "Failed to fetch" errors.**
