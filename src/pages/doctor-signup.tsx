@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { CheckCircle2, PenTool, ShieldCheck, CreditCard, FileText, Upload, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef } from "react";
+import { DOCTOR_PLANS } from "@/config/pricing";
 
 export default function DoctorSignup() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -556,7 +557,7 @@ export default function DoctorSignup() {
               {currentStep === 5 && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {plans.map((plan) => (
+                    {DOCTOR_PLANS.map((plan) => (
                       <Card 
                         key={plan.id}
                         className={`cursor-pointer transition-all ${

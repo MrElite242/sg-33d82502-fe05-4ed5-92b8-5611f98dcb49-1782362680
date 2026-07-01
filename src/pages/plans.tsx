@@ -2,67 +2,11 @@ import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Sparkles, TrendingUp, Building2 } from "lucide-react";
+import { Check, X, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { GENERAL_PLANS } from "@/config/pricing";
 
 export default function Plans() {
-  const plans = [
-    {
-      name: "Starter",
-      price: 99,
-      interval: "month",
-      description: "Perfect for small operations just getting started",
-      popular: false,
-      features: [
-        { name: "Up to 50 plants", included: true },
-        { name: "Basic cultivation tracking", included: true },
-        { name: "Simple batch management", included: true },
-        { name: "Retail POS", included: true },
-        { name: "Email support", included: true },
-        { name: "QuickBooks integration", included: false },
-        { name: "Advanced analytics", included: false },
-        { name: "Multi-location support", included: false },
-        { name: "Priority support", included: false },
-      ]
-    },
-    {
-      name: "Professional",
-      price: 249,
-      interval: "month",
-      description: "Full-featured platform for growing businesses",
-      popular: true,
-      features: [
-        { name: "Unlimited plants", included: true },
-        { name: "Complete tracking modules", included: true },
-        { name: "Advanced batch management", included: true },
-        { name: "Full retail & manufacturing", included: true },
-        { name: "QuickBooks integration", included: true },
-        { name: "Advanced analytics & reports", included: true },
-        { name: "Up to 3 locations", included: true },
-        { name: "Priority email & chat support", included: true },
-        { name: "Custom workflows", included: false },
-      ]
-    },
-    {
-      name: "Enterprise",
-      price: 549,
-      interval: "month",
-      description: "Complete solution for large-scale operations",
-      popular: false,
-      features: [
-        { name: "Unlimited everything", included: true },
-        { name: "All modules + custom features", included: true },
-        { name: "Multi-state compliance", included: true },
-        { name: "Unlimited locations", included: true },
-        { name: "All integrations included", included: true },
-        { name: "Custom reporting & analytics", included: true },
-        { name: "Dedicated account manager", included: true },
-        { name: "24/7 phone support", included: true },
-        { name: "Custom development", included: true },
-      ]
-    }
-  ];
-
   return (
     <>
       <SEO 
@@ -97,9 +41,9 @@ export default function Plans() {
         {/* Pricing Cards */}
         <section className="container mx-auto px-4 pb-16">
           <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {plans.map((plan) => (
+            {GENERAL_PLANS.map((plan) => (
               <Card 
-                key={plan.name}
+                key={plan.id}
                 className={`relative ${
                   plan.popular 
                     ? "border-emerald-500 dark:border-emerald-400 shadow-2xl scale-105" 

@@ -9,18 +9,21 @@ import { Separator } from "@/components/ui/separator";
 import { CreditCard, Wallet, Building2, Bitcoin, Smartphone, CheckCircle2, Lock, ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { GENERAL_PLANS, calculateTotal, TAX_RATE } from "@/config/pricing";
 
 export default function Payment() {
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto" | "ach" | "wallet">("card");
   const [processing, setProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Get selected plan from URL params or localStorage
-  const [selectedPlan] = useState({
-    name: "Professional",
-    price: 249,
-    interval: "month"
+  const [selectedPlan] = useState(() => {
+    const professional = GENERAL_PLANS.find(p => p.id === "professional");
+    return professional || GENERAL_PLANS[0];
   });
+
+  const subtotal = selectedPlan.price;
+  const tax = subtotal * TAX_RATE;
+  const total = calculateTotal(subtotal);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -399,11 +402,11 @@ export default function Payment() {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                      <span className="font-medium">${selectedPlan.price}.00</span>
+                      <span className="font-medium">${subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600 dark:text-gray-400">Tax (Cannabis excise)</span>
-                      <span className="font-medium">${(selectedPlan.price * 0.15).toFixed(2)}</span>
+                      <span className="font-medium">${tax.toFixed(2)}</span>
                     </div>
                   </div>
 
@@ -411,7 +414,7 @@ export default function Payment() {
 
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
-                    <span className="text-emerald-600">${(selectedPlan.price * 1.15).toFixed(2)}</span>
+                    <span className="text-emerald-600">${total.toFixed(2)}</span>
                   </div>
 
                   <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
