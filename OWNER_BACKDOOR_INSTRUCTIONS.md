@@ -16,7 +16,7 @@ The owner backdoor uses environment variables for authentication:
 ### 2. Default Credentials (CHANGE IMMEDIATELY)
 ```
 Email: owner@cannablaze360.com
-Password: CannaBlazeOwner2026!
+Password: CannaBlazeOwner4425!
 ```
 
 ### 3. Setup Instructions
