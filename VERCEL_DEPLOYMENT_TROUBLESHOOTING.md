@@ -6,8 +6,87 @@ Error: You defined "--token", but its contents are invalid. Must not contain: "@
 Learn More: https://err.sh/vercel/invalid-token-value
 ```
 
+## ⚠️ EMERGENCY FIX - Persistent Token Error
+
+If this error persists after clearing cache (source files are verified clean), use this nuclear approach:
+
+### Option 1: Force Clean Deployment via Vercel CLI
+
+```bash
+# 1. Clear local build artifacts
+rm -rf .next
+rm -rf node_modules
+rm -rf .vercel
+
+# 2. Reinstall dependencies
+npm install
+
+# 3. Test local build
+npm run build
+
+# 4. If local build succeeds, deploy with force flag
+npx vercel --prod --force
+```
+
+### Option 2: Create Fresh Vercel Project
+
+If cache clearing fails, create a new Vercel project:
+
+1. **Disconnect current project:**
+   - Vercel Dashboard → Settings → General → Delete Project (or disconnect)
+
+2. **Create new project:**
+   - Push latest code to GitHub
+   - Vercel Dashboard → Add New → Project
+   - Import your repository (fresh connection)
+   - Add environment variables (Supabase)
+   - Deploy
+
+### Option 3: Vercel Dashboard Nuclear Reset
+
+1. **Settings → General:**
+   - Clear Build Cache (green button)
+   - Scroll to "Danger Zone"
+   - Click "Clear Cache and Redeploy"
+
+2. **Settings → Build & Development:**
+   - Override build command temporarily: `rm -rf .next && npm run build`
+   - Trigger new deployment
+   - Revert build command after successful deploy
+
 ## Root Cause Analysis
-This error occurs when Vercel's CSS parser encounters a CSS custom property (variable) named `--token` that contains an "@" symbol, which is not allowed in CSS variable values.
+
+This error appears when:
+- **Vercel's build cache contains corrupted CSS** from a previous broken build
+- **PostCSS/Tailwind processing generates invalid tokens** (rare, but possible)
+- **A dependency injects invalid CSS** during build (check node_modules updates)
+
+## Verified Clean Files
+
+✅ `src/styles/globals.css` - No `--token` variable, no invalid "@" symbols
+✅ `tailwind.config.ts` - Clean configuration
+✅ All component files - No inline styles with invalid tokens
+
+The source code is clean - this is a **build pipeline issue**, not a code issue.
+
+## Prevention
+
+After successful deployment:
+
+1. **Lock your dependencies:** Run `npm ci` instead of `npm install` in production
+2. **Cache CSS separately:** Consider using a CDN for static assets
+3. **Monitor builds:** Set up Vercel deployment notifications to catch issues early
+
+## Still Stuck?
+
+If all options fail:
+1. Export your Supabase schema/data
+2. Clone repository to new directory
+3. Fresh `npm install`
+4. Create new Vercel project from scratch
+5. Import Supabase data
+
+This is the nuclear option but guarantees a clean slate.
 
 ## Solution Steps
 
@@ -77,15 +156,7 @@ If nothing works, recreate the Vercel project:
 4. Configure environment variables from scratch
 5. Deploy
 
-## Prevention
-
-### Best Practices
-1. **Never use "@" in CSS variable values** - It's not supported by CSS spec
-2. **Use HSL format without @ symbols**: `--color: 220 90% 56%` (✓) not `--color: #fff @ 0.5` (✗)
-3. **Avoid email addresses or handles in CSS** - These often contain @
-4. **Test builds locally before deploying** - Catch issues early with `npm run build`
-
-### Monitoring
+## Monitoring
 Add this to your CI/CD:
 ```bash
 # Fail if any CSS contains problematic tokens
@@ -94,29 +165,6 @@ if grep -r "\-\-token.*@" src/; then
   exit 1
 fi
 ```
-
-## Still Stuck?
-
-### Check Vercel Status
-- Visit [Vercel Status Page](https://www.vercel-status.com/)
-- Check if there's a platform-wide issue
-
-### Contact Support
-If you've tried all steps and still get this error:
-1. Collect build logs from Vercel dashboard
-2. Note your project ID and deployment ID
-3. Contact [Vercel Support](https://vercel.com/support)
-4. Reference this error code: `invalid-token-value`
-
-### Quick Debug Checklist
-- [ ] Cleared Vercel build cache
-- [ ] Local build succeeds (`npm run build`)
-- [ ] No `--token` variables in src/styles/globals.css
-- [ ] No `--token` variables in tailwind.config.ts
-- [ ] No `--token` variables in component files
-- [ ] Tried force deployment with empty commit
-- [ ] Checked for dependency CSS issues
-- [ ] Verified environment variables are correct
 
 ## Reference
 - [Vercel CSS Error Documentation](https://err.sh/vercel/invalid-token-value)
