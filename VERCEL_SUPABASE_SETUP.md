@@ -1,5 +1,17 @@
 # Vercel + Supabase Environment Variables Setup Guide
 
+## ⚠️ CRITICAL: Authentication Will Fail Without These Variables
+
+If you see errors like:
+- "Failed to fetch"
+- "Invalid Supabase URL" 
+- Network errors on login/signup
+- "placeholder.supabase.co" in error messages
+
+**You MUST configure these environment variables immediately.**
+
+---
+
 ## Quick Fix for Deployment Error
 
 If you're seeing: **"Error: Missing Supabase environment variables"** during Vercel deployment, follow these steps:

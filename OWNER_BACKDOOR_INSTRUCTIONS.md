@@ -1,7 +1,44 @@
 # 🔐 Platform Owner Backdoor Access
 
+## ⚠️ CRITICAL: Supabase Setup Required
+
+**Before you can use ANY login feature (including the backdoor), you MUST configure Supabase:**
+
+### Step 1: Get Your Supabase Credentials
+1. Go to your Supabase project dashboard: https://supabase.com/dashboard
+2. Click on your project
+3. Go to **Settings** → **API**
+4. Copy these values:
+   - **Project URL** (starts with `https://xxxxx.supabase.co`)
+   - **Anon/Public Key** (starts with `eyJ...`)
+
+### Step 2: Add to Vercel Environment Variables
+1. Go to Vercel Dashboard → Your Project → **Settings** → **Environment Variables**
+2. Add these variables:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL = your_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY = your_anon_key
+   ```
+3. Click **Save**
+4. **Redeploy** your application
+
+### Step 3: Local Development (.env.local)
+Create a `.env.local` file in your project root:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+
+# Owner Backdoor Credentials (optional - defaults exist)
+NEXT_PUBLIC_OWNER_EMAIL=owner@cannablaze360.com
+NEXT_PUBLIC_OWNER_PASSWORD=CannaBlazeOwner2026!
+```
+
+**Without Supabase configured, ALL login attempts will fail with "Failed to fetch" errors.**
+
+---
+
 ## Security Notice
-**THIS FILE CONTAINS SENSITIVE INFORMATION. DO NOT SHARE.**
+**THIS FILE CONTAINS SENSITIVE INFORMATION. DO NOT SHARE OR COMMIT TO PUBLIC REPOSITORIES.**
 
 ## Overview
 The admin login has been removed from public view. Only the platform owner can access the admin portal through a secure backdoor mechanism.

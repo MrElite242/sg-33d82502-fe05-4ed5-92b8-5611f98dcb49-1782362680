@@ -63,7 +63,7 @@ export default function Login() {
       if (error) {
         toast({
           title: "Authentication Failed",
-          description: error,
+          description: error.message,
           variant: "destructive",
         });
         return;
