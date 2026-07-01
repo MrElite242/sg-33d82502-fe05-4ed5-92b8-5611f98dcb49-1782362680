@@ -194,3 +194,19 @@ If you're still experiencing issues:
 4. Check the Vercel deployment logs for specific error messages
 
 **Still stuck?** Contact Vercel support or check the [Vercel Status Page](https://www.vercel-status.com/).
+
+---
+
+## Common Deployment Errors
+
+### Error: Missing Supabase Environment Variables
+See the steps above to configure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+### Error: Invalid CSS Token
+If you encounter CSS-related deployment errors (like "invalid --token value"), refer to **VERCEL_DEPLOYMENT_TROUBLESHOOTING.md** for detailed solutions.
+
+### Error: Build Failed
+1. Check build logs in Vercel dashboard
+2. Verify all dependencies are installed: `npm install`
+3. Test local build: `npm run build`
+4. Clear Vercel build cache and redeploy
