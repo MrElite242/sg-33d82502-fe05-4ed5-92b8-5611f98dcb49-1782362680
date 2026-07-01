@@ -11,11 +11,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const router = useRouter();
   const { signIn } = useAuth();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business">("business");
@@ -57,7 +58,7 @@ export default function Login() {
       }
 
       // Regular authentication flow
-      const { data, error } = await signIn(formData.email, formData.password);
+      const { error, user } = await signIn(formData.email, formData.password);
 
       if (error) {
         toast({
@@ -68,18 +69,18 @@ export default function Login() {
         return;
       }
 
-      if (data?.user) {
+      if (user) {
         toast({
           title: "Login Successful",
           description: "Redirecting to your dashboard...",
         });
 
         // Role-based redirects
-        if (user?.user_role === "doctor") {
+        if (user.user_role === "doctor") {
           router.push("/prescriptions");
-        } else if (user?.user_role === "pharmacy") {
+        } else if (user.user_role === "pharmacy") {
           router.push("/pharmacy-dashboard");
-        } else if (user?.user_role === "patient") {
+        } else if (user.user_role === "patient") {
           router.push("/patient-dashboard");
         } else {
           router.push("/dashboard");
