@@ -64,16 +64,16 @@ Added comprehensive meta tags for better SEO:
 After deploying with your custom domain, complete these steps:
 
 ### Immediate Updates Required
-- [ ] Replace all `https://yourdomain.com` with your actual domain in:
-  - [ ] `public/sitemap.xml`
-  - [ ] `public/robots.txt`
-  - [ ] `src/components/SEO.tsx` (defaultJsonLd url)
-  - [ ] `src/pages/index.tsx` (SEO url prop)
+✅ **All URLs have been updated to cannablaze360.com:**
+  - ✅ `public/sitemap.xml`
+  - ✅ `public/robots.txt`
+  - ✅ `src/components/SEO.tsx` (defaultJsonLd url)
+  - ✅ `src/pages/index.tsx` (SEO url prop)
 
 ### Search Console Setup
 1. **Google Search Console:**
    - Verify domain ownership
-   - Submit sitemap: `https://yourdomain.com/sitemap.xml`
+   - Submit sitemap: `https://cannablaze360.com/sitemap.xml`
    - Monitor indexing status and errors
 
 2. **Bing Webmaster Tools:**
@@ -82,8 +82,8 @@ After deploying with your custom domain, complete these steps:
    - Review SEO reports
 
 ### Performance Optimization
-- [ ] Verify robots.txt is accessible: `https://yourdomain.com/robots.txt`
-- [ ] Verify sitemap is accessible: `https://yourdomain.com/sitemap.xml`
+- [ ] Verify robots.txt is accessible: `https://cannablaze360.com/robots.txt`
+- [ ] Verify sitemap is accessible: `https://cannablaze360.com/sitemap.xml`
 - [ ] Test structured data with Google's Rich Results Test
 - [ ] Check page speed with PageSpeed Insights
 - [ ] Verify mobile-friendliness

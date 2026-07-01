@@ -64,15 +64,15 @@ export default function Home() {
         title="Canna Blaze 360 - Complete Cannabis Seed-to-Sale Platform | Track, Comply, Grow"
         description="Enterprise cannabis management platform with cultivation tracking, manufacturing, testing, retail POS, medical prescriptions, compliance reporting, and QuickBooks integration. 14-day free trial."
         image="/og-image.png"
-        url="https://yourdomain.com"
+        url="https://cannablaze360.com"
         jsonLd={{
           "@context": "https://schema.org",
           "@graph": [
             {
               "@type": "Organization",
               "name": "Canna Blaze 360",
-              "url": "https://yourdomain.com",
-              "logo": "https://yourdomain.com/canna-blaze-360-logo.png",
+              "url": "https://cannablaze360.com",
+              "logo": "https://cannablaze360.com/canna-blaze-360-logo.png",
               "description": "Complete seed-to-sale cannabis tracking and compliance platform",
               "sameAs": [
                 "https://twitter.com/cannablaze360",
@@ -90,7 +90,7 @@ export default function Home() {
                 "priceCurrency": "USD",
                 "priceValidUntil": "2027-12-31",
                 "availability": "https://schema.org/InStock",
-                "url": "https://yourdomain.com/plans"
+                "url": "https://cannablaze360.com/plans"
               },
               "aggregateRating": {
                 "@type": "AggregateRating",
@@ -114,12 +114,12 @@ export default function Home() {
             },
             {
               "@type": "WebSite",
-              "url": "https://yourdomain.com",
+              "url": "https://cannablaze360.com",
               "name": "Canna Blaze 360",
               "description": "Complete cannabis seed-to-sale tracking platform",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://yourdomain.com/search?q={search_term_string}",
+                "target": "https://cannablaze360.com/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             }
