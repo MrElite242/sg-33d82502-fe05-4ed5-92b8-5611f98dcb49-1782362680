@@ -47,6 +47,35 @@ export default function AdminPortal() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isEditing, setIsEditing] = useState<string | null>(null);
+
+  // Check for owner admin access (backdoor)
+  const [isOwnerAdmin, setIsOwnerAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check for owner admin in localStorage (only in browser)
+    if (typeof window !== "undefined") {
+      const ownerAdmin = localStorage.getItem("owner_admin_access");
+      if (ownerAdmin) {
+        setIsOwnerAdmin(true);
+      }
+    }
+  }, []);
+
+  // Only owner admin or admin users can access this page
+  useEffect(() => {
+    if (!loading && !isOwnerAdmin && (!user || user.user_role !== "admin")) {
+      toast({
+        title: "Access Denied",
+        description: "You must be an administrator to access this page.",
+        variant: "destructive",
+      });
+      router.push("/");
+    }
+  }, [user, loading, router, toast, isOwnerAdmin]);
+
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>([]);
   const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
   const [selectedUser, setSelectedUser] = useState<SystemUser | null>(null);
@@ -67,31 +96,7 @@ export default function AdminPortal() {
     pendingAlerts: 3
   });
 
-  // Check for demo admin user
-  const [isDemoAdmin, setIsDemoAdmin] = useState(false);
-
   useEffect(() => {
-    // Check for demo admin in localStorage (only in browser)
-    if (typeof window !== "undefined") {
-      const demoAdmin = localStorage.getItem("demo_admin_user");
-      if (demoAdmin) {
-        setIsDemoAdmin(true);
-        loadSystemData();
-        return;
-      }
-    }
-
-    // Only admin users can access this page
-    if (!loading && (!user || user.user_role !== "admin")) {
-      toast({
-        title: "Access Denied",
-        description: "You must be an administrator to access this page.",
-        variant: "destructive"
-      });
-      router.push("/dashboard");
-      return;
-    }
-
     loadSystemData();
   }, [user, loading, router]);
 
@@ -285,20 +290,20 @@ export default function AdminPortal() {
     return matchesSearch && matchesRole;
   });
 
-  if (loading || !user) {
-    // Allow demo admin to bypass
-    if (typeof window !== "undefined" && localStorage.getItem("demo_admin_user")) {
-      // Continue rendering
-    } else {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+  // Prevent rendering if not authorized
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Verifying access...</p>
         </div>
-      );
-    }
+      </div>
+    );
   }
 
-  if (!isDemoAdmin && user?.user_role !== "admin") {
+  // Allow owner admin to bypass
+  if (!isOwnerAdmin && user?.user_role !== "admin") {
     return null;
   }
 

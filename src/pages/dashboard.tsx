@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield, LogOut, CheckCircle } from "lucide-react";
+import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield, LogOut, CheckCircle, FileText } from "lucide-react";
 import { useState } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
@@ -289,18 +289,17 @@ export default function Dashboard() {
                       </Link>
                     </div>
 
-                    {user?.user_role === "admin" && (
-                      <div className="mt-4 pt-4 border-t">
-                        <Link href="/admin-portal">
-                          <Button variant="outline" className="w-full justify-start gap-2 h-auto py-3 border-red-200 bg-red-50 hover:bg-red-100">
-                            <Shield className="w-4 h-4 text-red-600" />
-                            <div className="text-left">
-                              <div className="font-semibold text-sm text-red-700">Admin Portal</div>
-                              <div className="text-xs text-red-600">Emergency Access</div>
+                    {user?.user_role === "doctor" && (
+                      <Link href="/prescriptions">
+                        <Card className="cursor-pointer hover:shadow-lg transition-all border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600">
+                          <CardContent className="p-6 text-center">
+                            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                              <FileText className="w-8 h-8 text-white" />
                             </div>
-                          </Button>
-                        </Link>
-                      </div>
+                            <div className="font-semibold text-sm text-blue-700">Prescriptions</div>
+                          </CardContent>
+                        </Card>
+                      </Link>
                     )}
                   </CardContent>
                 </Card>

