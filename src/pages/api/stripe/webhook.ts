@@ -163,13 +163,13 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   console.log("Processing subscription deletion:", subscription.id);
 
-  const { error } = await supabase
+  const { error } = await (supabase
     .from("user_subscriptions")
     .update({
       status: "canceled",
       canceled_at: new Date().toISOString(),
-    } as any)
-    .eq("stripe_subscription_id", subscription.id);
+    })
+    .eq("stripe_subscription_id", subscription.id) as any);
 
   if (error) {
     console.error("Error canceling subscription:", error);
@@ -181,13 +181,13 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 
   if (!invoice.subscription) return;
 
-  const { error } = await supabase
+  const { error } = await (supabase
     .from("user_subscriptions")
     .update({
       status: "active",
       last_payment_at: new Date(invoice.created * 1000).toISOString(),
-    } as any)
-    .eq("stripe_subscription_id", invoice.subscription as string);
+    })
+    .eq("stripe_subscription_id", invoice.subscription as string) as any);
 
   if (error) {
     console.error("Error updating subscription after payment:", error);
@@ -199,12 +199,12 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
 
   if (!invoice.subscription) return;
 
-  const { error } = await supabase
+  const { error } = await (supabase
     .from("user_subscriptions")
     .update({
       status: "past_due",
-    } as any)
-    .eq("stripe_subscription_id", invoice.subscription as string);
+    })
+    .eq("stripe_subscription_id", invoice.subscription as string) as any);
 
   if (error) {
     console.error("Error updating subscription after failed payment:", error);
