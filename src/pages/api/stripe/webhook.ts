@@ -1,11 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { buffer } from "micro";
-import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-01-27.acacia",
 });
+
+// Create Supabase client without complex type inference for webhooks
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  {
+    auth: {
+      persistSession: false,
+    },
+  }
+);
 
 // Disable body parsing, need raw body for webhook verification
 export const config = {
@@ -105,7 +116,7 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
   // Get the plan from database
-  const { data: plan } = await supabase
+  const { data: plan } = await supabaseAdmin
     .from("subscription_plans")
     .select("id")
     .eq("plan_id", planId)
@@ -117,7 +128,7 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   }
 
   // Create or update user subscription
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("user_subscriptions")
     .upsert({
       user_id: userId,
@@ -145,7 +156,7 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
   console.log("Processing subscription update:", subscription.id);
 
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("user_subscriptions")
     .update({
       status: subscription.status === "trialing" ? "trial" : subscription.status,
@@ -163,13 +174,13 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   console.log("Processing subscription deletion:", subscription.id);
 
-  const { error } = await (supabase
+  const { error } = await supabaseAdmin
     .from("user_subscriptions")
     .update({
       status: "canceled",
       canceled_at: new Date().toISOString(),
     })
-    .eq("stripe_subscription_id", subscription.id) as any);
+    .eq("stripe_subscription_id", subscription.id);
 
   if (error) {
     console.error("Error canceling subscription:", error);
@@ -181,13 +192,13 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 
   if (!invoice.subscription) return;
 
-  const { error } = await (supabase
+  const { error } = await supabaseAdmin
     .from("user_subscriptions")
     .update({
       status: "active",
       last_payment_at: new Date(invoice.created * 1000).toISOString(),
     })
-    .eq("stripe_subscription_id", invoice.subscription as string) as any);
+    .eq("stripe_subscription_id", invoice.subscription as string);
 
   if (error) {
     console.error("Error updating subscription after payment:", error);
@@ -199,12 +210,12 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
 
   if (!invoice.subscription) return;
 
-  const { error } = await (supabase
+  const { error } = await supabaseAdmin
     .from("user_subscriptions")
     .update({
       status: "past_due",
     })
-    .eq("stripe_subscription_id", invoice.subscription as string) as any);
+    .eq("stripe_subscription_id", invoice.subscription as string);
 
   if (error) {
     console.error("Error updating subscription after failed payment:", error);
