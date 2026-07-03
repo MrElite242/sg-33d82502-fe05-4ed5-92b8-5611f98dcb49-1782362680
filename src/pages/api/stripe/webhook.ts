@@ -4,7 +4,7 @@ import { buffer } from "micro";
 import { supabase } from "@/integrations/supabase/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
+  apiVersion: "2025-01-27.acacia",
 });
 
 // Disable body parsing, need raw body for webhook verification

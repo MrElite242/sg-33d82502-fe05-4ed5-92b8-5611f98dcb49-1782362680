@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { GENERAL_PLANS, DOCTOR_PLANS, calculateAnnualPrice } from "@/config/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
+  apiVersion: "2025-01-27.acacia",
 });
 
 export default async function handler(
