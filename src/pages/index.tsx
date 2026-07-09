@@ -28,7 +28,12 @@ import {
   Instagram,
   Linkedin,
   Youtube,
-  Mail
+  Mail,
+  Factory,
+  FlaskConical,
+  Stethoscope,
+  Building2,
+  Settings
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
