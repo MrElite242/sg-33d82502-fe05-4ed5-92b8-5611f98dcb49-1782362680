@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import Link from "next/link";
 import { 
   TrendingUp, 
   Clock, 
@@ -396,9 +397,11 @@ export function ROICalculator() {
                   <p className="text-sm text-green-800 dark:text-green-200 mb-3">
                     A detailed ROI analysis has been sent to {contactInfo.email}. Our team will contact you within 24 hours to discuss your personalized implementation plan.
                   </p>
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href="/plans">View Pricing Plans</a>
-                  </Button>
+                  <Link href="/plans">
+                    <Button variant="outline" className="w-full">
+                      View Pricing Plans
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

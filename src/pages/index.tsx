@@ -633,12 +633,12 @@ export default function Home() {
               <div>
                 <h3 className="font-semibold mb-4 text-white">Products</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                  <li><a href="/retail" className="hover:text-emerald-400 transition-colors">Retail POS</a></li>
-                  <li><a href="/cultivation" className="hover:text-emerald-400 transition-colors">Cultivation Tracking</a></li>
-                  <li><a href="/manufacturing" className="hover:text-emerald-400 transition-colors">Manufacturing</a></li>
-                  <li><a href="/testing" className="hover:text-emerald-400 transition-colors">Testing & Labs</a></li>
-                  <li><a href="/transport" className="hover:text-emerald-400 transition-colors">Transportation</a></li>
-                  <li><a href="/prescriptions" className="hover:text-emerald-400 transition-colors">Medical Prescriptions</a></li>
+                  <li><Link href="/retail" className="hover:text-emerald-400 transition-colors">Retail POS</Link></li>
+                  <li><Link href="/cultivation" className="hover:text-emerald-400 transition-colors">Cultivation Tracking</Link></li>
+                  <li><Link href="/manufacturing" className="hover:text-emerald-400 transition-colors">Manufacturing</Link></li>
+                  <li><Link href="/testing" className="hover:text-emerald-400 transition-colors">Testing & Labs</Link></li>
+                  <li><Link href="/transport" className="hover:text-emerald-400 transition-colors">Transportation</Link></li>
+                  <li><Link href="/prescriptions" className="hover:text-emerald-400 transition-colors">Medical Prescriptions</Link></li>
                 </ul>
               </div>
 
@@ -646,11 +646,11 @@ export default function Home() {
               <div>
                 <h3 className="font-semibold mb-4 text-white">Company</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                  <li><a href="/plans" className="hover:text-emerald-400 transition-colors">Pricing</a></li>
-                  <li><a href="/login" className="hover:text-emerald-400 transition-colors">Sign In</a></li>
-                  <li><a href="/signup" className="hover:text-emerald-400 transition-colors">Get Started</a></li>
+                  <li><Link href="/plans" className="hover:text-emerald-400 transition-colors">Pricing</Link></li>
+                  <li><Link href="/login" className="hover:text-emerald-400 transition-colors">Sign In</Link></li>
+                  <li><Link href="/signup" className="hover:text-emerald-400 transition-colors">Get Started</Link></li>
                   <li><a href="#roi-calculator" className="hover:text-emerald-400 transition-colors">ROI Calculator</a></li>
-                  <li><a href="/analytics" className="hover:text-emerald-400 transition-colors">Analytics</a></li>
+                  <li><Link href="/analytics" className="hover:text-emerald-400 transition-colors">Analytics</Link></li>
                 </ul>
               </div>
 
