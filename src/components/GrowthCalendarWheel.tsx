@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Calendar,
@@ -14,12 +15,16 @@ import {
   Wind,
   Snowflake,
   Flower as FlowerIcon,
+  Flower2,
   AlertTriangle,
+  AlertCircle,
   TrendingUp,
   Clock,
   Thermometer,
   Home,
-  TreePine
+  TreePine,
+  Moon,
+  CheckCircle2
 } from "lucide-react";
 
 interface StrainData {
@@ -116,6 +121,7 @@ export function GrowthCalendarWheel() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [growMode, setGrowMode] = useState<"indoor" | "outdoor">("indoor");
   const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east">("north-america");
+  const [selectedStrain, setSelectedStrain] = useState<StrainData>(STRAIN_DATABASE[0]);
 
   const regions = [
     { value: "north-america", label: "North America", timezone: "EST/PST" },
@@ -177,8 +183,15 @@ export function GrowthCalendarWheel() {
     }
   };
 
+  const getSeasonalInfo = (monthIndex: number) => {
+    const season = getCurrentSeason(monthIndex);
+    const seasonKey = season.charAt(0).toUpperCase() + season.slice(1);
+    return SEASONAL_DATA[growMode][seasonKey] || { plantable: [], conditions: "N/A" };
+  };
+
   const season = getCurrentSeason(selectedMonth);
   const climate = regionalClimate[selectedRegion][season];
+  const seasonalInfo = getSeasonalInfo(selectedMonth);
 
   const getRecommendedStrains = () => {
     return STRAIN_DATABASE.filter(strain => 
@@ -281,10 +294,10 @@ export function GrowthCalendarWheel() {
                       {season === "winter" && <Snowflake className="w-6 h-6 text-blue-500 flex-shrink-0" />}
                       <div>
                         <h3 className="font-semibold mb-1">{season} Conditions ({growMode})</h3>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">{seasonalInfo.conditions}</p>
-                        {seasonalInfo.plantable.length > 0 && (
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{SEASONAL_DATA[growMode][season].conditions}</p>
+                        {SEASONAL_DATA[growMode][season].plantable.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {seasonalInfo.plantable.map((strain, idx) => (
+                            {SEASONAL_DATA[growMode][season].plantable.map((strain, idx) => (
                               <Badge key={idx} variant="outline" className="bg-white dark:bg-gray-800">
                                 {strain}
                               </Badge>

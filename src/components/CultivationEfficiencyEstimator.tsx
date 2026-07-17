@@ -16,7 +16,8 @@ import {
   AlertCircle,
   CheckCircle2,
   Lightbulb,
-  BarChart3
+  BarChart3,
+  Target
 } from "lucide-react";
 
 interface EfficiencyMetrics {
@@ -37,12 +38,17 @@ export function CultivationEfficiencyEstimator() {
     plantCount: "50",
     strainType: "hybrid",
     lightingType: "led",
+    lightType: "led",
+    lightWattage: "1000",
     electricityRate: "0.12",
     cycleDuration: "14",
+    growCycle: "14",
     nutrientCost: "2000",
     laborHours: "20",
     laborRate: "25",
+    laborCostPerHour: "25",
     sellingPrice: "2500",
+    expectedPrice: "8.00",
   });
 
   const regions = [
@@ -109,11 +115,11 @@ export function CultivationEfficiencyEstimator() {
   const calculateEfficiency = (): EfficiencyMetrics => {
     const space = parseFloat(formData.growSpace);
     const plants = parseInt(formData.plantCount);
-    const wattage = parseInt(formData.lightWattage);
+    const wattage = parseFloat(formData.lightWattage);
     const rate = parseFloat(formData.electricityRate);
     const weeks = parseInt(formData.growCycle);
     const nutrients = parseFloat(formData.nutrientCost);
-    const laborRate = parseFloat(formData.laborCostPerHour);
+    const laborRateValue = parseFloat(formData.laborCostPerHour);
     const pricePerGram = parseFloat(formData.expectedPrice);
 
     // Yield calculations based on strain type and growing conditions
@@ -132,7 +138,7 @@ export function CultivationEfficiencyEstimator() {
 
     // Labor hours (estimated 2 hours per week for 20 plants)
     const laborHours = weeks * 2;
-    const laborCost = laborHours * laborRate;
+    const laborCost = laborHours * laborRateValue;
 
     // Total costs
     const totalCost = energyCost + nutrients + laborCost;
@@ -377,7 +383,7 @@ export function CultivationEfficiencyEstimator() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {((metrics.expectedYield / 28.35).toFixed(1)} oz ({(metrics.expectedYield / 453.592).toFixed(2)} lbs)
+                    {(metrics.expectedYield / 28.35).toFixed(1)} oz ({(metrics.expectedYield / 453.592).toFixed(2)} lbs)
                   </p>
                 </CardContent>
               </Card>
@@ -394,7 +400,7 @@ export function CultivationEfficiencyEstimator() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Total Cost: {currentRegion.currency} {metrics.totalCost.toLocaleString()}
+                    Total Cost: {currentRegion.currency} {(metrics.costPerGram * metrics.expectedYield).toLocaleString()}
                   </p>
                 </CardContent>
               </Card>
@@ -411,7 +417,7 @@ export function CultivationEfficiencyEstimator() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Net Profit: {currentRegion.currency} {metrics.netProfit.toLocaleString()}
+                    Net Profit: {currentRegion.currency} {((metrics.expectedYield * parseFloat(formData.expectedPrice)) - (metrics.costPerGram * metrics.expectedYield)).toLocaleString()}
                   </p>
                 </CardContent>
               </Card>
@@ -428,7 +434,7 @@ export function CultivationEfficiencyEstimator() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {metrics.energyUsage.toLocaleString()} kWh used
+                    {((parseFloat(formData.lightWattage) / 1000) * parseInt(formData.growCycle) * 7 * 18).toLocaleString()} kWh used
                   </p>
                 </CardContent>
               </Card>
