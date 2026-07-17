@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 import { ROICalculator } from "@/components/ROICalculator";
+import { RequestDemoForm } from "@/components/RequestDemoForm";
 import { 
   Sprout, 
   Beaker, 
@@ -33,7 +34,8 @@ import {
   FlaskConical,
   Stethoscope,
   Building2,
-  Settings
+  Settings,
+  Video
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -526,6 +528,68 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Request Demo Section */}
+        <section id="request-demo" className="container mx-auto px-4 py-24">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <Video className="w-3 h-3 mr-1" />
+                Schedule a Demo
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                See It in Action
+                <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mt-2">
+                  Live Demo
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Get a personalized walkthrough of Canna Blaze 360 tailored to your specific business needs. 
+                Our cannabis industry experts will show you exactly how the platform solves your challenges.
+              </p>
+            </div>
+
+            <RequestDemoForm />
+
+            <div className="mt-12 grid md:grid-cols-3 gap-6">
+              <Card className="border-blue-200 dark:border-blue-800">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Video className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Live Walkthrough</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    30-45 minute personalized demo with Q&A
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-purple-200 dark:border-purple-800">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-12 h-12 bg-purple-100 dark:bg-purple-950 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Expert Guidance</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Cannabis industry specialists, not just sales
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-emerald-200 dark:border-emerald-800">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-950 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Custom Solutions</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Tailored to your operation's unique needs
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-16 relative z-10">
           <div className="max-w-4xl mx-auto">
@@ -663,6 +727,7 @@ export default function Home() {
                     support@cannablaze360.com
                   </a></li>
                   <li><a href="tel:+1-555-BLAZE-360" className="hover:text-emerald-400 transition-colors">+1 (555) BLAZE-360</a></li>
+                  <li><Link href="/tutorial" className="hover:text-emerald-400 transition-colors">Platform Tutorial</Link></li>
                   <li><a href="#" className="hover:text-emerald-400 transition-colors">Documentation</a></li>
                   <li><a href="#" className="hover:text-emerald-400 transition-colors">API Reference</a></li>
                   <li><a href="#" className="hover:text-emerald-400 transition-colors">System Status</a></li>
