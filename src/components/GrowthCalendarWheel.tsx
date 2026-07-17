@@ -2,23 +2,24 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Calendar,
-  Sun,
-  Moon,
+  Sprout, 
+  Sun, 
+  Cloud,
   Droplets,
-  Thermometer,
   Wind,
-  Sprout,
-  CloudRain,
   Snowflake,
-  Flower2,
-  AlertCircle,
+  Flower as FlowerIcon,
+  AlertTriangle,
   TrendingUp,
-  CheckCircle2
+  Clock,
+  Thermometer,
+  Home,
+  TreePine
 } from "lucide-react";
 
 interface StrainData {
@@ -112,24 +113,76 @@ const SEASONAL_DATA = {
 };
 
 export function GrowthCalendarWheel() {
-  const [growingMode, setGrowingMode] = useState<"indoor" | "outdoor">("indoor");
-  const [selectedMonth, setSelectedMonth] = useState<string>(MONTHS[new Date().getMonth()]);
-  const [selectedStrain, setSelectedStrain] = useState<StrainData>(STRAIN_DATABASE[0]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [growMode, setGrowMode] = useState<"indoor" | "outdoor">("indoor");
+  const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east">("north-america");
 
-  const getCurrentSeason = (month: string): string => {
-    const monthIndex = MONTHS.indexOf(month);
-    if (monthIndex >= 2 && monthIndex <= 4) return "Spring";
-    if (monthIndex >= 5 && monthIndex <= 7) return "Summer";
-    if (monthIndex >= 8 && monthIndex <= 10) return "Fall";
-    return "Winter";
+  const regions = [
+    { value: "north-america", label: "North America", timezone: "EST/PST" },
+    { value: "europe", label: "Europe", timezone: "CET/GMT" },
+    { value: "asia-pacific", label: "Asia-Pacific", timezone: "JST/AEST" },
+    { value: "south-america", label: "South America", timezone: "BRT/ART" },
+    { value: "africa-middle-east", label: "Africa & Middle East", timezone: "EAT/GST" },
+  ];
+
+  // Regional climate considerations
+  const regionalClimate = {
+    "north-america": {
+      spring: { tempRange: "50-70°F", rainfall: "Moderate", growthPeriod: "Apr-Jun" },
+      summer: { tempRange: "70-90°F", rainfall: "Variable", growthPeriod: "Jun-Sep" },
+      fall: { tempRange: "50-70°F", rainfall: "Moderate", growthPeriod: "Sep-Nov" },
+      winter: { tempRange: "20-50°F", rainfall: "Low-Moderate", growthPeriod: "Indoor Only" },
+    },
+    "europe": {
+      spring: { tempRange: "45-65°F", rainfall: "High", growthPeriod: "Mar-May" },
+      summer: { tempRange: "60-80°F", rainfall: "Moderate", growthPeriod: "May-Sep" },
+      fall: { tempRange: "45-65°F", rainfall: "High", growthPeriod: "Sep-Nov" },
+      winter: { tempRange: "30-50°F", rainfall: "High", growthPeriod: "Indoor Only" },
+    },
+    "asia-pacific": {
+      spring: { tempRange: "60-80°F", rainfall: "High", growthPeriod: "Mar-Jun" },
+      summer: { tempRange: "75-95°F", rainfall: "Very High", growthPeriod: "Jun-Sep" },
+      fall: { tempRange: "60-80°F", rainfall: "Moderate", growthPeriod: "Sep-Dec" },
+      winter: { tempRange: "50-70°F", rainfall: "Low", growthPeriod: "Dec-Mar" },
+    },
+    "south-america": {
+      spring: { tempRange: "65-80°F", rainfall: "High", growthPeriod: "Sep-Dec" },
+      summer: { tempRange: "75-95°F", rainfall: "Very High", growthPeriod: "Dec-Mar" },
+      fall: { tempRange: "60-75°F", rainfall: "Moderate", growthPeriod: "Mar-Jun" },
+      winter: { tempRange: "50-70°F", rainfall: "Low", growthPeriod: "Jun-Sep" },
+    },
+    "africa-middle-east": {
+      spring: { tempRange: "70-85°F", rainfall: "Low", growthPeriod: "Mar-May" },
+      summer: { tempRange: "85-105°F", rainfall: "Very Low", growthPeriod: "Challenging" },
+      fall: { tempRange: "70-85°F", rainfall: "Low", growthPeriod: "Sep-Nov" },
+      winter: { tempRange: "55-75°F", rainfall: "Low-Moderate", growthPeriod: "Nov-Mar" },
+    },
+  };
+
+  const getCurrentSeason = (monthIndex: number) => {
+    // Adjust seasons for Southern Hemisphere
+    const isNorthernHemisphere = ["north-america", "europe", "asia-pacific", "africa-middle-east"].includes(selectedRegion);
+    
+    if (isNorthernHemisphere) {
+      if (monthIndex >= 2 && monthIndex <= 4) return "spring";
+      if (monthIndex >= 5 && monthIndex <= 7) return "summer";
+      if (monthIndex >= 8 && monthIndex <= 10) return "fall";
+      return "winter";
+    } else {
+      // Southern Hemisphere seasons are reversed
+      if (monthIndex >= 2 && monthIndex <= 4) return "fall";
+      if (monthIndex >= 5 && monthIndex <= 7) return "winter";
+      if (monthIndex >= 8 && monthIndex <= 10) return "spring";
+      return "summer";
+    }
   };
 
   const season = getCurrentSeason(selectedMonth);
-  const seasonalInfo = SEASONAL_DATA[growingMode][season];
+  const climate = regionalClimate[selectedRegion][season];
 
   const getRecommendedStrains = () => {
     return STRAIN_DATABASE.filter(strain => 
-      growingMode === "indoor" ? strain.indoorRecommended : strain.outdoorRecommended
+      growMode === "indoor" ? strain.indoorRecommended : strain.outdoorRecommended
     );
   };
 
@@ -157,18 +210,38 @@ export function GrowthCalendarWheel() {
             {/* Indoor/Outdoor Toggle */}
             <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">
               <div className="flex items-center gap-2">
-                <Moon className={`w-4 h-4 ${growingMode === "indoor" ? "text-purple-600" : "text-gray-400"}`} />
+                <Moon className={`w-4 h-4 ${growMode === "indoor" ? "text-purple-600" : "text-gray-400"}`} />
                 <Label htmlFor="growing-mode" className="text-sm font-medium">
-                  {growingMode === "indoor" ? "Indoor" : "Outdoor"}
+                  {growMode === "indoor" ? "Indoor" : "Outdoor"}
                 </Label>
               </div>
               <Switch
                 id="growing-mode"
-                checked={growingMode === "outdoor"}
-                onCheckedChange={(checked) => setGrowingMode(checked ? "outdoor" : "indoor")}
+                checked={growMode === "outdoor"}
+                onCheckedChange={(checked) => setGrowMode(checked ? "outdoor" : "indoor")}
               />
-              <Sun className={`w-4 h-4 ${growingMode === "outdoor" ? "text-orange-500" : "text-gray-400"}`} />
+              <Sun className={`w-4 h-4 ${growMode === "outdoor" ? "text-orange-500" : "text-gray-400"}`} />
             </div>
+          </div>
+
+          {/* Region Selector */}
+          <div className="mb-6">
+            <Label className="text-sm font-medium mb-2 block">Growing Region</Label>
+            <Select value={selectedRegion} onValueChange={(value: any) => setSelectedRegion(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {regions.map((region) => (
+                  <SelectItem key={region.value} value={region.value}>
+                    {region.label} ({region.timezone})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Climate recommendations will adjust based on your region
+            </p>
           </div>
         </CardHeader>
         <CardContent>
@@ -190,7 +263,7 @@ export function GrowthCalendarWheel() {
                 {/* Season Badge */}
                 <div className="flex items-center justify-between">
                   <Badge variant="outline" className="text-lg py-2 px-4">
-                    {getCurrentSeason(month)} - {growingMode === "indoor" ? "🏠 Indoor" : "🌞 Outdoor"} Growing
+                    {getCurrentSeason(MONTHS.indexOf(month))} - {growMode === "indoor" ? "🏠 Indoor" : "🌞 Outdoor"} Growing
                   </Badge>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Thermometer className="w-4 h-4" />
@@ -202,12 +275,12 @@ export function GrowthCalendarWheel() {
                 <Card className="border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-3">
-                      {season === "Spring" && <Flower2 className="w-6 h-6 text-pink-600 flex-shrink-0" />}
-                      {season === "Summer" && <Sun className="w-6 h-6 text-orange-500 flex-shrink-0" />}
-                      {season === "Fall" && <Wind className="w-6 h-6 text-amber-600 flex-shrink-0" />}
-                      {season === "Winter" && <Snowflake className="w-6 h-6 text-blue-500 flex-shrink-0" />}
+                      {season === "spring" && <Flower2 className="w-6 h-6 text-pink-600 flex-shrink-0" />}
+                      {season === "summer" && <Sun className="w-6 h-6 text-orange-500 flex-shrink-0" />}
+                      {season === "fall" && <Wind className="w-6 h-6 text-amber-600 flex-shrink-0" />}
+                      {season === "winter" && <Snowflake className="w-6 h-6 text-blue-500 flex-shrink-0" />}
                       <div>
-                        <h3 className="font-semibold mb-1">{season} Conditions ({growingMode})</h3>
+                        <h3 className="font-semibold mb-1">{season} Conditions ({growMode})</h3>
                         <p className="text-sm text-gray-700 dark:text-gray-300">{seasonalInfo.conditions}</p>
                         {seasonalInfo.plantable.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
@@ -227,7 +300,7 @@ export function GrowthCalendarWheel() {
                 <div>
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <Sprout className="w-5 h-5 text-emerald-600" />
-                    Recommended Strains for {growingMode} in {month}
+                    Recommended Strains for {growMode} in {month}
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     {getRecommendedStrains().map((strain) => (
@@ -334,7 +407,7 @@ export function GrowthCalendarWheel() {
                 </Card>
 
                 {/* Environmental Alerts */}
-                {growingMode === "outdoor" && (season === "Winter" || season === "Fall") && (
+                {growMode === "outdoor" && (season === "winter" || season === "fall") && (
                   <Card className="border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/30">
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-3">
@@ -342,7 +415,7 @@ export function GrowthCalendarWheel() {
                         <div>
                           <h3 className="font-semibold mb-1">Weather Advisory</h3>
                           <p className="text-sm text-gray-700 dark:text-gray-300">
-                            {season === "Winter"
+                            {season === "winter"
                               ? "Outdoor growing not recommended during winter months. Consider indoor cultivation for year-round production."
                               : "Monitor frost dates closely. Most strains should be harvested before first frost in your region."}
                           </p>
@@ -351,6 +424,31 @@ export function GrowthCalendarWheel() {
                     </CardContent>
                   </Card>
                 )}
+                <div className="mb-4 p-3 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    {season === "spring" && <FlowerIcon className="w-5 h-5 text-pink-600" />}
+                    {season === "summer" && <Sun className="w-5 h-5 text-yellow-600" />}
+                    {season === "fall" && <Wind className="w-5 h-5 text-orange-600" />}
+                    {season === "winter" && <Snowflake className="w-5 h-5 text-blue-600" />}
+                    <span className="font-semibold capitalize text-sm">
+                      {season} in {regions.find(r => r.value === selectedRegion)?.label}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">Temp Range:</span>
+                      <span className="ml-2 font-medium">{climate.tempRange}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">Rainfall:</span>
+                      <span className="ml-2 font-medium">{climate.rainfall}</span>
+                    </div>
+                    <div className="col-span-2">
+                      <span className="text-gray-600 dark:text-gray-400">Outdoor Growth:</span>
+                      <span className="ml-2 font-medium">{climate.growthPeriod}</span>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
             ))}
           </Tabs>
