@@ -29,27 +29,89 @@ export function RequestDemoForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.fullName || !formData.email || !formData.company) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields (marked with *)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      // Submit to API endpoint
+      const response = await fetch("/api/request-demo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Store demo request (in production, this would go to your CRM/database)
-    const demoRequest = {
-      ...formData,
-      timestamp: new Date().toISOString(),
-      status: "pending",
-    };
+      const data = await response.json();
 
-    localStorage.setItem(`demo_request_${Date.now()}`, JSON.stringify(demoRequest));
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit demo request");
+      }
 
-    setLoading(false);
-    setSubmitted(true);
+      // Also store in localStorage for reference
+      const demoRequest = {
+        ...formData,
+        submittedAt: new Date().toISOString(),
+        emailId: data.emailId,
+      };
+      localStorage.setItem("demoRequest", JSON.stringify(demoRequest));
 
-    toast({
-      title: "Demo Request Received!",
-      description: "Our team will contact you within 24 hours to schedule your personalized demo.",
-    });
+      setSubmitted(true);
+
+      toast({
+        title: "Demo Request Submitted! ✓",
+        description: "Check your email for confirmation. We'll contact you within 24 hours.",
+      });
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          company: "",
+          role: "",
+          businessType: "",
+          numberOfLocations: "1",
+          currentSoftware: "",
+          challenges: "",
+          preferredDate: "",
+          preferredTime: "",
+        });
+        setSubmitted(false);
+      }, 5000);
+
+    } catch (error) {
+      console.error("Error submitting demo request:", error);
+      toast({
+        title: "Submission Failed",
+        description: error instanceof Error ? error.message : "Please try again or contact support@cannablaze360.com",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
