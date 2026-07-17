@@ -258,12 +258,12 @@ export function GrowthCalendarWheel() {
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs value={selectedMonth} onValueChange={setSelectedMonth}>
+          <Tabs value={selectedMonth.toString()} onValueChange={(value) => setSelectedMonth(parseInt(value))}>
             <TabsList className="grid grid-cols-6 lg:grid-cols-12 gap-2 h-auto bg-transparent">
-              {MONTHS.map((month) => (
+              {MONTHS.map((month, index) => (
                 <TabsTrigger
                   key={month}
-                  value={month}
+                  value={index.toString()}
                   className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
                 >
                   {month.slice(0, 3)}
@@ -271,8 +271,8 @@ export function GrowthCalendarWheel() {
               ))}
             </TabsList>
 
-            {MONTHS.map((month) => (
-              <TabsContent key={month} value={month} className="mt-6 space-y-6">
+            {MONTHS.map((month, index) => (
+              <TabsContent key={month} value={index.toString()} className="mt-6 space-y-6">
                 {/* Season Badge */}
                 <div className="flex items-center justify-between">
                   <Badge variant="outline" className="text-lg py-2 px-4">
