@@ -17,6 +17,8 @@ import { PlantLabel } from "@/components/PlantLabel";
 import { PlantTimeline } from "@/components/PlantTimeline";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import { BarcodeDisplay } from "@/components/BarcodeDisplay";
+import { GrowthCalendarWheel } from "@/components/GrowthCalendarWheel";
+import { CultivationEfficiencyEstimator } from "@/components/CultivationEfficiencyEstimator";
 import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface Plant {
@@ -505,6 +507,16 @@ export default function Cultivation() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Smart Growth Calendar Wheel */}
+          <div className="mb-8">
+            <GrowthCalendarWheel />
+          </div>
+
+          {/* Cultivation Efficiency Estimator */}
+          <div className="mb-8">
+            <CultivationEfficiencyEstimator />
           </div>
 
           {/* Filters and Search */}
