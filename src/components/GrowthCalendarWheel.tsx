@@ -437,31 +437,6 @@ export function GrowthCalendarWheel() {
                     </CardContent>
                   </Card>
                 )}
-                <div className="mb-4 p-3 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                  <div className="flex items-center gap-2 mb-2">
-                    {season === "spring" && <FlowerIcon className="w-5 h-5 text-pink-600" />}
-                    {season === "summer" && <Sun className="w-5 h-5 text-yellow-600" />}
-                    {season === "fall" && <Wind className="w-5 h-5 text-orange-600" />}
-                    {season === "winter" && <Snowflake className="w-5 h-5 text-blue-600" />}
-                    <span className="font-semibold capitalize text-sm">
-                      {season} in {regions.find(r => r.value === selectedRegion)?.label}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <span className="text-gray-600 dark:text-gray-400">Temp Range:</span>
-                      <span className="ml-2 font-medium">{climate.tempRange}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600 dark:text-gray-400">Rainfall:</span>
-                      <span className="ml-2 font-medium">{climate.rainfall}</span>
-                    </div>
-                    <div className="col-span-2">
-                      <span className="text-gray-600 dark:text-gray-400">Outdoor Growth:</span>
-                      <span className="ml-2 font-medium">{climate.growthPeriod}</span>
-                    </div>
-                  </div>
-                </div>
               </TabsContent>
             ))}
           </Tabs>
