@@ -18,9 +18,11 @@ import {
   BarChart3,
   Calendar,
   Award,
-  AlertCircle
+  AlertCircle,
+  Activity
 } from "lucide-react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
+import { EcosystemHealthIndex } from "@/components/EcosystemHealthIndex";
 
 interface SalesData {
   date: string;
@@ -268,15 +270,26 @@ export default function Analytics() {
             </Card>
           </div>
 
-          <Tabs defaultValue="revenue" className="space-y-6">
-            <TabsList>
-              <TabsTrigger value="revenue">Revenue Trends</TabsTrigger>
-              <TabsTrigger value="products">Top Products</TabsTrigger>
-              <TabsTrigger value="inventory">Inventory Turnover</TabsTrigger>
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-5 lg:w-auto">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="health-index" className="flex items-center gap-2">
+                <Activity className="w-4 h-4" />
+                Health Index™
+                <Badge className="ml-1 bg-purple-600 text-white">Pro</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="sales">Sales</TabsTrigger>
+              <TabsTrigger value="inventory">Inventory</TabsTrigger>
+              <TabsTrigger value="compliance">Compliance</TabsTrigger>
             </TabsList>
 
-            {/* Revenue Trends */}
-            <TabsContent value="revenue">
+            {/* Health Index Tab */}
+            <TabsContent value="health-index" className="space-y-6">
+              <EcosystemHealthIndex planTier="enterprise" />
+            </TabsContent>
+
+            {/* Overview Tab */}
+            <TabsContent value="overview">
               <Card>
                 <CardHeader>
                   <CardTitle>Daily Revenue</CardTitle>
