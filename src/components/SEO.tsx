@@ -11,12 +11,10 @@ interface SEOProps {
 
 // SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
-  title = "Canna Blaze 360",
-  description = "Canna Blaze 360™ is the all-in-one cannabis management ecosystem powering the future of legal cannabis. From cultivation, manufacturing, testing, transportation, and retail sales to medical prescriptions, pharmacy fulfillment, patient management, compliance, licensing, and government oversight, Canna Blaze 360 delivers complete seed-to-sale visibility. Built for operators, healthcare providers, researchers, and regulators, it transforms complexity into control, compliance, and growth.",
+  title = "Canna Blaze 360 - Complete Seed to Sale Cannabis Tracking Ecosystem",
+  description = "Enterprise-grade cannabis compliance platform offering complete seed-to-sale tracking, cultivation management, retail POS, inventory control, and regulatory compliance for dispensaries, growers, and medical cannabis operations.",
   image = "/og-image.png",
-  url = "https://cannablaze360.com",
-  type = "website",
-  jsonLd,
+  url = "https://cannablaze360.com"
 }: SEOProps) {
   const defaultJsonLd = {
     "@context": "https://schema.org",
@@ -80,7 +78,12 @@ export function SEOElements({
 }
 
 // Default SEO component for use in pages/_app.tsx or individual pages (uses next/head)
-export function SEO(props: SEOProps) {
+export function SEO({
+  title = "Canna Blaze 360 - Complete Seed to Sale Cannabis Tracking Ecosystem",
+  description = "Enterprise-grade cannabis compliance platform offering complete seed-to-sale tracking, cultivation management, retail POS, inventory control, and regulatory compliance for dispensaries, growers, and medical cannabis operations.",
+  image = "/og-image.png",
+  url = "https://cannablaze360.com"
+}: SEOProps) {
   return (
     <Head>
       <SEOElements {...props} />

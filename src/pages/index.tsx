@@ -35,7 +35,8 @@ import {
   Stethoscope,
   Building2,
   Settings,
-  Video
+  Video,
+  Sparkles
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -209,43 +210,43 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-16 lg:py-24 text-center relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex justify-center mb-8">
-              <img 
-                src="/canna-blaze-360-logo.png" 
-                alt="Canna Blaze 360" 
-                className="h-40 w-auto drop-shadow-2xl"
-              />
-            </div>
-            <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
-              Complete Seed-to-Sale
-              <span className="block bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 bg-clip-text text-transparent mt-2">
-                Cannabis Tracking
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <Badge className="mb-6 text-base px-6 py-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Complete Seed to Sale Cannabis Tracking Ecosystem
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              Cannabis Compliance &
+              <span className="block bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mt-2">
+                Business Management
               </span>
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Track every stage of your cannabis operation with full regulatory compliance, 
-              real-time analytics, and seamless accounting integration
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/signup">
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 hover:from-emerald-700 hover:via-orange-600 hover:to-green-700 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all">
-                  <CannabisLeaf size={20} />
-                  Start Free Trial
-                  <TrendingUp className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Link href="/plans">
-                <Button size="lg" variant="outline" className="gap-2 text-lg px-10 py-7 border-2 hover:bg-emerald-50 dark:hover:bg-emerald-950">
-                  View Pricing
-                  <BarChart3 className="w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mt-6">
-              No credit card required • 14-day free trial • Cancel anytime
+              <span className="block text-4xl md:text-5xl mt-4 text-gray-700 dark:text-gray-300">
+                Made Simple
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+              Enterprise-grade platform offering complete seed-to-sale tracking, cultivation management, 
+              retail POS, inventory control, and regulatory compliance for dispensaries, growers, and medical cannabis operations.
             </p>
           </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/signup">
+              <Button size="lg" className="gap-2 bg-gradient-to-r from-emerald-600 via-orange-500 to-green-600 hover:from-emerald-700 hover:via-orange-600 hover:to-green-700 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all">
+                <CannabisLeaf size={20} />
+                Start Free Trial
+                <TrendingUp className="w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/plans">
+              <Button size="lg" variant="outline" className="gap-2 text-lg px-10 py-7 border-2 hover:bg-emerald-50 dark:hover:bg-emerald-950">
+                View Pricing
+                <BarChart3 className="w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-500 mt-6">
+            No credit card required • 14-day free trial • Cancel anytime
+          </p>
         </section>
 
         {/* Portal Access Section - NEW */}
