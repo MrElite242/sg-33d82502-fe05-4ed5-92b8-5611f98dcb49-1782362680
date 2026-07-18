@@ -294,10 +294,10 @@ export function GrowthCalendarWheel() {
                       {season === "winter" && <Snowflake className="w-6 h-6 text-blue-500 flex-shrink-0" />}
                       <div>
                         <h3 className="font-semibold mb-1">{season} Conditions ({growMode})</h3>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">{SEASONAL_DATA[growMode][season].conditions}</p>
-                        {SEASONAL_DATA[growMode][season].plantable.length > 0 && (
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{getSeasonalInfo(index).conditions}</p>
+                        {getSeasonalInfo(index).plantable.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {SEASONAL_DATA[growMode][season].plantable.map((strain, idx) => (
+                            {getSeasonalInfo(index).plantable.map((strain, idx) => (
                               <Badge key={idx} variant="outline" className="bg-white dark:bg-gray-800">
                                 {strain}
                               </Badge>
