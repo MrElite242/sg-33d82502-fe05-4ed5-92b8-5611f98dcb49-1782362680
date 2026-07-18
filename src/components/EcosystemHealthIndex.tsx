@@ -23,7 +23,8 @@ import {
   Download,
   Calendar,
   Target,
-  Zap
+  Zap,
+  Droplets
 } from "lucide-react";
 
 interface ScoreCategory {
@@ -364,6 +365,196 @@ export function EcosystemHealthIndex({ planTier = "professional" }: EcosystemHea
           </Card>
         </div>
       )}
+
+      {/* AI Growth Advisor */}
+      <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-indigo-950/30 border-2 border-purple-200 dark:border-purple-800">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  AI Growth Advisor™
+                  <Badge className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                    Beta
+                  </Badge>
+                </CardTitle>
+                <CardDescription className="text-gray-700 dark:text-gray-300">
+                  Personalized insights powered by machine learning analysis of your operations
+                </CardDescription>
+              </div>
+            </div>
+            <Button variant="outline" size="sm">
+              <Settings className="w-4 h-4 mr-2" />
+              Preferences
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Advisor Message */}
+          <div className="space-y-4 mb-6">
+            <div className="flex gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1 space-y-3">
+                <div className="bg-white dark:bg-gray-900 rounded-2xl rounded-tl-none p-4 shadow-sm border border-purple-200 dark:border-purple-800">
+                  <p className="text-sm leading-relaxed mb-3">
+                    Hi there! 👋 I've analyzed your operations and noticed your <strong>Cultivation Efficiency</strong> score 
+                    has dropped 4 points this month. Based on my analysis of 10,000+ similar operations, 
+                    I have three high-impact recommendations that could bring your score back above 90.
+                  </p>
+                  <div className="flex gap-2">
+                    <Badge variant="outline" className="bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300">
+                      <TrendingUp className="w-3 h-3 mr-1" />
+                      +6 point improvement potential
+                    </Badge>
+                    <Badge variant="outline" className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
+                      $4.8K monthly savings
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Recommendation Cards */}
+                <div className="space-y-3">
+                  <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-amber-100 dark:bg-amber-950/30 rounded-lg flex items-center justify-center">
+                          <Sprout className="w-4 h-4 text-amber-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">Optimize Light Cycles</h4>
+                          <p className="text-xs text-gray-500">Impact: +3 points • $2.4K/mo savings</p>
+                        </div>
+                      </div>
+                      <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                        High Impact
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      Your flowering rooms are averaging 13.2 hours of light daily. Industry benchmarks show 
+                      optimal results at 12 hours for your strain mix (60% Indica, 40% Sativa). This adjustment 
+                      could reduce energy costs by <strong>18%</strong> while improving yield quality.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                        Apply Recommendation
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        Learn More
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-950/30 rounded-lg flex items-center justify-center">
+                          <Droplets className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">Automate Irrigation Schedule</h4>
+                          <p className="text-xs text-gray-500">Impact: +2 points • $1.8K/mo savings</p>
+                        </div>
+                      </div>
+                      <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                        Medium Impact
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      I detected 23% variance in watering times across your grow rooms. Implementing automated 
+                      drip irrigation with soil moisture sensors could reduce water usage by <strong>30%</strong> and 
+                      improve plant consistency scores from 78 to 89.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline">
+                        View Equipment Options
+                      </Button>
+                      <Button size="sm" variant="ghost">
+                        Schedule Demo
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-green-100 dark:bg-green-950/30 rounded-lg flex items-center justify-center">
+                          <Users className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">Staff Cross-Training Program</h4>
+                          <p className="text-xs text-gray-500">Impact: +1 point • $600/mo savings</p>
+                        </div>
+                      </div>
+                      <Badge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
+                        Quick Win
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      Your data shows 3 staff members handle 80% of cultivation tasks. Cross-training 2 additional 
+                      team members would reduce overtime costs and improve your operational resilience score.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline">
+                        Create Training Plan
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Follow-up prompt */}
+                <div className="bg-white dark:bg-gray-900 rounded-2xl rounded-tl-none p-4 shadow-sm border border-purple-200 dark:border-purple-800">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Would you like me to dive deeper into any of these recommendations? I can also analyze 
+                    your <strong>Inventory Accuracy</strong> (92/100) or help optimize your 
+                    <strong>Financial Performance</strong> (89/100) next.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="grid md:grid-cols-3 gap-3">
+            <Button variant="outline" className="justify-start" size="sm">
+              <Target className="w-4 h-4 mr-2" />
+              Ask About Inventory
+            </Button>
+            <Button variant="outline" className="justify-start" size="sm">
+              <DollarSign className="w-4 h-4 mr-2" />
+              Improve Financials
+            </Button>
+            <Button variant="outline" className="justify-start" size="sm">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Compare to Industry
+            </Button>
+          </div>
+
+          {/* Learning Status */}
+          <div className="mt-6 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold text-purple-900 dark:text-purple-100">
+                AI is learning your business
+              </span>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">
+              I've analyzed <strong>47 days</strong> of your operational data. The more you interact with my 
+              recommendations, the more personalized and accurate my insights become.
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full" style={{ width: "68%" }}></div>
+              </div>
+              <span className="text-xs font-semibold text-purple-600">68%</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Action Recommendations */}
       <Card>
