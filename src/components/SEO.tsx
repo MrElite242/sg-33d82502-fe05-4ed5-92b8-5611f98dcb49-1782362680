@@ -14,7 +14,9 @@ export function SEOElements({
   title = "Canna Blaze 360 - Complete Seed to Sale Cannabis Tracking Ecosystem",
   description = "Enterprise-grade cannabis compliance platform offering complete seed-to-sale tracking, cultivation management, retail POS, inventory control, and regulatory compliance for dispensaries, growers, and medical cannabis operations.",
   image = "/og-image.png",
-  url = "https://cannablaze360.com"
+  url = "https://cannablaze360.com",
+  type = "website",
+  jsonLd
 }: SEOProps) {
   const defaultJsonLd = {
     "@context": "https://schema.org",
@@ -82,11 +84,20 @@ export function SEO({
   title = "Canna Blaze 360 - Complete Seed to Sale Cannabis Tracking Ecosystem",
   description = "Enterprise-grade cannabis compliance platform offering complete seed-to-sale tracking, cultivation management, retail POS, inventory control, and regulatory compliance for dispensaries, growers, and medical cannabis operations.",
   image = "/og-image.png",
-  url = "https://cannablaze360.com"
+  url = "https://cannablaze360.com",
+  type = "website",
+  jsonLd
 }: SEOProps) {
   return (
     <Head>
-      <SEOElements {...props} />
+      <SEOElements 
+        title={title}
+        description={description}
+        image={image}
+        url={url}
+        type={type}
+        jsonLd={jsonLd}
+      />
     </Head>
   );
 }
