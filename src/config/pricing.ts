@@ -48,6 +48,14 @@ export const GENERAL_PLANS: PricingTier[] = [
       { name: "Up to 3 locations", included: true },
       { name: "Priority email & chat support", included: true },
       { name: "Custom workflows", included: false },
+      { name: "Canna Blaze 360™ Intelligence Premium", included: true },
+      { name: "  • ROI Calculator™", included: true },
+      { name: "  • Business Impact Assessment™", included: true },
+      { name: "  • Cultivation Smart Growth Wheel™", included: true },
+      { name: "  • Cultivation Efficiency Estimator™", included: true },
+      { name: "  • Ecosystem Health Index™ (Standard)", included: true },
+      { name: "  • Inventory Accuracy Assessment™", included: true },
+      { name: "  • Compliance Readiness Assessment™", included: true },
     ]
   },
   {
@@ -67,6 +75,16 @@ export const GENERAL_PLANS: PricingTier[] = [
       { name: "Dedicated account manager", included: true },
       { name: "24/7 phone support", included: true },
       { name: "Custom development", included: true },
+      { name: "Canna Blaze 360™ Intelligence Premium Pro", included: true },
+      { name: "  • Ecosystem Health Index™ Pro", included: true },
+      { name: "  • Executive Scorecard", included: true },
+      { name: "  • Multi-location benchmarking", included: true },
+      { name: "  • Predictive risk alerts", included: true },
+      { name: "  • AI-powered operational insights", included: true },
+      { name: "  • Executive KPI dashboard", included: true },
+      { name: "  • Custom score weighting", included: true },
+      { name: "  • Regulatory readiness insights", included: true },
+      { name: "  • Board-ready reports", included: true },
     ]
   }
 ];
