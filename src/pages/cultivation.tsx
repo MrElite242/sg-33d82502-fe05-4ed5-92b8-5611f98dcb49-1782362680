@@ -509,16 +509,6 @@ export default function Cultivation() {
             </Card>
           </div>
 
-          {/* Smart Growth Calendar Wheel */}
-          <div className="mb-8">
-            <GrowthCalendarWheel />
-          </div>
-
-          {/* Cultivation Efficiency Estimator */}
-          <div className="mb-8">
-            <CultivationEfficiencyEstimator />
-          </div>
-
           {/* Filters and Search */}
           <Card className="mb-6">
             <CardHeader>
@@ -1146,6 +1136,16 @@ export default function Cultivation() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Smart Growth Calendar Wheel - Moved to Bottom */}
+      <div className="mb-8">
+        <GrowthCalendarWheel />
+      </div>
+
+      {/* Cultivation Efficiency Estimator - Moved to Bottom */}
+      <div className="mb-8">
+        <CultivationEfficiencyEstimator />
+      </div>
     </>
   );
 }
