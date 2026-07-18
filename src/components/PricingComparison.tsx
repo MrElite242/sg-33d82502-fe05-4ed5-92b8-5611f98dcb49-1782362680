@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Check, X, Sparkles, Zap } from "lucide-react";
-import Link from "next/link";
-import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/database.types";
-
-type SubscriptionPlan = Database["public"]["Tables"]["subscription_plans"]["Row"];
+import { GENERAL_PLANS, DOCTOR_PLANS, calculateAnnualPrice } from "@/config/pricing";
 
 interface PricingComparisonProps {
   planType?: "general" | "doctor";
@@ -18,40 +14,18 @@ interface PricingComparisonProps {
 
 export function PricingComparison({ planType = "general", onSelectPlan }: PricingComparisonProps) {
   const [isAnnual, setIsAnnual] = useState(false);
-  const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchPlans();
-  }, [planType]);
+  const plans = planType === "general" ? GENERAL_PLANS : DOCTOR_PLANS;
 
-  async function fetchPlans() {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("subscription_plans")
-        .select("*")
-        .eq("plan_type", planType)
-        .eq("active", true)
-        .order("price_monthly", { ascending: true });
-
-      if (error) throw error;
-      setPlans(data || []);
-    } catch (error) {
-      console.error("Error fetching plans:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const calculateSavings = (monthly: number, annual: number) => {
-    const annualIfMonthly = monthly * 12;
-    const savings = annualIfMonthly - annual;
+  const calculateSavings = (monthlyPrice: number) => {
+    const annualPrice = calculateAnnualPrice(monthlyPrice);
+    const annualIfMonthly = monthlyPrice * 12;
+    const savings = annualIfMonthly - annualPrice;
     const percentage = Math.round((savings / annualIfMonthly) * 100);
-    return { amount: savings, percentage };
+    return { amount: savings, percentage, annualPrice };
   };
 
-  if (loading) {
+  if (plans.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -85,7 +59,7 @@ export function PricingComparison({ planType = "general", onSelectPlan }: Pricin
           Annual
           <Badge variant="secondary" className="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">
             <Zap className="w-3 h-3 mr-1" />
-            Save up to 20%
+            Save 20%
           </Badge>
         </Label>
       </div>
@@ -93,10 +67,8 @@ export function PricingComparison({ planType = "general", onSelectPlan }: Pricin
       {/* Pricing Cards */}
       <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {plans.map((plan) => {
-          const price = isAnnual ? plan.price_annual : plan.price_monthly;
-          const displayPrice = isAnnual ? (plan.price_annual / 12).toFixed(2) : price.toFixed(2);
-          const savings = calculateSavings(plan.price_monthly, plan.price_annual);
-          const features = Array.isArray(plan.features) ? plan.features : [];
+          const savings = calculateSavings(plan.price);
+          const displayPrice = isAnnual ? (savings.annualPrice / 12).toFixed(0) : plan.price;
 
           return (
             <Card
@@ -130,10 +102,10 @@ export function PricingComparison({ planType = "general", onSelectPlan }: Pricin
                   {isAnnual && (
                     <div className="mt-2 space-y-1">
                       <p className="text-sm text-emerald-600 dark:text-emerald-400 font-semibold">
-                        ${plan.price_annual.toFixed(2)} billed annually
+                        ${savings.annualPrice.toFixed(0)} billed annually
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Save ${savings.amount.toFixed(2)} ({savings.percentage}%)
+                        Save ${savings.amount.toFixed(0)} ({savings.percentage}%)
                       </p>
                     </div>
                   )}
@@ -148,53 +120,31 @@ export function PricingComparison({ planType = "general", onSelectPlan }: Pricin
                       : ""
                   }`}
                   variant={plan.popular ? "default" : "outline"}
-                  onClick={() => onSelectPlan?.(plan.plan_id, isAnnual ? "annual" : "monthly")}
+                  onClick={() => onSelectPlan?.(plan.id, isAnnual ? "annual" : "monthly")}
                 >
                   Start Free Trial
                 </Button>
 
                 <ul className="space-y-3">
-                  {features.map((feature: any, idx: number) => {
-                    const featureName = typeof feature === "string" ? feature : feature.name;
-                    const included = typeof feature === "string" ? true : feature.included;
-
-                    return (
-                      <li key={idx} className="flex items-start gap-2">
-                        {included ? (
-                          <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                        ) : (
-                          <X className="w-5 h-5 text-gray-400 dark:text-gray-600 flex-shrink-0 mt-0.5" />
-                        )}
-                        <span className={included ? "" : "text-gray-400 dark:text-gray-600 line-through"}>
-                          {featureName}
-                        </span>
-                      </li>
-                    );
-                  })}
+                  {planType === "general" && "features" in plan && plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      {feature.included ? (
+                        <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                      ) : (
+                        <X className="w-5 h-5 text-gray-400 dark:text-gray-600 flex-shrink-0 mt-0.5" />
+                      )}
+                      <span className={feature.included ? "" : "text-gray-400 dark:text-gray-600 line-through"}>
+                        {feature.name}
+                      </span>
+                    </li>
+                  ))}
+                  {planType === "doctor" && "features" in plan && Array.isArray(plan.features) && plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
                 </ul>
-
-                {/* Plan Limits */}
-                {(plan.max_users || plan.max_locations || plan.storage_gb) && (
-                  <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Plan Limits
-                    </p>
-                    <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                      {plan.max_users && (
-                        <li>• {plan.max_users} {plan.max_users === 1 ? "user" : "users"}</li>
-                      )}
-                      {plan.max_locations && (
-                        <li>• {plan.max_locations} {plan.max_locations === 1 ? "location" : "locations"}</li>
-                      )}
-                      {plan.storage_gb && (
-                        <li>• {plan.storage_gb}GB storage</li>
-                      )}
-                      {!plan.max_users && !plan.max_locations && !plan.storage_gb && (
-                        <li>• Unlimited</li>
-                      )}
-                    </ul>
-                  </div>
-                )}
               </CardContent>
             </Card>
           );
