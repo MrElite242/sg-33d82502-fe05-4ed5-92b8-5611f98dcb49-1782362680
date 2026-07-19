@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Activity,
   AlertTriangle,
@@ -24,7 +25,12 @@ import {
   Calendar,
   Target,
   Zap,
-  Droplets
+  Droplets,
+  ShieldCheck,
+  Brain,
+  ArrowRight,
+  FileText,
+  ThermometerSun
 } from "lucide-react";
 
 interface ScoreCategory {
@@ -38,11 +44,68 @@ interface ScoreCategory {
 }
 
 interface EcosystemHealthIndexProps {
-  planTier: "professional" | "enterprise";
+  planTier?: "professional" | "enterprise";
 }
 
 export function EcosystemHealthIndex({ planTier = "professional" }: EcosystemHealthIndexProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<"7d" | "30d" | "90d">("30d");
+  const [selectedCategory, setSelectedCategory] = useState<string>("overall");
+  const { toast } = useToast();
+
+  // Mock user data - in production, get from auth context
+  const userData = {
+    email: "user@example.com",
+    name: "John Smith",
+    companyName: "Green Valley Cultivators"
+  };
+
+  // Function to send AI Advisor action notification
+  const sendAIAdvisorNotification = async (
+    action: "applied" | "learn_more" | "view_equipment" | "schedule_demo" | "create_training_plan",
+    recommendationDetails: {
+      title: string;
+      impact: string;
+      monthlySavings: string;
+      pointsImprovement: string;
+    },
+    categoryAffected: string,
+    currentScore: number
+  ) => {
+    try {
+      const response = await fetch("/api/ai-advisor-notification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userEmail: userData.email,
+          userName: userData.name,
+          companyName: userData.companyName,
+          action,
+          recommendationType: recommendationDetails.title,
+          recommendationDetails,
+          currentScore,
+          categoryAffected
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send notification");
+      }
+
+      toast({
+        title: "✓ Action Recorded",
+        description: "You'll receive a confirmation email shortly with next steps.",
+      });
+    } catch (error) {
+      console.error("Notification error:", error);
+      toast({
+        title: "Action Recorded",
+        description: "Your action was saved but email notification failed.",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Calculate weighted scores
   const categories: ScoreCategory[] = [
@@ -440,10 +503,38 @@ export function EcosystemHealthIndex({ planTier = "professional" }: EcosystemHea
                       could reduce energy costs by <strong>18%</strong> while improving yield quality.
                     </p>
                     <div className="flex gap-2">
-                      <Button size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                      <Button 
+                        size="sm" 
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                        onClick={() => sendAIAdvisorNotification(
+                          "applied",
+                          {
+                            title: "Optimize Light Cycles",
+                            impact: "High Impact",
+                            monthlySavings: "$2,400",
+                            pointsImprovement: "3"
+                          },
+                          "Cultivation Efficiency",
+                          84
+                        )}
+                      >
                         Apply Recommendation
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => sendAIAdvisorNotification(
+                          "learn_more",
+                          {
+                            title: "Optimize Light Cycles",
+                            impact: "High Impact",
+                            monthlySavings: "$2,400",
+                            pointsImprovement: "3"
+                          },
+                          "Cultivation Efficiency",
+                          84
+                        )}
+                      >
                         Learn More
                       </Button>
                     </div>
@@ -470,10 +561,38 @@ export function EcosystemHealthIndex({ planTier = "professional" }: EcosystemHea
                       improve plant consistency scores from 78 to 89.
                     </p>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => sendAIAdvisorNotification(
+                          "view_equipment",
+                          {
+                            title: "Automate Irrigation Schedule",
+                            impact: "Medium Impact",
+                            monthlySavings: "$1,800",
+                            pointsImprovement: "2"
+                          },
+                          "Cultivation Efficiency",
+                          84
+                        )}
+                      >
                         View Equipment Options
                       </Button>
-                      <Button size="sm" variant="ghost">
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={() => sendAIAdvisorNotification(
+                          "schedule_demo",
+                          {
+                            title: "Automate Irrigation Schedule",
+                            impact: "Medium Impact",
+                            monthlySavings: "$1,800",
+                            pointsImprovement: "2"
+                          },
+                          "Cultivation Efficiency",
+                          84
+                        )}
+                      >
                         Schedule Demo
                       </Button>
                     </div>
@@ -499,7 +618,21 @@ export function EcosystemHealthIndex({ planTier = "professional" }: EcosystemHea
                       team members would reduce overtime costs and improve your operational resilience score.
                     </p>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => sendAIAdvisorNotification(
+                          "create_training_plan",
+                          {
+                            title: "Staff Cross-Training Program",
+                            impact: "Quick Win",
+                            monthlySavings: "$600",
+                            pointsImprovement: "1"
+                          },
+                          "Operational Performance",
+                          94
+                        )}
+                      >
                         Create Training Plan
                       </Button>
                     </div>
