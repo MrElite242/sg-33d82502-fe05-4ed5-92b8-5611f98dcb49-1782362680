@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SEO } from "@/components/SEO";
@@ -7,8 +7,31 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Package, TrendingUp, Users, Calendar, DollarSign, AlertTriangle, CheckCircle2, Clock, Settings, Zap, ThermometerSun } from "lucide-react";
-import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { 
+  Package, 
+  TrendingUp, 
+  Users, 
+  Calendar, 
+  DollarSign, 
+  AlertTriangle, 
+  CheckCircle2, 
+  Clock, 
+  Settings, 
+  Zap, 
+  ThermometerSun,
+  Sprout,
+  Factory,
+  FlaskConical,
+  Truck,
+  Store,
+  Leaf,
+  User,
+  AlertCircle,
+  LogOut,
+  FileText,
+  CheckCircle
+} from "lucide-react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
 interface DashboardStats {
@@ -22,7 +45,7 @@ interface DashboardStats {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, signOut } = useAuth();
   const { toast } = useToast();
   const isAuthenticated = !!user;
   const [stats, setStats] = useState<DashboardStats>({
@@ -283,7 +306,7 @@ export default function Dashboard() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-gray-500">Safe: ≤65%</span>
                         <span className="text-xs text-amber-600">Warning: 65-75%</span>
-                        <span className="text-xs text-red-600">Critical: >75%</span>
+                        <span className="text-xs text-red-600">Critical: &gt;75%</span>
                       </div>
                     </div>
                     <div className="relative h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
