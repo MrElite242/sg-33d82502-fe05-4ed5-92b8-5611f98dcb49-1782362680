@@ -723,9 +723,8 @@ export default function Home() {
               <div>
                 <h3 className="font-semibold mb-4 text-white">Support</h3>
                 <ul className="space-y-2 text-sm text-gray-400">
-                  <li><a href="mailto:support@cannablaze360.com" className="hover:text-emerald-400 transition-colors flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    support@cannablaze360.com
+                  <li><a href="mailto:support&#64;cannablaze360.com" className="hover:text-emerald-400 transition-colors flex items-center gap-2">
+                    support&#64;cannablaze360.com
                   </a></li>
                   <li><a href="tel:+1-555-BLAZE-360" className="hover:text-emerald-400 transition-colors">+1 (555) BLAZE-360</a></li>
                   <li><Link href="/tutorial" className="hover:text-emerald-400 transition-colors">Platform Tutorial</Link></li>

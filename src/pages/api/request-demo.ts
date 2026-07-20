@@ -193,7 +193,7 @@ export default async function handler(
                 <p style="margin: 0; font-size: 14px; color: #9ca3af;">
                   <a href="https://cannablaze360.com" style="color: #059669; text-decoration: none;">Website</a> • 
                   <a href="https://cannablaze360.com/tutorial" style="color: #059669; text-decoration: none;">Tutorial</a> • 
-                  <a href="mailto:support@cannablaze360.com" style="color: #059669; text-decoration: none;">Support</a>
+                  <a href="mailto:support&#64;cannablaze360.com" style="color: #059669; text-decoration: none;">Support</a>
                 </p>
               </div>
             </div>

@@ -106,7 +106,7 @@ export function RequestDemoForm() {
       console.error("Error submitting demo request:", error);
       toast({
         title: "Submission Failed",
-        description: error instanceof Error ? error.message : "Please try again or contact support@cannablaze360.com",
+        description: error instanceof Error ? error.message : "Please try again or contact support&#64;cannablaze360.com",
         variant: "destructive",
       });
     } finally {
