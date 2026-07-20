@@ -45,7 +45,7 @@ interface DashboardStats {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user, profile, loading, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const { toast } = useToast();
   const isAuthenticated = !!user;
   const [stats, setStats] = useState<DashboardStats>({
@@ -219,7 +219,7 @@ export default function Dashboard() {
 
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome back, {profile?.full_name || "User"}</h1>
+            <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.full_name || user?.email || "User"}</h1>
             <p className="text-gray-600 dark:text-gray-400">Here's what's happening with your operations today</p>
           </div>
 
