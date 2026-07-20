@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SEO } from "@/components/SEO";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { Leaf, TrendingUp, DollarSign, ShoppingCart, Package, Sprout, Factory, FlaskConical, Truck, Store, User, AlertCircle, Activity, Shield, LogOut, CheckCircle, FileText } from "lucide-react";
+import { Package, TrendingUp, Users, Calendar, DollarSign, AlertTriangle, CheckCircle2, Clock, Settings, Zap, ThermometerSun } from "lucide-react";
 import { useState } from "react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
@@ -22,7 +22,8 @@ interface DashboardStats {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user, signOut, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
+  const { toast } = useToast();
   const isAuthenticated = !!user;
   const [stats, setStats] = useState<DashboardStats>({
     activePlants: 0,
@@ -33,11 +34,53 @@ export default function Dashboard() {
     complianceStatus: "compliant"
   });
 
+  // Humidity alert state for Caribbean/Tropics region
+  const [humidityAlert, setHumidityAlert] = useState({
+    show: false,
+    level: 0,
+    severity: "normal" as "normal" | "warning" | "critical"
+  });
+
+  // Detect if user is in Caribbean/Tropics region (could come from profile settings)
+  const userRegion = "caribbean-tropics"; // In production, get from user profile
+  const isCaribbean = userRegion === "caribbean-tropics";
+
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && !user) {
       router.push("/login");
     }
-  }, [isAuthenticated, loading, router]);
+  }, [user, loading, router]);
+
+  // Simulate humidity monitoring for Caribbean/Tropics region
+  useEffect(() => {
+    if (isCaribbean) {
+      // Simulate real-time humidity reading (in production, get from IoT sensors)
+      const simulatedHumidity = 78; // Current humidity percentage
+      
+      let severity: "normal" | "warning" | "critical" = "normal";
+      
+      if (simulatedHumidity > 85) {
+        severity = "critical";
+      } else if (simulatedHumidity > 75) {
+        severity = "warning";
+      }
+
+      setHumidityAlert({
+        show: severity !== "normal",
+        level: simulatedHumidity,
+        severity
+      });
+
+      // Show toast notification for critical humidity
+      if (severity === "critical") {
+        toast({
+          title: "⚠️ Critical Humidity Alert",
+          description: `Humidity at ${simulatedHumidity}% - Immediate action required to prevent mold`,
+          variant: "destructive",
+        });
+      }
+    }
+  }, [isCaribbean, toast]);
 
   useEffect(() => {
     const saved = localStorage.getItem("dashboardStats");
@@ -153,8 +196,8 @@ export default function Dashboard() {
 
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user.full_name || user.email}</h1>
-            <p className="text-gray-600">Here&apos;s what&apos;s happening with your operations today.</p>
+            <h1 className="text-3xl font-bold mb-2">Welcome back, {profile?.full_name || "User"}</h1>
+            <p className="text-gray-600 dark:text-gray-400">Here's what's happening with your operations today</p>
           </div>
 
           {/* Compliance Status Banner */}
@@ -180,6 +223,140 @@ export default function Dashboard() {
               <Button variant="outline">View Details</Button>
             </CardContent>
           </Card>
+
+          {/* Caribbean/Tropics Humidity Alert */}
+          {isCaribbean && humidityAlert.show && (
+            <Card className={`mb-6 border-2 ${
+              humidityAlert.severity === "critical" 
+                ? "bg-red-50 border-red-500 dark:bg-red-950/30 dark:border-red-600" 
+                : "bg-amber-50 border-amber-500 dark:bg-amber-950/30 dark:border-amber-600"
+            }`}>
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      humidityAlert.severity === "critical" 
+                        ? "bg-red-100 dark:bg-red-900" 
+                        : "bg-amber-100 dark:bg-amber-900"
+                    }`}>
+                      <AlertTriangle className={`w-6 h-6 ${
+                        humidityAlert.severity === "critical" 
+                          ? "text-red-600" 
+                          : "text-amber-600"
+                        }`} />
+                    </div>
+                    <div>
+                      <CardTitle className={`flex items-center gap-2 ${
+                        humidityAlert.severity === "critical" 
+                          ? "text-red-900 dark:text-red-100" 
+                          : "text-amber-900 dark:text-amber-100"
+                        }`}>
+                        {humidityAlert.severity === "critical" ? "Critical" : "Warning"} - High Humidity Detected
+                        <Badge className={
+                          humidityAlert.severity === "critical" 
+                            ? "bg-red-600 text-white" 
+                            : "bg-amber-600 text-white"
+                        }>
+                          Caribbean / Tropics Region
+                        </Badge>
+                      </CardTitle>
+                      <CardDescription className={
+                        humidityAlert.severity === "critical" 
+                          ? "text-red-700 dark:text-red-300" 
+                          : "text-amber-700 dark:text-amber-300"
+                        }>
+                        Current humidity: <strong>{humidityAlert.level}%</strong> - 
+                        {humidityAlert.severity === "critical" 
+                          ? " Immediate action required to prevent mold and mildew" 
+                          : " Monitor closely to prevent mold risk"}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Humidity Level Gauge */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold">Humidity Level</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500">Safe: ≤65%</span>
+                        <span className="text-xs text-amber-600">Warning: 65-75%</span>
+                        <span className="text-xs text-red-600">Critical: >75%</span>
+                      </div>
+                    </div>
+                    <div className="relative h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div 
+                        className={`absolute top-0 left-0 h-full rounded-full transition-all ${
+                          humidityAlert.level > 75 
+                            ? "bg-gradient-to-r from-red-500 to-red-600" 
+                            : humidityAlert.level > 65 
+                            ? "bg-gradient-to-r from-amber-500 to-amber-600" 
+                            : "bg-gradient-to-r from-green-500 to-green-600"
+                        }`}
+                        style={{ width: `${Math.min(humidityAlert.level, 100)}%` }}
+                      />
+                      {/* Safe zone marker */}
+                      <div className="absolute top-0 left-[65%] w-0.5 h-full bg-white/50"></div>
+                      <div className="absolute top-0 left-[75%] w-0.5 h-full bg-white/50"></div>
+                    </div>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="bg-white dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                      <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                        <ThermometerSun className="w-4 h-4 text-blue-600" />
+                        Immediate Actions
+                      </h4>
+                      <ul className="text-sm space-y-1 text-gray-600 dark:text-gray-400">
+                        <li>• Increase ventilation and air circulation</li>
+                        <li>• Run dehumidifiers continuously</li>
+                        <li>• Reduce plant density in grow rooms</li>
+                        <li>• Monitor for mold signs on leaves</li>
+                      </ul>
+                    </div>
+                    <div className="bg-white dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                      <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                        <Settings className="w-4 h-4 text-purple-600" />
+                        Long-term Solutions
+                      </h4>
+                      <ul className="text-sm space-y-1 text-gray-600 dark:text-gray-400">
+                        <li>• Install industrial dehumidification system</li>
+                        <li>• Upgrade HVAC with humidity control</li>
+                        <li>• Consider climate-controlled greenhouses</li>
+                        <li>• Schedule preventive maintenance</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700">
+                      <Zap className="w-4 h-4 mr-2" />
+                      Activate Emergency Protocols
+                    </Button>
+                    <Button variant="outline">
+                      View Equipment Options
+                    </Button>
+                    <Button variant="ghost">
+                      Dismiss for 1 Hour
+                    </Button>
+                  </div>
+
+                  {/* Regional Context */}
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-xs text-blue-900 dark:text-blue-100">
+                      <strong>Caribbean / Tropics Region Alert:</strong> Your region experiences naturally high humidity (65-90%). 
+                      Maintaining proper environmental controls is critical for successful cultivation. Consider strain selection 
+                      optimized for tropical climates with natural mold resistance.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
