@@ -248,7 +248,7 @@ export default function Government() {
         {
           id: "comp-002",
           businessName: "CannaRetail Express",
-          licenseType: "retail",
+          licenseNumber: "CO-RET-2026-045",
           recordType: "violation",
           severity: "high",
           description: "Sale to minor attempted - immediate corrective action required",
