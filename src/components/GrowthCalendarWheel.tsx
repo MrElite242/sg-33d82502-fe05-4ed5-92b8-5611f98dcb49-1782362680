@@ -120,8 +120,11 @@ const SEASONAL_DATA = {
 export function GrowthCalendarWheel() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [growMode, setGrowMode] = useState<"indoor" | "outdoor">("indoor");
-  const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east">("north-america");
+  const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east" | "caribbean-tropics">("north-america");
   const [selectedStrain, setSelectedStrain] = useState<StrainData>(STRAIN_DATABASE[0]);
+
+  // Wheel rotation state
+  const [rotation, setRotation] = useState(0);
 
   const regions = [
     { value: "north-america", label: "North America", timezone: "EST/PST" },
@@ -129,40 +132,47 @@ export function GrowthCalendarWheel() {
     { value: "asia-pacific", label: "Asia-Pacific", timezone: "JST/AEST" },
     { value: "south-america", label: "South America", timezone: "BRT/ART" },
     { value: "africa-middle-east", label: "Africa & Middle East", timezone: "EAT/GST" },
+    { value: "caribbean-tropics", label: "Caribbean / Tropics", timezone: "AST/EST" }
   ];
 
   // Regional climate considerations
   const regionalClimate = {
     "north-america": {
-      spring: { tempRange: "50-70°F", rainfall: "Moderate", growthPeriod: "Apr-Jun" },
-      summer: { tempRange: "70-90°F", rainfall: "Variable", growthPeriod: "Jun-Sep" },
-      fall: { tempRange: "50-70°F", rainfall: "Moderate", growthPeriod: "Sep-Nov" },
-      winter: { tempRange: "20-50°F", rainfall: "Low-Moderate", growthPeriod: "Indoor Only" },
+      spring: { temp: "50-70°F", humidity: "40-60%", light: "12-14hrs" },
+      summer: { temp: "70-85°F", humidity: "50-70%", light: "14-16hrs" },
+      fall: { temp: "55-70°F", humidity: "45-65%", light: "10-12hrs" },
+      winter: { temp: "40-60°F", humidity: "35-55%", light: "8-10hrs" }
     },
     "europe": {
-      spring: { tempRange: "45-65°F", rainfall: "High", growthPeriod: "Mar-May" },
-      summer: { tempRange: "60-80°F", rainfall: "Moderate", growthPeriod: "May-Sep" },
-      fall: { tempRange: "45-65°F", rainfall: "High", growthPeriod: "Sep-Nov" },
-      winter: { tempRange: "30-50°F", rainfall: "High", growthPeriod: "Indoor Only" },
+      spring: { temp: "45-65°F", humidity: "50-70%", light: "12-14hrs" },
+      summer: { temp: "65-80°F", humidity: "55-75%", light: "14-16hrs" },
+      fall: { temp: "50-65°F", humidity: "60-80%", light: "10-12hrs" },
+      winter: { temp: "35-50°F", humidity: "70-85%", light: "8-10hrs" }
     },
     "asia-pacific": {
-      spring: { tempRange: "60-80°F", rainfall: "High", growthPeriod: "Mar-Jun" },
-      summer: { tempRange: "75-95°F", rainfall: "Very High", growthPeriod: "Jun-Sep" },
-      fall: { tempRange: "60-80°F", rainfall: "Moderate", growthPeriod: "Sep-Dec" },
-      winter: { tempRange: "50-70°F", rainfall: "Low", growthPeriod: "Dec-Mar" },
+      spring: { temp: "60-75°F", humidity: "60-80%", light: "11-13hrs" },
+      summer: { temp: "75-90°F", humidity: "70-90%", light: "13-15hrs" },
+      fall: { temp: "65-80°F", humidity: "65-85%", light: "11-13hrs" },
+      winter: { temp: "50-70°F", humidity: "55-75%", light: "10-12hrs" }
     },
     "south-america": {
-      spring: { tempRange: "65-80°F", rainfall: "High", growthPeriod: "Sep-Dec" },
-      summer: { tempRange: "75-95°F", rainfall: "Very High", growthPeriod: "Dec-Mar" },
-      fall: { tempRange: "60-75°F", rainfall: "Moderate", growthPeriod: "Mar-Jun" },
-      winter: { tempRange: "50-70°F", rainfall: "Low", growthPeriod: "Jun-Sep" },
+      spring: { temp: "65-80°F", humidity: "60-80%", light: "11-13hrs" },
+      summer: { temp: "75-90°F", humidity: "70-90%", light: "13-15hrs" },
+      fall: { temp: "60-75°F", humidity: "65-85%", light: "11-13hrs" },
+      winter: { temp: "55-70°F", humidity: "50-70%", light: "10-12hrs" }
     },
     "africa-middle-east": {
-      spring: { tempRange: "70-85°F", rainfall: "Low", growthPeriod: "Mar-May" },
-      summer: { tempRange: "85-105°F", rainfall: "Very Low", growthPeriod: "Challenging" },
-      fall: { tempRange: "70-85°F", rainfall: "Low", growthPeriod: "Sep-Nov" },
-      winter: { tempRange: "55-75°F", rainfall: "Low-Moderate", growthPeriod: "Nov-Mar" },
+      spring: { temp: "70-85°F", humidity: "30-50%", light: "12-14hrs" },
+      summer: { temp: "80-100°F", humidity: "20-40%", light: "13-15hrs" },
+      fall: { temp: "65-80°F", humidity: "35-55%", light: "11-13hrs" },
+      winter: { temp: "55-75°F", humidity: "40-60%", light: "10-12hrs" }
     },
+    "caribbean-tropics": {
+      spring: { temp: "75-85°F", humidity: "70-85%", light: "12-13hrs" },
+      summer: { temp: "80-90°F", humidity: "75-90%", light: "12-14hrs" },
+      fall: { temp: "75-85°F", humidity: "75-90%", light: "12-13hrs" },
+      winter: { temp: "70-80°F", humidity: "65-80%", light: "11-12hrs" }
+    }
   };
 
   const getCurrentSeason = (monthIndex: number) => {

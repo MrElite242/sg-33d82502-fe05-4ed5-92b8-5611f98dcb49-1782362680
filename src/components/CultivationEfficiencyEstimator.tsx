@@ -32,7 +32,7 @@ interface EfficiencyMetrics {
 }
 
 export function CultivationEfficiencyEstimator() {
-  const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east">("north-america");
+  const [selectedRegion, setSelectedRegion] = useState<"north-america" | "europe" | "asia-pacific" | "south-america" | "africa-middle-east" | "caribbean-tropics">("north-america");
   const [formData, setFormData] = useState({
     growSpace: "1000",
     plantCount: "50",
@@ -90,6 +90,14 @@ export function CultivationEfficiencyEstimator() {
       avgElectricity: 0.08,
       avgLaborRate: 15,
       avgMarketPrice: 2000,
+      currency: "USD"
+    },
+    { 
+      value: "caribbean-tropics", 
+      label: "Caribbean / Tropics",
+      avgElectricity: 0.18,
+      avgLaborRate: 10,
+      avgMarketPrice: 2600,
       currency: "USD"
     },
   ];
