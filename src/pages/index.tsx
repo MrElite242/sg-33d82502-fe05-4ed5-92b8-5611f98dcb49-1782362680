@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 import { ROICalculator } from "@/components/ROICalculator";
 import { RequestDemoForm } from "@/components/RequestDemoForm";
@@ -41,8 +46,58 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Home() {
+  const [consultationForm, setConsultationForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    country: "",
+    position: "",
+    organization: "",
+    programType: "",
+    expectedLicensees: "",
+    timeline: "",
+    budget: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleConsultationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // In production, send to API endpoint
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Show success message
+      alert("Thank you for your consultation request! Our government solutions team will contact you within 24 hours.");
+      
+      // Reset form
+      setConsultationForm({
+        fullName: "",
+        email: "",
+        phone: "",
+        country: "",
+        position: "",
+        organization: "",
+        programType: "",
+        expectedLicensees: "",
+        timeline: "",
+        budget: "",
+        message: ""
+      });
+      setDialogOpen(false);
+    } catch (error) {
+      alert("There was an error submitting your request. Please try again or contact government@cannablaze360.com");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const modules = [
   {
     icon: Sprout,
@@ -573,9 +628,228 @@ export default function Home() {
                             <ArrowRight className="ml-2 h-5 w-5" />
                           </Button>
                         </Link>
-                        <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                          Schedule Consultation
-                        </Button>
+                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                              Schedule Consultation
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle className="text-2xl">Schedule Government Consultation</DialogTitle>
+                              <DialogDescription>
+                                Connect with our government solutions team to discuss national cannabis program infrastructure
+                              </DialogDescription>
+                            </DialogHeader>
+                            
+                            <form onSubmit={handleConsultationSubmit} className="space-y-6 mt-4">
+                              {/* Contact Information */}
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg border-b pb-2">Contact Information</h3>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="fullName">Full Name *</Label>
+                                    <Input
+                                      id="fullName"
+                                      required
+                                      value={consultationForm.fullName}
+                                      onChange={(e) => setConsultationForm({...consultationForm, fullName: e.target.value})}
+                                      placeholder="Dr. Jane Smith"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="position">Position/Title *</Label>
+                                    <Input
+                                      id="position"
+                                      required
+                                      value={consultationForm.position}
+                                      onChange={(e) => setConsultationForm({...consultationForm, position: e.target.value})}
+                                      placeholder="Director of Cannabis Regulation"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="email">Email Address *</Label>
+                                    <Input
+                                      id="email"
+                                      type="email"
+                                      required
+                                      value={consultationForm.email}
+                                      onChange={(e) => setConsultationForm({...consultationForm, email: e.target.value})}
+                                      placeholder="jane.smith&#64;government.com"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="phone">Phone Number *</Label>
+                                    <Input
+                                      id="phone"
+                                      type="tel"
+                                      required
+                                      value={consultationForm.phone}
+                                      onChange={(e) => setConsultationForm({...consultationForm, phone: e.target.value})}
+                                      placeholder="+1 (555) 123-4567"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Organization & Location */}
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg border-b pb-2">Organization & Location</h3>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="organization">Government Agency/Department *</Label>
+                                    <Input
+                                      id="organization"
+                                      required
+                                      value={consultationForm.organization}
+                                      onChange={(e) => setConsultationForm({...consultationForm, organization: e.target.value})}
+                                      placeholder="Ministry of Health & Cannabis Regulation"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="country">Country/Region *</Label>
+                                    <Input
+                                      id="country"
+                                      required
+                                      value={consultationForm.country}
+                                      onChange={(e) => setConsultationForm({...consultationForm, country: e.target.value})}
+                                      placeholder="e.g., Thailand, Jamaica, Colombia"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Program Details */}
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg border-b pb-2">Program Details</h3>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="programType">Program Type *</Label>
+                                    <Select
+                                      value={consultationForm.programType}
+                                      onValueChange={(value) => setConsultationForm({...consultationForm, programType: value})}
+                                      required
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select program type" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="medical-only">Medical Cannabis Only</SelectItem>
+                                        <SelectItem value="medical-adult-use">Medical + Adult-Use</SelectItem>
+                                        <SelectItem value="research-pilot">Research/Pilot Program</SelectItem>
+                                        <SelectItem value="full-legalization">Full Legalization</SelectItem>
+                                        <SelectItem value="exploring">Still Exploring Options</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="expectedLicensees">Expected Number of Licensees *</Label>
+                                    <Select
+                                      value={consultationForm.expectedLicensees}
+                                      onValueChange={(value) => setConsultationForm({...consultationForm, expectedLicensees: value})}
+                                      required
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select range" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="under-100">Under 100</SelectItem>
+                                        <SelectItem value="100-500">100-500 (Tier 1)</SelectItem>
+                                        <SelectItem value="500-2000">500-2,000 (Tier 2)</SelectItem>
+                                        <SelectItem value="2000-10000">2,000-10,000 (Tier 3)</SelectItem>
+                                        <SelectItem value="over-10000">Over 10,000 (Tier 4)</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="timeline">Implementation Timeline *</Label>
+                                    <Select
+                                      value={consultationForm.timeline}
+                                      onValueChange={(value) => setConsultationForm({...consultationForm, timeline: value})}
+                                      required
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select timeline" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="0-3-months">0-3 months (Immediate)</SelectItem>
+                                        <SelectItem value="3-6-months">3-6 months</SelectItem>
+                                        <SelectItem value="6-12-months">6-12 months</SelectItem>
+                                        <SelectItem value="12-24-months">12-24 months</SelectItem>
+                                        <SelectItem value="planning">Planning Phase (24+ months)</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="budget">Annual Budget Range *</Label>
+                                    <Select
+                                      value={consultationForm.budget}
+                                      onValueChange={(value) => setConsultationForm({...consultationForm, budget: value})}
+                                      required
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select budget" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="under-500k">Under $500K (Custom)</SelectItem>
+                                        <SelectItem value="350k-850k">$350K-$850K (Tier 1-2)</SelectItem>
+                                        <SelectItem value="850k-2.5m">$850K-$2.5M (Tier 2-3)</SelectItem>
+                                        <SelectItem value="2.5m-5m">$2.5M-$5M (Tier 3-4)</SelectItem>
+                                        <SelectItem value="over-5m">Over $5M (Enterprise)</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Additional Information */}
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg border-b pb-2">Additional Information</h3>
+                                <div>
+                                  <Label htmlFor="message">Tell us about your program goals and challenges</Label>
+                                  <Textarea
+                                    id="message"
+                                    rows={4}
+                                    value={consultationForm.message}
+                                    onChange={(e) => setConsultationForm({...consultationForm, message: e.target.value})}
+                                    placeholder="Please share any specific requirements, regulatory concerns, or questions you have about implementing a national cannabis program..."
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Privacy Notice */}
+                              <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  <strong>Confidentiality Notice:</strong> All consultation requests are handled with strict confidentiality. 
+                                  We understand the sensitive nature of government cannabis program planning and will not disclose your inquiry to third parties.
+                                </p>
+                              </div>
+
+                              {/* Submit Buttons */}
+                              <div className="flex gap-3 pt-4">
+                                <Button 
+                                  type="submit" 
+                                  className="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+                                  disabled={isSubmitting}
+                                >
+                                  {isSubmitting ? "Submitting..." : "Schedule Consultation"}
+                                </Button>
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  onClick={() => setDialogOpen(false)}
+                                  disabled={isSubmitting}
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            </form>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
 
