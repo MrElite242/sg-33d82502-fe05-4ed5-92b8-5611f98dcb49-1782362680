@@ -39,7 +39,7 @@ export default function GovernmentLicensing() {
         "Regulatory Dashboard",
         "Compliance Management",
         "Inspection Management",
-        "Up to 500 licensees",
+        "100 Licensees",
         "Standard support"
       ],
       popular: false
