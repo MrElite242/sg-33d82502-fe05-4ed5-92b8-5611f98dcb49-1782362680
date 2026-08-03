@@ -70,8 +70,19 @@ export default function Home() {
     setIsSubmitting(true);
     
     try {
-      // In production, send to API endpoint
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await fetch("/api/government-consultation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(consultationForm)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit consultation request");
+      }
       
       // Show success message
       alert("Thank you for your consultation request! Our government solutions team will contact you within 24 hours.");
@@ -92,6 +103,7 @@ export default function Home() {
       });
       setDialogOpen(false);
     } catch (error) {
+      console.error("Consultation submission error:", error);
       alert("There was an error submitting your request. Please try again or contact government@cannablaze360.com");
     } finally {
       setIsSubmitting(false);
