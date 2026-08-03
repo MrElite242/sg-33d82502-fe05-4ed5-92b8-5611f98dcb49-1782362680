@@ -565,18 +565,19 @@ export default function Home() {
                       </p>
 
                       {/* Key Stats */}
+                      {/* TODO: Configure with real-time data from government deployments API */}
                       <div className="grid grid-cols-3 gap-6 mb-8">
                         <div>
-                          <div className="text-3xl font-bold text-white mb-1">12+</div>
-                          <div className="text-sm text-blue-200">Countries</div>
+                          <div className="text-3xl font-bold text-white mb-1">0</div>
+                          <div className="text-sm text-blue-200">Countries Deployed</div>
                         </div>
                         <div>
-                          <div className="text-3xl font-bold text-white mb-1">50M+</div>
-                          <div className="text-sm text-blue-200">Transactions</div>
+                          <div className="text-3xl font-bold text-white mb-1">0</div>
+                          <div className="text-sm text-blue-200">Transactions Tracked</div>
                         </div>
                         <div>
-                          <div className="text-3xl font-bold text-white mb-1">99.9%</div>
-                          <div className="text-sm text-blue-200">Uptime SLA</div>
+                          <div className="text-3xl font-bold text-white mb-1">0%</div>
+                          <div className="text-sm text-blue-200">System Uptime</div>
                         </div>
                       </div>
 
