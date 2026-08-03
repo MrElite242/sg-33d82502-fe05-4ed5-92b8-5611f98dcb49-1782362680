@@ -869,7 +869,7 @@ export default function Home() {
                         </CardHeader>
                         <CardContent>
                           <div className="text-sm text-blue-200">
-                            Up to 500 licensees • Regulatory Dashboard • Compliance Management
+                            100 Licensees • Regulatory Dashboard • Compliance Management
                           </div>
                         </CardContent>
                       </Card>
