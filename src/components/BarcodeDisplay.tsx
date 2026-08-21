@@ -1,165 +1,158 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Download, Printer } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { formatCredentialDate, maskNationalId } from "@/lib/cannaId";
+import { CalendarDays, MapPin, CheckCircle2, AlertCircle, XCircle } from "lucide-react";
+import Image from "next/image";
 
-interface BarcodeDisplayProps {
-  value: string;
-  format?: "barcode" | "qr";
-  label?: string;
-  showValue?: boolean;
-  size?: "sm" | "md" | "lg";
+interface CannaIdCredential {
+  id: string;
+  credential_number: string;
+  full_name: string;
+  date_of_birth: string;
+  gender: string;
+  national_id_number: string;
+  jurisdiction: string;
+  region: string;
+  eligibility_status: boolean;
+  status: "active" | "suspended" | "revoked" | "expired";
+  issued_at: string;
+  expires_at: string;
+  issuing_authority: string;
+  qr_code_data: string;
 }
 
-export function BarcodeDisplay({ 
-  value, 
-  format = "barcode", 
-  label,
-  showValue = true,
-  size = "md"
-}: BarcodeDisplayProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+interface BarcodeDisplayProps {
+  credential: CannaIdCredential;
+  showSensitiveData?: boolean;
+}
 
-  const dimensions = {
-    sm: { width: 200, height: 80, fontSize: 10 },
-    md: { width: 300, height: 120, fontSize: 12 },
-    lg: { width: 400, height: 160, fontSize: 14 }
+export function BarcodeDisplay({ credential, showSensitiveData = false }: BarcodeDisplayProps) {
+  const isExpired = new Date(credential.expires_at) < new Date();
+  const statusConfig = {
+    active: { icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50", label: "Active" },
+    suspended: { icon: AlertCircle, color: "text-orange-600", bg: "bg-orange-50", label: "Suspended" },
+    revoked: { icon: XCircle, color: "text-red-600", bg: "bg-red-50", label: "Revoked" },
+    expired: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-50", label: "Expired" }
   };
-
-  const dim = dimensions[size];
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      if (ctx) {
-        generateBarcode(ctx, value, format, dim);
-      }
-    }
-  }, [value, format, size]);
-
-  const generateBarcode = (
-    ctx: CanvasRenderingContext2D,
-    code: string,
-    type: "barcode" | "qr",
-    dim: typeof dimensions.md
-  ) => {
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, dim.width, dim.height);
-
-    if (type === "barcode") {
-      // Simple barcode representation (bars pattern)
-      ctx.fillStyle = "#000000";
-      const barWidth = 3;
-      const spacing = 2;
-      let x = 20;
-      
-      for (let i = 0; i < code.length; i++) {
-        const charCode = code.charCodeAt(i);
-        const pattern = (charCode % 2 === 0) ? [1, 0, 1, 0] : [1, 1, 0, 0];
-        
-        pattern.forEach(bar => {
-          if (bar === 1) {
-            ctx.fillRect(x, 20, barWidth, dim.height - 60);
-          }
-          x += barWidth + spacing;
-        });
-      }
-
-      // Add text
-      ctx.fillStyle = "#000000";
-      ctx.font = `${dim.fontSize}px monospace`;
-      ctx.textAlign = "center";
-      ctx.fillText(code, dim.width / 2, dim.height - 20);
-    } else {
-      // Simple QR code representation (grid pattern)
-      ctx.fillStyle = "#000000";
-      const gridSize = 8;
-      const cellSize = (dim.height - 40) / gridSize;
-      
-      for (let i = 0; i < gridSize; i++) {
-        for (let j = 0; j < gridSize; j++) {
-          if ((i + j + code.length) % 2 === 0) {
-            ctx.fillRect(
-              20 + i * cellSize,
-              20 + j * cellSize,
-              cellSize - 2,
-              cellSize - 2
-            );
-          }
-        }
-      }
-
-      // Add text
-      ctx.fillStyle = "#000000";
-      ctx.font = `${dim.fontSize}px monospace`;
-      ctx.textAlign = "center";
-      ctx.fillText(code, dim.width / 2, dim.height - 10);
-    }
-  };
-
-  const handlePrint = () => {
-    if (canvasRef.current) {
-      const printWindow = window.open("", "_blank");
-      if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>Print ${label || "Barcode"}</title>
-              <style>
-                body { margin: 0; padding: 20px; text-align: center; }
-                img { max-width: 100%; }
-                h3 { margin-top: 10px; }
-              </style>
-            </head>
-            <body>
-              ${label ? `<h3>${label}</h3>` : ""}
-              <img src="${canvasRef.current.toDataURL()}" />
-              <script>window.print(); window.close();</script>
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-      }
-    }
-  };
-
-  const handleDownload = () => {
-    if (canvasRef.current) {
-      const link = document.createElement("a");
-      link.download = `${value}-${format}.png`;
-      link.href = canvasRef.current.toDataURL();
-      link.click();
-    }
-  };
+  
+  const currentStatus = isExpired ? "expired" : credential.status;
+  const StatusIcon = statusConfig[currentStatus].icon;
 
   return (
-    <Card>
-      <CardContent className="p-4">
-        {label && (
-          <h4 className="font-semibold text-sm mb-3 text-center">{label}</h4>
-        )}
-        <div className="flex flex-col items-center gap-3">
-          <canvas
-            ref={canvasRef}
-            width={dim.width}
-            height={dim.height}
-            className="border rounded"
-          />
-          {showValue && (
-            <p className="text-xs font-mono text-gray-600">{value}</p>
+    <Card className="max-w-md mx-auto overflow-hidden border-2 border-emerald-200 dark:border-emerald-800">
+      {/* Header - Canna ID 360™ Branding */}
+      <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white p-6 text-center">
+        <div className="text-xs font-semibold tracking-wider opacity-90 mb-1">CANNA ID 360™</div>
+        <div className="text-2xl font-bold">National Cannabis Credential</div>
+      </div>
+
+      {/* Credential Body */}
+      <div className="p-6 space-y-4 bg-white dark:bg-gray-900">
+        {/* Status Badge */}
+        <div className="flex justify-between items-center">
+          <Badge className={`${statusConfig[currentStatus].bg} ${statusConfig[currentStatus].color} border-0 flex items-center gap-1.5`}>
+            <StatusIcon className="w-3.5 h-3.5" />
+            {statusConfig[currentStatus].label}
+          </Badge>
+          {credential.eligibility_status && currentStatus === "active" && (
+            <Badge className="bg-blue-50 text-blue-700 border-0">Eligible</Badge>
           )}
-          <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={handlePrint}>
-              <Printer className="w-4 h-4 mr-1" />
-              Print
-            </Button>
-            <Button size="sm" variant="outline" onClick={handleDownload}>
-              <Download className="w-4 h-4 mr-1" />
-              Download
-            </Button>
+        </div>
+
+        {/* User Information */}
+        <div className="space-y-3 border-l-4 border-emerald-500 pl-4">
+          <div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Name</div>
+            <div className="text-xl font-bold text-gray-900 dark:text-white">{credential.full_name}</div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date of Birth</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{formatCredentialDate(credential.date_of_birth)}</div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Gender</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{credential.gender}</div>
+            </div>
+          </div>
+
+          {showSensitiveData && (
+            <div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">National ID</div>
+              <div className="font-mono text-sm text-gray-700 dark:text-gray-300">{maskNationalId(credential.national_id_number)}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Jurisdiction */}
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded">
+          <MapPin className="w-4 h-4 text-emerald-600" />
+          <span className="font-medium">{credential.jurisdiction}</span>
+          {credential.region && <span className="text-gray-400">•</span>}
+          {credential.region && <span>{credential.region}</span>}
+        </div>
+
+        {/* Credential Details */}
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Credential No.</div>
+            <div className="font-mono text-sm font-semibold text-gray-900 dark:text-white">{credential.credential_number}</div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Issued By</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-white truncate">{credential.issuing_authority}</div>
           </div>
         </div>
-      </CardContent>
+
+        {/* Dates */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+              <CalendarDays className="w-3 h-3" />
+              Issued
+            </div>
+            <div className="text-sm font-medium text-gray-900 dark:text-white">{formatCredentialDate(credential.issued_at)}</div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+              <CalendarDays className="w-3 h-3" />
+              Expires
+            </div>
+            <div className={`text-sm font-medium ${isExpired ? "text-red-600" : "text-gray-900 dark:text-white"}`}>
+              {formatCredentialDate(credential.expires_at)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* QR Code Section */}
+      <div className="bg-gray-50 dark:bg-gray-800 p-6 text-center border-t border-gray-200 dark:border-gray-700">
+        <div className="text-xs text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">Secure Verification Code</div>
+        {credential.qr_code_data ? (
+          <div className="inline-block p-3 bg-white rounded-lg">
+            <Image 
+              src={credential.qr_code_data} 
+              alt="Verification QR Code" 
+              width={200} 
+              height={200}
+              className="mx-auto"
+            />
+          </div>
+        ) : (
+          <div className="w-[200px] h-[200px] mx-auto bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+            <div className="text-gray-400 text-sm">QR Code Unavailable</div>
+          </div>
+        )}
+        <div className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+          Scan to verify eligibility
+        </div>
+      </div>
+
+      {/* Privacy Notice */}
+      <div className="bg-blue-50 dark:bg-blue-950/30 p-4 text-xs text-gray-600 dark:text-gray-400 border-t border-blue-100 dark:border-blue-900">
+        <strong className="text-blue-700 dark:text-blue-400">Privacy Protected:</strong> QR verification reveals only eligibility status. No personal information is shared during verification.
+      </div>
     </Card>
   );
 }

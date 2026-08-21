@@ -1,169 +1,165 @@
-import { useState, useEffect, useRef } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, X, Keyboard, ScanLine } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CheckCircle2, XCircle, Scan, Loader2 } from "lucide-react";
 
-interface BarcodeScannerProps {
-  onScan: (barcode: string) => void;
-  onClose?: () => void;
-  title?: string;
-  placeholder?: string;
+interface VerificationResult {
+  eligible: boolean;
+  jurisdiction?: string;
+  credentialNumber?: string;
+  reason?: string;
+  message?: string;
 }
 
-export function BarcodeScanner({ 
-  onScan, 
-  onClose, 
-  title = "Scan Barcode",
-  placeholder = "Enter barcode manually..."
-}: BarcodeScannerProps) {
-  const [scanMode, setScanMode] = useState<"camera" | "manual">("manual");
-  const [manualInput, setManualInput] = useState("");
-  const [error, setError] = useState("");
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+export function BarcodeScanner() {
+  const [verificationToken, setVerificationToken] = useState("");
+  const [isScanning, setIsScanning] = useState(false);
+  const [result, setResult] = useState<VerificationResult | null>(null);
 
-  useEffect(() => {
-    if (scanMode === "camera") {
-      startCamera();
-    }
-    return () => {
-      stopCamera();
-    };
-  }, [scanMode]);
-
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: "environment" } 
+  const handleVerify = async () => {
+    if (!verificationToken.trim()) {
+      setResult({
+        eligible: false,
+        reason: "Please enter a verification token"
       });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-      setError("");
-    } catch (err) {
-      setError("Camera access denied. Please use manual input.");
-      setScanMode("manual");
+      return;
+    }
+
+    setIsScanning(true);
+    setResult(null);
+
+    try {
+      const response = await fetch("/api/canna-id/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ verificationToken: verificationToken.trim() })
+      });
+
+      const data: VerificationResult = await response.json();
+      setResult(data);
+    } catch (error) {
+      setResult({
+        eligible: false,
+        reason: "Verification system error. Please try again."
+      });
+    } finally {
+      setIsScanning(false);
     }
   };
 
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
-  };
-
-  const handleManualSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (manualInput.trim()) {
-      onScan(manualInput.trim());
-      setManualInput("");
-    }
-  };
-
-  const handleCameraCapture = () => {
-    // In a real implementation, this would use a barcode detection library
-    // For demo purposes, we'll simulate a scan
-    const simulatedBarcode = `SCAN-${Date.now()}`;
-    onScan(simulatedBarcode);
-    stopCamera();
-    setScanMode("manual");
+  const handleReset = () => {
+    setVerificationToken("");
+    setResult(null);
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold flex items-center gap-2">
-            <ScanLine className="w-5 h-5 text-emerald-600" />
-            {title}
-          </h3>
-          {onClose && (
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
-          )}
+    <Card className="max-w-lg mx-auto p-6">
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Scan className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Canna ID 360™ Verification</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Scan QR code or enter verification token</p>
         </div>
 
-        {error && (
-          <Alert className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <div className="flex gap-2 mb-4">
-          <Button
-            variant={scanMode === "manual" ? "default" : "outline"}
-            onClick={() => {
-              stopCamera();
-              setScanMode("manual");
-            }}
-            className="flex-1"
-          >
-            <Keyboard className="w-4 h-4 mr-2" />
-            Manual
-          </Button>
-          <Button
-            variant={scanMode === "camera" ? "default" : "outline"}
-            onClick={() => setScanMode("camera")}
-            className="flex-1"
-          >
-            <Camera className="w-4 h-4 mr-2" />
-            Camera
-          </Button>
-        </div>
-
-        {scanMode === "manual" ? (
-          <form onSubmit={handleManualSubmit} className="space-y-4">
+        {/* Input */}
+        {!result && (
+          <div className="space-y-4">
             <div>
-              <Label htmlFor="barcode">Barcode / SKU</Label>
+              <Label htmlFor="token">Verification Token</Label>
               <Input
-                id="barcode"
-                value={manualInput}
-                onChange={(e) => setManualInput(e.target.value)}
-                placeholder={placeholder}
-                autoFocus
+                id="token"
+                placeholder="Enter token from QR code"
+                value={verificationToken}
+                onChange={(e) => setVerificationToken(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleVerify()}
                 className="font-mono"
               />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                This can be obtained by scanning the customer's Canna ID 360™ QR code
+              </p>
             </div>
-            <Button type="submit" className="w-full" disabled={!manualInput.trim()}>
-              <ScanLine className="w-4 h-4 mr-2" />
-              Submit Barcode
-            </Button>
-          </form>
-        ) : (
-          <div className="space-y-4">
-            <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-64 h-32 border-4 border-emerald-500 rounded-lg"></div>
-              </div>
-            </div>
-            <p className="text-sm text-center text-gray-600">
-              Position barcode within the green frame
-            </p>
-            <Button onClick={handleCameraCapture} className="w-full">
-              <Camera className="w-4 h-4 mr-2" />
-              Capture Barcode
+
+            <Button 
+              onClick={handleVerify} 
+              disabled={isScanning || !verificationToken.trim()}
+              className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+              size="lg"
+            >
+              {isScanning ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  <Scan className="w-5 h-5 mr-2" />
+                  Verify Credential
+                </>
+              )}
             </Button>
           </div>
         )}
 
-        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
-          <p className="text-xs text-blue-700 dark:text-blue-300">
-            💡 <strong>Tip:</strong> Use a USB barcode scanner or type the code manually for fastest entry.
+        {/* Result */}
+        {result && (
+          <div className="space-y-4">
+            {result.eligible ? (
+              <Alert className="bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-800">
+                <CheckCircle2 className="h-5 w-5 text-green-600" />
+                <AlertDescription>
+                  <div className="space-y-2">
+                    <div className="text-2xl font-bold text-green-700 dark:text-green-400">ELIGIBLE ✓</div>
+                    <div className="text-green-800 dark:text-green-300">
+                      {result.message || "Customer is authorized for cannabis purchase"}
+                    </div>
+                    {result.jurisdiction && (
+                      <div className="text-sm text-green-700 dark:text-green-400 mt-3 pt-3 border-t border-green-200 dark:border-green-800">
+                        <strong>Jurisdiction:</strong> {result.jurisdiction}
+                      </div>
+                    )}
+                    {result.credentialNumber && (
+                      <div className="text-sm text-green-700 dark:text-green-400">
+                        <strong>Credential:</strong> {result.credentialNumber}
+                      </div>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Alert className="bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-800">
+                <XCircle className="h-5 w-5 text-red-600" />
+                <AlertDescription>
+                  <div className="space-y-2">
+                    <div className="text-2xl font-bold text-red-700 dark:text-red-400">NOT ELIGIBLE ✗</div>
+                    <div className="text-red-800 dark:text-red-300">
+                      {result.reason || "Customer is not authorized for cannabis purchase"}
+                    </div>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <Button onClick={handleReset} variant="outline" className="w-full" size="lg">
+              Verify Another Credential
+            </Button>
+          </div>
+        )}
+
+        {/* Privacy Notice */}
+        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
+            <strong className="text-blue-700 dark:text-blue-400">Privacy Protected:</strong> This verification only reveals eligibility status. No personal information (name, address, medical history, purchase history) is accessed or displayed.
           </p>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }
