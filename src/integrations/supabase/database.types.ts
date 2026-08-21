@@ -9,6 +9,55 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      canna_id_audit_logs: {
+        Row: {
+          id: string
+          credential_id: string
+          credential_number: string
+          action_type: string
+          previous_status: string | null
+          new_status: string | null
+          action_by: string
+          action_reason: string | null
+          verification_location: string | null
+          metadata: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          credential_id: string
+          credential_number: string
+          action_type: string
+          previous_status?: string | null
+          new_status?: string | null
+          action_by: string
+          action_reason?: string | null
+          verification_location?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          credential_id?: string
+          credential_number?: string
+          action_type?: string
+          previous_status?: string | null
+          new_status?: string | null
+          action_by?: string
+          action_reason?: string | null
+          verification_location?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canna_id_audit_logs_credential_id_fkey"
+            columns: ["credential_id"]
+            referencedRelation: "canna_id_credentials"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       canna_id_credentials: {
         Row: {
           id: string

@@ -51,9 +51,12 @@ Privacy-focused national cannabis user credential system that allows government 
 - [x] Add age verification (21+)
 - [x] Add credential number generator
 - [x] Add privacy-preserving verification endpoint
+- [x] Create government admin page for credential management
+- [x] Add verification audit log viewer
+- [x] Add credential revocation/suspension functionality
 - [ ] Add multi-region support (ready for government configuration)
 - [ ] Add credential expiration handling (expiration checking implemented, renewal workflow pending)
-- [ ] Add audit trail for credential issuance (verification logging implemented)
+- [x] Add audit trail for credential issuance (full audit logging with automatic triggers)
 
 ## Acceptance
 
