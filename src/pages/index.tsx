@@ -43,7 +43,8 @@ import {
   Settings,
   Video,
   Sparkles,
-  Lock
+  Lock,
+  Shield
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -632,6 +633,60 @@ export default function Home() {
                             <div className="text-blue-200 text-sm">Enterprise-grade security and 24/7 support</div>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Government Solutions Modules */}
+                      <div className="grid md:grid-cols-2 gap-6 mb-8">
+                        <Card className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/20 border-2 border-emerald-300 dark:border-emerald-700">
+                          <CardHeader>
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+                                <Shield className="w-6 h-6 text-white" />
+                              </div>
+                              <div>
+                                <CardTitle className="text-emerald-900 dark:text-emerald-100">Canna ID 360™</CardTitle>
+                                <CardDescription className="text-emerald-700 dark:text-emerald-300">National Cannabis Credential System</CardDescription>
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <p className="text-sm text-gray-700 dark:text-gray-300">
+                              Privacy-first national cannabis user credential system with secure digital IDs, QR verification, and payment integration.
+                            </p>
+                            <div className="space-y-2">
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Issue government-verified digital credentials</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Privacy-preserving QR verification (returns only "Eligible? YES/NO")</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Multi-tier pricing: Local $5/month, Tourist $10/month, Annual $50/year</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Complete audit trail & credential management portal</span>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                              <Link href="/canna-id/admin" className="flex-1">
+                                <Button variant="default" className="w-full bg-emerald-600 hover:bg-emerald-700 text-sm">
+                                  Government Portal
+                                </Button>
+                              </Link>
+                              <Link href="/canna-id/apply" className="flex-1">
+                                <Button variant="outline" className="w-full border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950 text-sm">
+                                  Apply Now
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/20 border-2 border-blue-300 dark:border-blue-700">
                       </div>
 
                       {/* CTA Buttons */}
