@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { generateCredentialNumber, generateVerificationToken, generateQRCode } from "@/lib/cannaId";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2024-06-20",
+  apiVersion: "2023-10-16",
 });
 
 export default async function handler(

@@ -29,6 +29,7 @@ interface Credential {
   issued_at: string;
   expires_at: string;
   verification_count: number;
+  last_verified_at: string | null;
   permit_type: string;
   payment_status: string;
 }

@@ -67,7 +67,7 @@ export default function IssueCannaId() {
           status: "active",
           issued_by: "government_official",
           issued_at: new Date().toISOString(),
-          expires_at: expiresAt.toISOString(),
+          expires_at: expiresAt,
           payment_status: "waived"
         })
         .select()

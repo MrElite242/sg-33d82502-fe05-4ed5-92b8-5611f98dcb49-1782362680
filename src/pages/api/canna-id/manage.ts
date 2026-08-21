@@ -88,7 +88,6 @@ export default async function handler(
 
     return res.status(200).json({
       success: true,
-      credential: updatedCredential,
       message: `Credential ${action}d successfully`
     });
   } catch (error) {
