@@ -32,7 +32,9 @@ import {
   Calendar,
   User,
   Plus,
-  BarChart3
+  BarChart3,
+  Shield,
+  Settings
 } from "lucide-react";
 
 interface License {
@@ -609,6 +611,43 @@ export default function Government() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <Card className="hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-emerald-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-emerald-600" />
+                  Canna ID 360™
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-gray-600">National cannabis user credential system</p>
+                <div className="space-y-2">
+                  <Link href="/canna-id/issue">
+                    <Button variant="outline" className="w-full justify-start">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Issue New Credential
+                    </Button>
+                  </Link>
+                  <Link href="/canna-id/admin">
+                    <Button variant="outline" className="w-full justify-start">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Manage Credentials
+                    </Button>
+                  </Link>
+                  <Link href="/canna-id/verify">
+                    <Button variant="outline" className="w-full justify-start">
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Verify Credential
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-blue-500">
           </div>
 
           <Tabs defaultValue="licenses" className="space-y-6">

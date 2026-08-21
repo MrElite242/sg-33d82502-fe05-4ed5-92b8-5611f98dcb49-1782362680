@@ -42,7 +42,8 @@ import {
   Building2,
   Settings,
   Video,
-  Sparkles
+  Sparkles,
+  Lock
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -933,6 +934,149 @@ export default function Home() {
               </div>
             </TabsContent>
           </Tabs>
+        </section>
+
+        {/* Canna ID 360™ Section */}
+        <section className="container mx-auto px-4 py-16 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30">
+                Privacy-First Identity
+              </Badge>
+              <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                Canna ID 360™
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                National cannabis user credential system with privacy-preserving verification
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* Left: For Users */}
+              <Card className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-950/30 dark:via-green-950/20 dark:to-teal-950/30 border-2 border-emerald-200 dark:border-emerald-800">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+                      <ShieldCheck className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle>For Cannabis Users</CardTitle>
+                      <CardDescription>Secure digital credential</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Digital ID & QR Code</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Mobile-friendly credential with secure verification</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Privacy Protected</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Retailers only see "Eligible? YES" - no personal data shared</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Government Verified</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Official national cannabis credential</p>
+                    </div>
+                  </div>
+                  <Link href="/canna-id/verify">
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 mt-4">
+                      View Your Credential
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Right: For Government */}
+              <Card className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-purple-950/30 border-2 border-blue-200 dark:border-blue-800">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle>For Government Authorities</CardTitle>
+                      <CardDescription>Issuance & management portal</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Issue Credentials</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Age-verified national cannabis user IDs</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Audit Trail</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Complete verification logs and compliance tracking</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-semibold">Manage Credentials</div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Suspend, revoke, or reactivate credentials</p>
+                    </div>
+                  </div>
+                  <Link href="/canna-id/admin">
+                    <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 mt-4">
+                      Government Portal
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Privacy Feature Highlight */}
+            <Card className="bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 dark:from-purple-950/20 dark:via-pink-950/10 dark:to-rose-950/20 border-purple-200 dark:border-purple-800">
+              <CardContent className="py-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0">
+                    <Lock className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Privacy-First Architecture</h4>
+                    <p className="text-gray-700 dark:text-gray-300 mb-3">
+                      Dispensaries verify eligibility without accessing sensitive personal information. No national ID numbers, medical diagnoses, doctor notes, or purchase history is exposed during verification.
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-white/50 dark:bg-gray-900/50 rounded-lg p-3">
+                        <div className="text-sm font-semibold text-red-600 mb-1">❌ Dispensaries DON'T See:</div>
+                        <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                          <li>• Full national ID number</li>
+                          <li>• Medical diagnosis</li>
+                          <li>• Doctor's notes</li>
+                          <li>• Purchase history</li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-900/50 rounded-lg p-3">
+                        <div className="text-sm font-semibold text-green-600 mb-1">✓ Dispensaries Only See:</div>
+                        <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                          <li>• Eligible? <strong className="text-green-600">YES</strong> / <strong className="text-red-600">NO</strong></li>
+                          <li>• Jurisdiction (region only)</li>
+                          <li>• Nothing else</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         {/* ROI Calculator Section */}

@@ -30,7 +30,8 @@ import {
   AlertCircle,
   LogOut,
   FileText,
-  CheckCircle
+  CheckCircle,
+  Shield
 } from "lucide-react";
 import { CannabisLeaf } from "@/components/CannabisLeaf";
 
