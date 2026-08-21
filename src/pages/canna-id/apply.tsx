@@ -88,7 +88,8 @@ export default function ApplyCannaId() {
     nationalId: "",
     email: "",
     jurisdiction: "",
-    region: ""
+    region: "",
+    permitType: "local"
   });
 
   const handleApply = async (e: React.FormEvent) => {
@@ -188,47 +189,42 @@ export default function ApplyCannaId() {
               <CardContent>
                 <form onSubmit={handleApply} className="space-y-6">
                   {/* Permit Type Selection */}
-                  <div className="space-y-3">
-                    <Label>Select Permit Type</Label>
-                    <RadioGroup value={permitType} onValueChange={(value) => setPermitType(value as "local" | "tourist")}>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <label className={`relative flex items-start space-x-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${permitType === "local" ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20" : "border-gray-200 hover:border-gray-300"}`}>
-                          <RadioGroupItem value="local" id="local" />
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <User className="w-5 h-5 text-emerald-600" />
-                              <span className="font-semibold">Local Resident</span>
-                            </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                              For residents of the issuing jurisdiction
-                            </p>
-                            <div className="flex items-baseline gap-1">
-                              <DollarSign className="w-4 h-4 text-emerald-600" />
-                              <span className="text-2xl font-bold text-emerald-600">5.00</span>
-                              <span className="text-sm text-gray-500">/ 30 days</span>
-                            </div>
+                  <div>
+                    <Label htmlFor="permitType">Permit Type *</Label>
+                    <Select
+                      value={formData.permitType}
+                      onValueChange={(value) => setFormData({...formData, permitType: value})}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select permit type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="local">
+                          <div className="flex flex-col">
+                            <span className="font-semibold">Local Resident - 30 Days</span>
+                            <span className="text-sm text-gray-500">$5.00 USD</span>
                           </div>
-                        </label>
-
-                        <label className={`relative flex items-start space-x-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${permitType === "tourist" ? "border-blue-600 bg-blue-50 dark:bg-blue-950/20" : "border-gray-200 hover:border-gray-300"}`}>
-                          <RadioGroupItem value="tourist" id="tourist" />
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Globe2 className="w-5 h-5 text-blue-600" />
-                              <span className="font-semibold">Tourist/Foreigner</span>
-                            </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                              For international visitors and tourists
-                            </p>
-                            <div className="flex items-baseline gap-1">
-                              <DollarSign className="w-4 h-4 text-blue-600" />
-                              <span className="text-2xl font-bold text-blue-600">10.00</span>
-                              <span className="text-sm text-gray-500">/ 30 days</span>
-                            </div>
+                        </SelectItem>
+                        <SelectItem value="tourist">
+                          <div className="flex flex-col">
+                            <span className="font-semibold">Tourist/Foreigner - 30 Days</span>
+                            <span className="text-sm text-gray-500">$10.00 USD</span>
                           </div>
-                        </label>
-                      </div>
-                    </RadioGroup>
+                        </SelectItem>
+                        <SelectItem value="annual_local">
+                          <div className="flex flex-col">
+                            <span className="font-semibold">Annual Local Pass - 1 Year</span>
+                            <span className="text-sm text-gray-500">$50.00 USD (Best Value!)</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {formData.permitType === "local" && "30-day access for residents"}
+                      {formData.permitType === "tourist" && "30-day access for visitors"}
+                      {formData.permitType === "annual_local" && "365-day unlimited access for residents - save 75%!"}
+                    </p>
                   </div>
 
                   {/* Personal Details */}
@@ -323,19 +319,57 @@ export default function ApplyCannaId() {
                     </Alert>
                   )}
 
-                  {/* Summary */}
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">Permit Type:</span>
-                      <Badge>{selectedPricing.label}</Badge>
-                    </div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">Duration:</span>
-                      <span>{selectedPricing.duration}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-lg font-bold pt-2 border-t">
-                      <span>Total Amount:</span>
-                      <span className="text-emerald-600">${selectedPricing.price.toFixed(2)} USD</span>
+                  {/* Pricing Comparison */}
+                  <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-blue-50 dark:from-emerald-950/20 dark:via-green-950/10 dark:to-blue-950/20 p-6 rounded-lg border-2 border-emerald-200 dark:border-emerald-800">
+                    <h4 className="font-bold text-emerald-900 dark:text-emerald-300 mb-4 text-lg">Permit Options & Pricing</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+                        <div className="text-center mb-3">
+                          <Badge className="bg-blue-500 mb-2">30 Days</Badge>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">$5.00</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">Local Resident</div>
+                        </div>
+                        <ul className="text-sm space-y-2 text-gray-700 dark:text-gray-300">
+                          <li>✓ 30-day access</li>
+                          <li>✓ QR verification</li>
+                          <li>✓ Privacy-protected</li>
+                          <li>✓ Multi-jurisdiction</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+                        <div className="text-center mb-3">
+                          <Badge className="bg-purple-500 mb-2">30 Days</Badge>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">$10.00</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">Tourist/Foreigner</div>
+                        </div>
+                        <ul className="text-sm space-y-2 text-gray-700 dark:text-gray-300">
+                          <li>✓ 30-day access</li>
+                          <li>✓ QR verification</li>
+                          <li>✓ Privacy-protected</li>
+                          <li>✓ International travel</li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 p-4 rounded-lg border-2 border-emerald-400 dark:border-emerald-600 relative">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                          <Badge className="bg-emerald-600">Best Value</Badge>
+                        </div>
+                        <div className="text-center mb-3 mt-2">
+                          <Badge className="bg-emerald-600 mb-2">1 Year</Badge>
+                          <div className="text-2xl font-bold text-emerald-900 dark:text-emerald-200">$50.00</div>
+                          <div className="text-sm text-emerald-700 dark:text-emerald-400">Annual Local Pass</div>
+                          <div className="text-xs text-emerald-600 dark:text-emerald-500 mt-1 font-semibold">
+                            Save 75%! (vs 12 monthly permits)
+                          </div>
+                        </div>
+                        <ul className="text-sm space-y-2 text-emerald-900 dark:text-emerald-200">
+                          <li>✓ 365-day unlimited access</li>
+                          <li>✓ QR verification</li>
+                          <li>✓ Privacy-protected</li>
+                          <li>✓ Best price per day</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 

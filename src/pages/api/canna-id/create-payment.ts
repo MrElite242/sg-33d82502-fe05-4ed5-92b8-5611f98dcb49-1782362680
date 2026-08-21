@@ -17,6 +17,11 @@ const PERMIT_PRICING = {
     amount: 1000, // $10.00 in cents
     duration_days: 30,
     description: "Tourist/Foreigner Permit - 30 Days"
+  },
+  annual_local: {
+    amount: 5000, // $50.00 in cents
+    duration_days: 365,
+    description: "Annual Local Resident Pass - 1 Year"
   }
 };
 
@@ -35,7 +40,7 @@ export default async function handler(
     } = req.body;
 
     // Validate permit type
-    if (!["local", "tourist"].includes(permitType)) {
+    if (!["local", "tourist", "annual_local"].includes(permitType)) {
       return res.status(400).json({ error: "Invalid permit type" });
     }
 
