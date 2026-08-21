@@ -648,6 +648,52 @@ export default function Government() {
             </Card>
 
             <Card className="hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-blue-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  Licensing
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-gray-600">Review and approve license applications</p>
+                <Button variant="outline" className="w-full justify-start">
+                  <ClipboardCheck className="w-4 h-4 mr-2" />
+                  View Applications
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-purple-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-purple-600" />
+                  Compliance
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-gray-600">Monitor violations and compliance issues</p>
+                <Button variant="outline" className="w-full justify-start">
+                  <ShieldCheck className="w-4 h-4 mr-2" />
+                  View Reports
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-orange-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-orange-600" />
+                  Inspections
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-gray-600">Schedule and manage facility inspections</p>
+                <Button variant="outline" className="w-full justify-start">
+                  <Eye className="w-4 h-4 mr-2" />
+                  View Schedule
+                </Button>
+              </CardContent>
+            </Card>
           </div>
 
           <Tabs defaultValue="licenses" className="space-y-6">
