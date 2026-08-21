@@ -687,6 +687,42 @@ export default function Home() {
                         </Card>
 
                         <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/20 border-2 border-blue-300 dark:border-blue-700">
+                          <CardHeader>
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+                                <FileText className="w-6 h-6 text-white" />
+                              </div>
+                              <div>
+                                <CardTitle className="text-blue-900 dark:text-blue-100">Licensing & Compliance</CardTitle>
+                                <CardDescription className="text-blue-700 dark:text-blue-300">Regulatory Dashboard</CardDescription>
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <p className="text-sm text-gray-700 dark:text-gray-300">
+                              Complete license management, compliance tracking, and inspection scheduling for regulatory authorities.
+                            </p>
+                            <div className="space-y-2">
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">License application review and approval workflows</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Real-time compliance monitoring and violation tracking</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Automated reporting and analytics dashboards</span>
+                              </div>
+                            </div>
+                            <Link href="/government-licensing">
+                              <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 text-sm mt-2">
+                                View Licensing Packages
+                              </Button>
+                            </Link>
+                          </CardContent>
+                        </Card>
                       </div>
 
                       {/* CTA Buttons */}
