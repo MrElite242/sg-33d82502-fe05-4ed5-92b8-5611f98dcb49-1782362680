@@ -1,55 +1,32 @@
-// Barcode utility functions for generating and validating barcodes
+// Simple barcode utilities for product tracking
+// Separate from Canna ID 360™ credential system
 
-export function generateBarcode(prefix: string, id: string | number): string {
+export function generateProductBarcode(productId: string, batchNumber: string): string {
+  // Generate a simple barcode for cannabis products
   const timestamp = Date.now().toString().slice(-6);
-  const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `${prefix}-${timestamp}-${randomPart}-${id}`;
-}
-
-export function generateSKU(category: string, subcategory: string, index: number): string {
-  const catCode = category.substring(0, 2).toUpperCase();
-  const subCode = subcategory.substring(0, 3).toUpperCase();
-  const num = index.toString().padStart(3, "0");
-  return `${catCode}-${subCode}-${num}`;
+  return `CB${productId.slice(0, 4).toUpperCase()}${batchNumber.slice(0, 4)}${timestamp}`;
 }
 
 export function validateBarcode(barcode: string): boolean {
-  // Basic validation - check format
-  const patterns = [
-    /^[A-Z]{2,3}-\d{6}-[A-Z0-9]{4}-\d+$/, // Standard format
-    /^[A-Z0-9]{8,}$/, // Simple alphanumeric
-    /^\d{12,13}$/ // UPC/EAN format
-  ];
+  // Basic validation for product barcodes
+  return /^CB[A-Z0-9]{4}[A-Z0-9]{4}[0-9]{6}$/.test(barcode);
+}
+
+export function formatBarcodeDisplay(barcode: string): string {
+  // Format barcode for display
+  if (barcode.length >= 14) {
+    return `${barcode.slice(0, 2)}-${barcode.slice(2, 6)}-${barcode.slice(6, 10)}-${barcode.slice(10)}`;
+  }
+  return barcode;
+}
+
+export function parseBarcodeData(barcode: string): { prefix: string; productCode: string; batchCode: string; timestamp: string } | null {
+  if (!validateBarcode(barcode)) return null;
   
-  return patterns.some(pattern => pattern.test(barcode));
-}
-
-export function getBarcodeType(barcode: string): string {
-  if (/^INV-/.test(barcode)) return "Inventory";
-  if (/^PLT-/.test(barcode)) return "Plant Batch";
-  if (/^MFG-/.test(barcode)) return "Manufacturing";
-  if (/^LAB-/.test(barcode)) return "Lab Sample";
-  if (/^TRN-/.test(barcode)) return "Transport";
-  if (/^STF-/.test(barcode)) return "Staff";
-  if (/^RET-/.test(barcode)) return "Retail";
-  return "Unknown";
-}
-
-export interface BarcodeData {
-  type: string;
-  id: string;
-  module: string;
-  createdAt: string;
-}
-
-export function parseBarcode(barcode: string): BarcodeData | null {
-  const parts = barcode.split("-");
-  if (parts.length < 2) return null;
-
   return {
-    type: getBarcodeType(barcode),
-    id: parts[parts.length - 1],
-    module: parts[0],
-    createdAt: new Date().toISOString()
+    prefix: barcode.slice(0, 2),
+    productCode: barcode.slice(2, 6),
+    batchCode: barcode.slice(6, 10),
+    timestamp: barcode.slice(10)
   };
 }

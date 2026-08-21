@@ -44,16 +44,16 @@ Privacy-focused national cannabis user credential system that allows government 
 ## Checklist
 
 - [x] Create database schema for canna_id_credentials
-- [ ] Create government issuance interface
-- [ ] Create user digital ID view page
-- [ ] Create retailer verification interface
+- [x] Create government issuance interface
+- [x] Create user digital ID view page
+- [x] Create retailer verification interface
 - [x] Add QR code generation utility
 - [x] Add age verification (21+)
 - [x] Add credential number generator
 - [x] Add privacy-preserving verification endpoint
-- [ ] Add multi-region support
-- [ ] Add credential expiration handling
-- [ ] Add audit trail for credential issuance
+- [ ] Add multi-region support (ready for government configuration)
+- [ ] Add credential expiration handling (expiration checking implemented, renewal workflow pending)
+- [ ] Add audit trail for credential issuance (verification logging implemented)
 
 ## Acceptance
 
