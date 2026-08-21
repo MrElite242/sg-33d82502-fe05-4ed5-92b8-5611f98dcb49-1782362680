@@ -27,7 +27,7 @@ export default async function handler(
     // Look up credential by verification token
     const { data: credential, error } = await supabase
       .from("canna_id_credentials")
-      .select("id, credential_number, eligibility_status, status, expires_at, jurisdiction")
+      .select("id, credential_number, eligibility_status, status, expires_at, jurisdiction, verification_count")
       .eq("verification_token", verificationToken)
       .single();
 
