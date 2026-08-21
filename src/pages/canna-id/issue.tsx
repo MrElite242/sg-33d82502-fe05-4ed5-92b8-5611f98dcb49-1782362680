@@ -11,10 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Shield, CheckCircle2, AlertCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { generateCredentialNumber, generateVerificationToken, isEligibleByAge } from "@/lib/cannaId";
-import { createClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function IssueCannaId() {
-  const supabase = createClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<{ success: boolean; credentialNumber?: string; message: string } | null>(null);
   

@@ -39,6 +39,23 @@ export function isAgeEligible(dateOfBirth: Date | string): boolean {
 }
 
 /**
+ * Validate if user is eligible by age (21+)
+ */
+export function isEligibleByAge(dateOfBirth: string): boolean {
+  const dob = new Date(dateOfBirth);
+  const today = new Date();
+  const age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  
+  // Check if birthday hasn't occurred this year yet
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    return age - 1 >= 21;
+  }
+  
+  return age >= 21;
+}
+
+/**
  * Calculate credential expiration date (default: 1 year from issue)
  */
 export function calculateExpirationDate(yearsValid: number = 1): Date {
@@ -162,7 +179,7 @@ export function getCredentialStatusDisplay(status: string, expiresAt: Date | str
 }
 
 /**
- * Mask national ID for display (show only last 4 digits)
+ * Mask national ID for privacy (show only last 4 digits)
  */
 export function maskNationalId(nationalId: string): string {
   if (!nationalId || nationalId.length < 4) return "****";
