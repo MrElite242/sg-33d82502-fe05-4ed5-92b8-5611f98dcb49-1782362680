@@ -65,43 +65,61 @@ export interface Database {
           full_name: string
           date_of_birth: string
           gender: string
-          national_id_number: string
+          national_id: string
           jurisdiction: string
           region: string | null
-          eligibility_status: boolean
+          eligibility_status: string
           status: string
-          issued_at: string
-          expires_at: string
-          issuing_authority: string
           verification_token: string
           qr_code_data: string | null
-          notes: string | null
+          issued_at: string
+          expires_at: string
+          issued_by: string | null
           verification_count: number
           last_verified_at: string | null
+          notes: string | null
+          metadata: Json
           created_at: string
           updated_at: string
+          permit_type: string
+          payment_status: string
+          payment_amount: number | null
+          payment_currency: string
+          payment_method: string | null
+          stripe_payment_intent_id: string | null
+          paid_at: string | null
+          permit_duration_days: number
         }
         Insert: {
           id?: string
-          credential_number: string
+          credential_number?: string
           full_name: string
           date_of_birth: string
           gender: string
-          national_id_number: string
+          national_id: string
           jurisdiction: string
           region?: string | null
-          eligibility_status?: boolean
+          eligibility_status?: string
           status?: string
-          issued_at: string
-          expires_at: string
-          issuing_authority: string
-          verification_token: string
+          verification_token?: string
           qr_code_data?: string | null
-          notes?: string | null
+          issued_at?: string
+          expires_at?: string
+          issued_by?: string | null
           verification_count?: number
           last_verified_at?: string | null
+          notes?: string | null
+          metadata?: Json
           created_at?: string
           updated_at?: string
+          permit_type?: string
+          payment_status?: string
+          payment_amount?: number | null
+          payment_currency?: string
+          payment_method?: string | null
+          stripe_payment_intent_id?: string | null
+          paid_at?: string | null
+          permit_duration_days?: number
         }
         Update: {
           id?: string
@@ -109,23 +127,96 @@ export interface Database {
           full_name?: string
           date_of_birth?: string
           gender?: string
-          national_id_number?: string
+          national_id?: string
           jurisdiction?: string
           region?: string | null
-          eligibility_status?: boolean
+          eligibility_status?: string
           status?: string
-          issued_at?: string
-          expires_at?: string
-          issuing_authority?: string
           verification_token?: string
           qr_code_data?: string | null
-          notes?: string | null
+          issued_at?: string
+          expires_at?: string
+          issued_by?: string | null
           verification_count?: number
           last_verified_at?: string | null
+          notes?: string | null
+          metadata?: Json
+          created_at?: string
+          updated_at?: string
+          permit_type?: string
+          payment_status?: string
+          payment_amount?: number | null
+          payment_currency?: string
+          payment_method?: string | null
+          stripe_payment_intent_id?: string | null
+          paid_at?: string | null
+          permit_duration_days?: number
+        }
+        Relationships: []
+      }
+      canna_id_payments: {
+        Row: {
+          id: string
+          credential_id: string
+          credential_number: string
+          permit_type: string
+          amount: number
+          currency: string
+          payment_method: string | null
+          stripe_payment_intent_id: string | null
+          stripe_charge_id: string | null
+          payment_status: string
+          user_email: string | null
+          user_name: string | null
+          jurisdiction: string | null
+          metadata: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          credential_id: string
+          credential_number: string
+          permit_type: string
+          amount: number
+          currency?: string
+          payment_method?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_charge_id?: string | null
+          payment_status?: string
+          user_email?: string | null
+          user_name?: string | null
+          jurisdiction?: string | null
+          metadata?: Json
           created_at?: string
           updated_at?: string
         }
-        Relationships: []
+        Update: {
+          id?: string
+          credential_id?: string
+          credential_number?: string
+          permit_type?: string
+          amount?: number
+          currency?: string
+          payment_method?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_charge_id?: string | null
+          payment_status?: string
+          user_email?: string | null
+          user_name?: string | null
+          jurisdiction?: string | null
+          metadata?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canna_id_payments_credential_id_fkey"
+            columns: ["credential_id"]
+            referencedRelation: "canna_id_credentials"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {

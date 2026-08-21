@@ -54,8 +54,11 @@ Privacy-focused national cannabis user credential system that allows government 
 - [x] Create government admin page for credential management
 - [x] Add verification audit log viewer
 - [x] Add credential revocation/suspension functionality
+- [x] Add payment system for credential permits (Local $5/30 days, Tourist $10/30 days)
+- [x] Add Stripe payment integration for permits
+- [x] Add permit type selection (Local vs Tourist)
 - [ ] Add multi-region support (ready for government configuration)
-- [ ] Add credential expiration handling (expiration checking implemented, renewal workflow pending)
+- [x] Add credential expiration handling (30-day permits with automatic expiry)
 - [x] Add audit trail for credential issuance (full audit logging with automatic triggers)
 
 ## Acceptance
