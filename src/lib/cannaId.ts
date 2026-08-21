@@ -109,6 +109,26 @@ export async function generateCredentialQRCode(verificationToken: string): Promi
 }
 
 /**
+ * Generate QR code data URL from verification token
+ */
+export async function generateQRCode(verificationToken: string): Promise<string> {
+  try {
+    const qrDataUrl = await QRCode.toDataURL(verificationToken, {
+      width: 300,
+      margin: 2,
+      color: {
+        dark: "#000000",
+        light: "#FFFFFF"
+      }
+    });
+    return qrDataUrl;
+  } catch (error) {
+    console.error("QR code generation error:", error);
+    throw new Error("Failed to generate QR code");
+  }
+}
+
+/**
  * Parse QR code data
  */
 export function parseQRCodeData(qrData: string): { token: string; timestamp: string } | null {

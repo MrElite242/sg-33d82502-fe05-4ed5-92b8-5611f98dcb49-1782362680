@@ -53,25 +53,22 @@ export default function IssueCannaId() {
       // In production, generate actual QR code here
       const qrCodeData = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="white"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12">QR: ${verificationToken.slice(0, 8)}...</text></svg>`;
 
-      // Insert into database
+      // Insert credential into database
       const { data, error } = await supabase
         .from("canna_id_credentials")
         .insert({
-          credential_number: credentialNumber,
           full_name: formData.fullName,
           date_of_birth: formData.dateOfBirth,
           gender: formData.gender,
-          national_id_number: formData.nationalId,
+          national_id: formData.nationalId,
           jurisdiction: formData.jurisdiction,
-          region: formData.region,
-          eligibility_status: true,
+          region: formData.region || null,
+          eligibility_status: "verified",
           status: "active",
-          issued_at: issuedAt,
-          expires_at: expiresAt,
-          issuing_authority: formData.issuingAuthority,
-          verification_token: verificationToken,
-          qr_code_data: qrCodeData,
-          notes: formData.notes
+          issued_by: "government_official",
+          issued_at: new Date().toISOString(),
+          expires_at: expiresAt.toISOString(),
+          payment_status: "waived"
         })
         .select()
         .single();

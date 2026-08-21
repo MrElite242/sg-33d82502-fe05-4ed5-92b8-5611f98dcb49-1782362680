@@ -50,17 +50,14 @@ export default async function handler(
     }
 
     // Update credential status
-    const { data: updatedCredential, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from("canna_id_credentials")
       .update({
         status: newStatus,
-        eligibility_status: newStatus === "active", // Only active credentials are eligible
-        notes: reason || `${action} by ${officialEmail}`,
+        eligibility_status: newStatus === "active" ? "verified" : "revoked",
         updated_at: new Date().toISOString()
       })
-      .eq("id", credentialId)
-      .select()
-      .single();
+      .eq("id", credentialId);
 
     if (updateError) {
       console.error("Error updating credential:", updateError);

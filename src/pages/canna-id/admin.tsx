@@ -21,17 +21,16 @@ interface Credential {
   full_name: string;
   date_of_birth: string;
   gender: string;
-  national_id_number: string;
+  national_id: string;
   jurisdiction: string;
   region: string | null;
-  eligibility_status: boolean;
+  eligibility_status: string;
   status: string;
   issued_at: string;
   expires_at: string;
-  issuing_authority: string;
   verification_count: number;
-  last_verified_at: string | null;
-  notes: string | null;
+  permit_type: string;
+  payment_status: string;
 }
 
 interface AuditLog {

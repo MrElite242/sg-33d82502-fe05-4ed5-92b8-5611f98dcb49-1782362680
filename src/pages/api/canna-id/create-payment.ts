@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2023-10-16",
+  apiVersion: "2024-06-20",
 });
 
 // Pricing configuration
